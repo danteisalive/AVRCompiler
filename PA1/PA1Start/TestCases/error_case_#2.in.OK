@@ -1,0 +1,13 @@
+Illegal character: &
+symbol: #47  symbolValue:  [sdasd  at: (2,2)  value: -1]
+Illegal character: $
+symbol: #46  symbolValue:  [2  at: (4,2)  value: 2]
+symbol: #47  symbolValue:  [asda  at: (4,3)  value: -1]
+Illegal character: #
+symbol: #47  symbolValue:  [a2sa  at: (6,2)  value: -1]
+Illegal character: @
+symbol: #47  symbolValue:  [dfsdf  at: (8,2)  value: -1]
+symbol: #47  symbolValue:  [_  at: (10,1)  value: -1]
+Illegal character: $
+symbol: #46  symbolValue:  [4334  at: (10,3)  value: 4334]
+symbol: #47  symbolValue:  [sfs  at: (10,7)  value: -1]
