@@ -9,7 +9,8 @@ import java_cup.runtime.*;
 
 import mjparser.*;
 import ast_visitors.*;
-//import ast_visitors.DotVisitor;
+import ast.node.*;
+import ast_visitors.DotVisitor;
 public class MJDriver {
 
       private static void usage() {
@@ -36,10 +37,15 @@ public class MJDriver {
           Symbol parse_tree = null;
           mj mjparser = new mj (new Yylex(new FileReader(filename)));
           mjparser.programName = filename;
-          //System.out.println(filename);
-          parse_tree = mjparser.parse();
+
+        //  parse_tree = mjparser.parse();
           //parse_tree = mjparser.debug_parse();
 
+           java.io.PrintStream astout =
+            new java.io.PrintStream(
+                new java.io.FileOutputStream(filename + ".ast.dot.final"));
+           Program ast_root = (Program)mjparser.parse().value;
+           ast_root.accept(new DotVisitor(new PrintWriter(astout)));
 
         }catch (Exception e) {
             e.printStackTrace();

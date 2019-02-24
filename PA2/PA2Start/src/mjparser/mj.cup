@@ -16,11 +16,8 @@ import ast.visitor.*;
 
 parser code {:
 
-
-    public PrintWriter out;
-    public DotVisitor dotVisitor;
     public String programName;
-    public Program ast_root;
+
 
     public void unrecovered_syntax_error(Symbol cur_SymbolValue) {
         report_fatal_error("Fatal syntax error", cur_SymbolValue);
@@ -107,10 +104,6 @@ Program ::=
     ClassDeclarationList:classlist
     {:
         System.out.println("PROGRAM");
-
-        parser.ast_root = new Program(imp.line, imp.pos, mainclass, classlist);
-        parser.ast_root.accept(parser.dotVisitor);
-
         RESULT =  new Program(imp.line, imp.pos, mainclass, classlist);
 
     :}
@@ -126,9 +119,6 @@ MainClass ::=
                     System.err.println("Filename and Program name are different!");
                     System.exit(0);
                 }
-
-                java.io.PrintStream sout = new java.io.PrintStream( new java.io.FileOutputStream(name.lexeme+".java.ast.dot.test"));
-                parser.dotVisitor = new DotVisitor(new PrintWriter(sout));
 
             :}
         LBRACE PUBLIC STATIC VOID MAIN:main
