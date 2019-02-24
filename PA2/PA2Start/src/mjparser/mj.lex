@@ -120,6 +120,18 @@ single_line_comment   =   "//".*
 ";"                     {return new Symbol(sym.SEMI,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 "("                     {return new Symbol(sym.LPAREN,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 ")"                     {return new Symbol(sym.RPAREN,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+
+"{"                     {return new Symbol(sym.LBRACE,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"}"                     {return new Symbol(sym.RBRACE,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+
+"["                     {return new Symbol(sym.LBRACKET,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"]"                     {return new Symbol(sym.RBRACKET,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"="                     {return new Symbol(sym.ASSIGN,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"=="                     {return new Symbol(sym.EQUAL,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"&&"                    {return new Symbol(sym.AND,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"<"                     {return new Symbol(sym.LT,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"!"                     {return new Symbol(sym.NOT,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+
 {integer}               {return new Symbol(sym.INT_LITERAL, new SymbolValue(yyline+1, yychar+1, yytext(), new Integer(yytext())));}
 {identifier}            {return new Symbol(sym.ID, new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 {single_line_comment}   {/* ignore everything*/}

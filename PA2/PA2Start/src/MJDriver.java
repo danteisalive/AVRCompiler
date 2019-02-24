@@ -8,13 +8,13 @@ import java.io.PrintWriter;
 import java_cup.runtime.*;
 
 import mjparser.*;
-//import ast_visitors.*;
-
+import ast_visitors.*;
+//import ast_visitors.DotVisitor;
 public class MJDriver {
 
       private static void usage() {
           System.err.println(
-            "MJPA2: Specify input file in program arguments");
+            "MJ: Specify input file in program arguments");
       }
 
       public static void main(String args[])
@@ -30,27 +30,25 @@ public class MJDriver {
         String filename = args[args.length-1];
 
         try {
-          // construct the lexer,
+          // construct the lexer and feed it to the parser
           // the lexer will be the same for all of the parsers
-          Yylex lexer = new Yylex(new FileReader(filename));
+          /* open input files, etc. here */
+          Symbol parse_tree = null;
+          mj mjparser = new mj (new Yylex(new FileReader(filename)));
+          mjparser.programName = filename;
+          //System.out.println(filename);
+          parse_tree = mjparser.parse();
+          //parse_tree = mjparser.debug_parse();
 
-          // Exercise the lexer: print out all of the tokens
-          java_cup.runtime.Symbol symbol = lexer.next_token();
-          while (symbol.sym != sym.EOF) {
-              System.out.print("symbol: " + symbol + "  symbolValue: ");
-              if(symbol.value!=null) {
-                SymbolValue symval = (SymbolValue)symbol.value;
-                System.out.println(" [" + symval.lexeme + "  at: (" + symval.line + "," + symval.pos + ")" + "  value: " + symval.value + "]");
-              } else {
-                System.out.println(" null value");
-              }
-              symbol = lexer.next_token();
-          }
 
         }catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
+        finally {
+        	/* do close out here */
+        }
+
       }
 
 }

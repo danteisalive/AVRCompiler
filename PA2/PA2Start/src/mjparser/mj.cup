@@ -10,35 +10,40 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-
+import ast_visitors.DotVisitor;
+import ast.node.*;
+import ast.visitor.*;
 
 parser code {:
 
-    public PrintWriter out; 
-    
+
+    public PrintWriter out;
+    public DotVisitor dotVisitor;
     public String programName;
+    public Program ast_root;
 
     public void unrecovered_syntax_error(Symbol cur_SymbolValue) {
         report_fatal_error("Fatal syntax error", cur_SymbolValue);
     }
-    
+
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         done_parsing();
         Symbol SymbolValue = (Symbol)info;
         mjparser.SymbolValue tok = (mjparser.SymbolValue)SymbolValue.value;
-        throw new mjparser.ParseException("Fatal parsing error", 
+        throw new mjparser.ParseException("Fatal parsing error",
                                           tok.line, tok.pos);
     }
-    
+
     public void report_error(String message, Object info) {
         Symbol SymbolValue = (Symbol)info;
         mjparser.SymbolValue tok = (mjparser.SymbolValue)SymbolValue.value;
-        System.err.println("[" + tok.line + "," + tok.pos + "] " 
+        System.err.println("[" + tok.line + "," + tok.pos + "] "
                                + message + " at " + tok.toString() );
     }
-            
+
 :}
+
 
 /* Notice: all terminals declared here */
 terminal SymbolValue PLUS, MINUS, TIMES, LPAREN, RPAREN;
@@ -79,11 +84,14 @@ terminal SymbolValue THIS;
 /* bogus terminal for unary precedence declaration */
 terminal UMINUS;
 
-non terminal program;
-non terminal Integer exp;
-non terminal statement;
-non terminal statement_list;
-non terminal main_class;
+non terminal        Program                   Program;
+non terminal        IExp                      Expression;
+non terminal        IStatement                Statement;
+non terminal        MainClass                 MainClass;
+non terminal        List<IStatement>          StatementList;
+non terminal        List<IClassDecl>          ClassDeclarationList;
+non terminal        LinkedList<IExp>          ExpressionList;
+
 
 /* Declare precedence and associativity  here */
 precedence left TIMES;
@@ -91,61 +99,118 @@ precedence right UMINUS;
 
 
 /* Meggy Java Grammar */
-start with program;
+start with Program;
 
-program ::= 
-    IMPORT MEGGY SEMI main_class
+Program ::=
+    IMPORT:imp MEGGY SEMI
+    MainClass:mainclass
+    ClassDeclarationList:classlist
+    {:
+        System.out.println("PROGRAM");
+
+        parser.ast_root = new Program(imp.line, imp.pos, mainclass, classlist);
+        parser.ast_root.accept(parser.dotVisitor);
+
+        RESULT =  new Program(imp.line, imp.pos, mainclass, classlist);
+
+    :}
     ;
-    
-main_class ::=
-        CLASS ID:name         
-            {: java.io.PrintStream sout 
-                    = new java.io.PrintStream(
-                        new java.io.FileOutputStream(name.lexeme+".java.s"));
-                parser.out = new PrintWriter(sout);
-                // Check filename is class name, if not exit with error message
-                System.exit(0);   
+
+MainClass ::=
+        CLASS:op ID:name
+            {:
+                System.out.println(name.toString());
+                String t_name = name.toString() + ".java";
+
+                if (!parser.programName.contains(t_name)){
+                    System.err.println("Filename and Program name are different!");
+                    System.exit(0);
+                }
+
+                java.io.PrintStream sout = new java.io.PrintStream( new java.io.FileOutputStream(name.lexeme+".java.ast.dot.test"));
+                parser.dotVisitor = new DotVisitor(new PrintWriter(sout));
+
             :}
-        LBRACE PUBLIC STATIC VOID MAIN 
+        LBRACE PUBLIC STATIC VOID MAIN:main
         LPAREN STRING LBRACKET RBRACKET ID:param RPAREN
-        LBRACE 
-          {: 
-            System.out.println("Generate prolog using avrH.rtl.s");
-            InputStream mainPrologue=null;
-            BufferedReader reader=null;
-            try {
-                // The syntax for loading a text resource file 
-                // from a jar file here:
-                // http://www.rgagnon.com/javadetails/java-0077.html
-                mainPrologue 
-                    = this.getClass().getClassLoader().getResourceAsStream(
-                        "avrH.rtl.s");
-                reader = new BufferedReader(new 
-                    InputStreamReader(mainPrologue));
-
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                  parser.out.println(line);
-                }
-            } catch ( Exception e2) {
-                e2.printStackTrace();
-            }
-            finally{
-                try{
-                    if(mainPrologue!=null) mainPrologue.close();
-                    if(reader!=null) reader.close();
-                }
-                catch (IOException e) {
-                   e.printStackTrace();
-                }
-            }
-          :}
-        statement_list:list RBRACE
+        LBRACE
           {:
+              System.out.println(param.toString());
           :}
-        RBRACE 
+        StatementList:stmtlist
+        RBRACE
+        RBRACE
           {:
-            parser.out.flush();
+              System.out.println("END OF FILE");
+              RESULT  = new MainClass(op.line, op.pos, name.toString(), param.toString(),  new BlockStatement(op.line, op.pos, stmtlist));
           :}
     ;
 
+
+
+
+StatementList    ::= StatementList:stmtlist   Statement:stmt
+                    {:  if (stmt != null) {stmtlist.add(stmt);} RESULT = stmtlist;  :}
+                    |   /* empty */ {: RESULT = new LinkedList<IStatement>(); :}
+                    ;
+
+ClassDeclarationList    ::=  /* empty */ {: RESULT = new LinkedList<IClassDecl>(); :}
+                        ;
+
+ExpressionList ::= ExpressionList:explist COMMA Expression:exp   {: /* if(exp!=null) {explist.add(exp); } RESULT=explist; */ :}
+                    | ExpressionList:explist Expression:exp {: /* if(exp!=null) explist.add(exp); RESULT = explist; */ :}
+                    | /* empty */ {: //RESULT = new LinkedList<IExp>(); :}
+                     ;
+
+Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:exp2 COMMA Expression:exp3 RPAREN SEMI
+                {: RESULT = new MeggySetPixel(op.line, op.pos, exp1, exp2, exp3); :}
+
+            |    MEGGYDELAY:op       LPAREN Expression:exp1 RPAREN  SEMI
+                {: RESULT = new MeggyDelay(op.line, op.pos, exp1); :}
+
+            |   IF:op LPAREN Expression:exp1 RPAREN Statement:stmt1 ELSE Statement:stmt2
+          			{: RESULT = new IfStatement(op.line, op.pos, exp1, stmt1, stmt2); :}
+
+            |   WHILE:op LPAREN Expression:exp1 RPAREN Statement:stmt1
+          			{: RESULT = new WhileStatement(op.line, op.pos, exp1, stmt1); :}
+
+            |   Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN SEMI
+                {: //RESULT = new CallStatement(dot.line, dot.pos, exp1, id.toString(), explist); :}
+
+            |    LBRACE:op StatementList:stmtlist RBRACE
+                {: RESULT = new BlockStatement(op.line, op.pos, stmtlist);  :}
+
+            ;
+
+
+Expression ::=    MEGGYGETPIXEL:op LPAREN Expression:a COMMA Expression:b RPAREN
+          			{: //RESULT = new MeggyGetPixel(op.line, op.pos, (IExp)a, (IExp)b); :}
+
+          			 | MEGGYCHECKBUTTON:op LPAREN Expression:a RPAREN
+          			{: RESULT = new MeggyCheckButton(op.line, op.pos, a); :}
+
+          			 | LPAREN:op BYTE RPAREN Expression:a
+          			{: RESULT = new ByteCast(op.line, op.pos, a); :}
+
+          			 | INT_LITERAL:intval
+          			{: RESULT = new IntLiteral(intval.line, intval.pos, intval.toString(), intval.value); :}
+
+          			 | COLOR_LITERAL:colorval
+          			{: RESULT = new ColorLiteral(colorval.line, colorval.pos, colorval.toString(), colorval.value); :}
+
+          			 | BUTTON_LITERAL:buttval
+          			{: RESULT = new ButtonLiteral(buttval.line, buttval.pos, buttval.toString(), buttval.value); :}
+
+          			 | TRUE:val
+          			{: RESULT = new TrueLiteral(val.line, val.pos, val.toString(), val.value); :}
+
+          			 | FALSE:val
+          			{: RESULT = new FalseLiteral(val.line, val.pos, val.toString(), val.value); :}
+
+          			 | LPAREN:op Expression:exp1 RPAREN
+          			{: //RESULT = exp1; :}
+
+          			| ID:id
+                {: //RESULT = new IdLiteral(id.line, id.pos, id.toString()); :}
+
+                ;
