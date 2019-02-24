@@ -109,7 +109,7 @@ precedence right UMINUS, LPAREN, RPAREN, NOT;
 precedence left ELSE;
 precedence left DOT;
 precedence left BYTE;
-
+precedence right ASSIGN;
 
 
 /* Meggy Java Grammar */
@@ -156,7 +156,7 @@ MainClass ::=
 
 
 
-StatementList    ::= StatementList:stmtlist   Statement:stmt
+StatementList    ::= StatementList:stmtlist Statement:stmt
                     {:  if (stmt != null) {stmtlist.add(stmt);} RESULT = stmtlist;  :}
                     |   /* empty */ {: RESULT = new LinkedList<IStatement>(); :}
                     ;
@@ -170,8 +170,8 @@ MethodDeclrationList   ::= MethodDeclrationList:methodlist  MethodDeclration:met
                         ;
 
 
-ExpressionList ::= ExpressionList:explist COMMA Expression:exp   {:  if(exp!=null) {explist.add(exp);} RESULT=explist;  :}
-                    | ExpressionList:explist Expression:exp {:  if(exp!=null) {explist.add(exp);} RESULT = explist;  :}
+ExpressionList ::= ExpressionList:explist COMMA  Expression:exp    {:  if(exp!=null) {explist.add(exp);} RESULT=explist;  :}
+                    |  ExpressionList:explist Expression:exp {:  if(exp!=null) {explist.add(exp);} RESULT = explist;  :}
                     | /* empty */ {: RESULT = new LinkedList<IExp>(); :}
                      ;
 
@@ -202,6 +202,9 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |    MEGGYDELAY:op       LPAREN Expression:exp1 RPAREN  SEMI
                 {: RESULT = new MeggyDelay(op.line, op.pos, exp1); :}
 
+            |    MEGGYTONESTART:op LPAREN Expression:exp1 COMMA Expression:exp2 RPAREN SEMI
+                {: RESULT = new MeggyToneStart(op.line, op.pos, exp1, exp2); :}
+
             |   IF:op LPAREN Expression:exp1 RPAREN Statement:stmt1 ELSE Statement:stmt2
           			{: RESULT = new IfStatement(op.line, op.pos, exp1, stmt1, stmt2); :}
 
@@ -217,7 +220,10 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |    LBRACE:op StatementList:stmtlist RBRACE
                 {: RESULT = new BlockStatement(op.line, op.pos, stmtlist);  :}
 
+            |   ID:name ASSIGN:op Expression:exp SEMI
+                {: RESULT = new AssignStatement(op.line, op.pos, name.toString(), exp); :}
             ;
+
 
 
 Expression ::=  Expression:lhs TIMES:op Expression:rhs
@@ -256,6 +262,9 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
           			 | COLOR_LITERAL:colorval
           			{: RESULT = new ColorLiteral(colorval.line, colorval.pos, colorval.toString(), colorval.value); :}
 
+                | TONE_LITERAL:toneval
+                {: RESULT = new ToneLiteral(toneval.line, toneval.pos, toneval.toString(), toneval.value); :}
+
           			 | BUTTON_LITERAL:buttval
           			{: RESULT = new ButtonLiteral(buttval.line, buttval.pos, buttval.toString(), buttval.value); :}
 
@@ -288,6 +297,8 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
 VariableDecl   ::= Type:t  ID:name SEMI:op
                 {: RESULT = new VarDecl(name.line, name.pos, t, name.toString()); :}
                 ;
+
+
 FormalVar      ::= Type:t  ID:name
                 {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
                 ;
@@ -305,11 +316,12 @@ Type   ::=  BOOLEAN:op
         {: RESULT = new VoidType(op.line, op.pos); :}
 
 	      | MEGGYCOLOR:op
-        {: RESULT = new ColorArrayType(op.line, op.pos); :}
+        {: RESULT = new ColorType(op.line, op.pos); :}
 
 	      | MEGGYBUTTON:op
         {: RESULT = new ButtonType(op.line, op.pos); :}
 
 	      | MEGGYTONE:op
         {: RESULT = new ToneType(op.line, op.pos); :}
+
         ;
