@@ -98,6 +98,7 @@ non terminal        List<Formal>              FormalList;
 non terminal        List<VarDecl>             VarDeclList;
 
 /* Declare precedence and associativity  here */
+precedence right THIS;
 precedence left AND;
 precedence left EQUAL;
 precedence left LT;
@@ -108,7 +109,7 @@ precedence right UMINUS, LPAREN, RPAREN, NOT;
 precedence left ELSE;
 precedence left DOT;
 precedence left BYTE;
-precedence right THIS;
+
 
 
 /* Meggy Java Grammar */
@@ -279,6 +280,8 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
                 | NEW:op ID:id LPAREN RPAREN
                 {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
 
+                | Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN
+                {: RESULT = new CallExp(dot.line, dot.pos, exp1, id.toString(), explist); :}
                 ;
 
 
