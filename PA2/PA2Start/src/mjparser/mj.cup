@@ -156,9 +156,9 @@ StatementList    ::= StatementList:stmtlist   Statement:stmt
 ClassDeclarationList    ::=  /* empty */ {: RESULT = new LinkedList<IClassDecl>(); :}
                         ;
 
-ExpressionList ::= ExpressionList:explist COMMA Expression:exp   {: /* if(exp!=null) {explist.add(exp); } RESULT=explist; */ :}
-                    | ExpressionList:explist Expression:exp {: /* if(exp!=null) explist.add(exp); RESULT = explist; */ :}
-                    | /* empty */ {: //RESULT = new LinkedList<IExp>(); :}
+ExpressionList ::= ExpressionList:explist COMMA Expression:exp   {:  if(exp!=null) {explist.add(exp);} RESULT=explist;  :}
+                    | ExpressionList:explist Expression:exp {:  if(exp!=null) {explist.add(exp);} RESULT = explist;  :}
+                    | /* empty */ {: RESULT = new LinkedList<IExp>(); :}
                      ;
 
 Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:exp2 COMMA Expression:exp3 RPAREN SEMI
@@ -237,6 +237,14 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
          			  {: RESULT = new NotExp(op.line, op.pos, exp); :}
 
           			| ID:id
-                {: //RESULT = new IdLiteral(id.line, id.pos, id.toString()); :}
+                {: RESULT = new IdLiteral(id.line, id.pos, id.toString()); :}
 
+                | THIS:op
+                {: RESULT = new ThisLiteral(op.line, op.pos, op.lexeme, op.value); :}
+
+                | NEW:op ID:id LPAREN RPAREN
+                {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
+
+                | Expression:exp DOT:dot ID:id LPAREN ExpressionList:explist RPAREN
+                {: RESULT = new CallExp(dot.line, dot.pos, exp, id.lexeme, explist); :}
                 ;
