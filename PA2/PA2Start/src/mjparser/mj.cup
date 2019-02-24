@@ -91,8 +91,17 @@ non terminal        LinkedList<IExp>          ExpressionList;
 
 
 /* Declare precedence and associativity  here */
+precedence left AND;
+precedence left EQUAL;
+precedence left LT;
+precedence left PLUS, MINUS;
 precedence left TIMES;
-precedence right UMINUS;
+precedence right NOT;
+precedence right UMINUS, LPAREN, RPAREN, NOT;
+precedence left ELSE;
+precedence left DOT;
+precedence left BYTE;
+
 
 
 /* Meggy Java Grammar */
@@ -161,6 +170,9 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |   IF:op LPAREN Expression:exp1 RPAREN Statement:stmt1 ELSE Statement:stmt2
           			{: RESULT = new IfStatement(op.line, op.pos, exp1, stmt1, stmt2); :}
 
+            | IF LPAREN:op Expression:exp RPAREN Statement:stmt
+          			{: RESULT = new IfStatement(op.line, op.pos, exp, stmt, (IStatement)null); :}
+
             |   WHILE:op LPAREN Expression:exp1 RPAREN Statement:stmt1
           			{: RESULT = new WhileStatement(op.line, op.pos, exp1, stmt1); :}
 
@@ -173,11 +185,32 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             ;
 
 
-Expression ::=    MEGGYGETPIXEL:op LPAREN Expression:a COMMA Expression:b RPAREN
-          			{: //RESULT = new MeggyGetPixel(op.line, op.pos, (IExp)a, (IExp)b); :}
+Expression ::=  Expression:lhs TIMES:op Expression:rhs
+                {: RESULT = new MulExp(op.line, op.pos, lhs, rhs); :}
 
-          			 | MEGGYCHECKBUTTON:op LPAREN Expression:a RPAREN
-          			{: RESULT = new MeggyCheckButton(op.line, op.pos, a); :}
+                | Expression:lhs PLUS:op  Expression:rhs
+                {: RESULT = new PlusExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs MINUS:op  Expression:rhs
+                {: RESULT = new MinusExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs EQUAL:op  Expression:rhs
+                {: RESULT = new EqualExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs AND:op  Expression:rhs
+                {: RESULT = new AndExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs LT:op  Expression:rhs
+                {: RESULT = new LtExp(op.line, op.pos, lhs, rhs); :}
+
+                | MINUS:op Expression:exp
+         			  {: RESULT = new NegExp(op.line, op.pos, exp); :}
+
+                | MEGGYGETPIXEL:op LPAREN Expression:exp1 COMMA Expression:exp2 RPAREN
+          			{: RESULT = new MeggyGetPixel(op.line, op.pos, exp1, exp2); :}
+
+          			 | MEGGYCHECKBUTTON:op LPAREN Expression:exp RPAREN
+          			{: RESULT = new MeggyCheckButton(op.line, op.pos, exp); :}
 
           			 | LPAREN:op BYTE RPAREN Expression:a
           			{: RESULT = new ByteCast(op.line, op.pos, a); :}
@@ -197,8 +230,11 @@ Expression ::=    MEGGYGETPIXEL:op LPAREN Expression:a COMMA Expression:b RPAREN
           			 | FALSE:val
           			{: RESULT = new FalseLiteral(val.line, val.pos, val.toString(), val.value); :}
 
-          			 | LPAREN:op Expression:exp1 RPAREN
-          			{: //RESULT = exp1; :}
+          			 | LPAREN:op Expression:exp RPAREN
+          			{: RESULT = exp; :}
+
+                | NOT:op Expression:exp
+         			  {: RESULT = new NotExp(op.line, op.pos, exp); :}
 
           			| ID:id
                 {: //RESULT = new IdLiteral(id.line, id.pos, id.toString()); :}

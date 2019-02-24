@@ -116,6 +116,7 @@ single_line_comment   =   "//".*
 
 "+"                     {return new Symbol(sym.PLUS,new SymbolValue(yyline+1, yychar+1, yytext()));}
 "*"                     {return new Symbol(sym.TIMES,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
+"-"                     {return new Symbol(sym.MINUS,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 ","                     {return new Symbol(sym.COMMA,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 ";"                     {return new Symbol(sym.SEMI,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 "("                     {return new Symbol(sym.LPAREN,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
