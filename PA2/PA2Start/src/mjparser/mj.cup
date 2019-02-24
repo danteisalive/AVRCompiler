@@ -83,12 +83,19 @@ terminal UMINUS;
 
 non terminal        Program                   Program;
 non terminal        IExp                      Expression;
+non terminal        IType                     Type;
 non terminal        IStatement                Statement;
+non terminal        Formal                    FormalVar;
+non terminal        VarDecl                   VariableDecl;
+non terminal        TopClassDecl              ClassDeclaration;
+non terminal        MethodDecl                MethodDeclration;
 non terminal        MainClass                 MainClass;
 non terminal        List<IStatement>          StatementList;
 non terminal        List<IClassDecl>          ClassDeclarationList;
 non terminal        LinkedList<IExp>          ExpressionList;
-
+non terminal        List<MethodDecl>          MethodDeclrationList;
+non terminal        List<Formal>              FormalList;
+non terminal        List<VarDecl>             VarDeclList;
 
 /* Declare precedence and associativity  here */
 precedence left AND;
@@ -101,7 +108,7 @@ precedence right UMINUS, LPAREN, RPAREN, NOT;
 precedence left ELSE;
 precedence left DOT;
 precedence left BYTE;
-
+precedence right THIS;
 
 
 /* Meggy Java Grammar */
@@ -153,13 +160,40 @@ StatementList    ::= StatementList:stmtlist   Statement:stmt
                     |   /* empty */ {: RESULT = new LinkedList<IStatement>(); :}
                     ;
 
-ClassDeclarationList    ::=  /* empty */ {: RESULT = new LinkedList<IClassDecl>(); :}
+ClassDeclarationList    ::= ClassDeclarationList:classlist  ClassDeclaration:c  {: if(c!=null) {classlist.add(c);} RESULT = classlist; :}
+                        | /* empty */                                               {: RESULT = new LinkedList<IClassDecl>(); :}
                         ;
+
+MethodDeclrationList   ::= MethodDeclrationList:methodlist  MethodDeclration:method {: if(method!=null) {methodlist.add(method);} RESULT = methodlist; :}
+                        | /* empty */                                               {: RESULT = new LinkedList<MethodDecl>(); :}
+                        ;
+
 
 ExpressionList ::= ExpressionList:explist COMMA Expression:exp   {:  if(exp!=null) {explist.add(exp);} RESULT=explist;  :}
                     | ExpressionList:explist Expression:exp {:  if(exp!=null) {explist.add(exp);} RESULT = explist;  :}
                     | /* empty */ {: RESULT = new LinkedList<IExp>(); :}
                      ;
+
+FormalList  ::= FormalList:formallist COMMA FormalVar:formal  {: if(formal!=null) {formallist.add(formal);} RESULT=formallist; :}
+            |   FormalList:formallist FormalVar:formal        {: if(formal!=null) {formallist.add(formal);} RESULT=formallist; :}
+            |   /*  empty  */                                 {: RESULT = new LinkedList<Formal>(); :}
+            ;
+
+VarDeclList  ::= VarDeclList:varlist VariableDecl:variable    {: if(variable!=null) {varlist.add(variable);} RESULT=varlist; :}
+              | /*  empty  */                                 {: RESULT = new LinkedList<VarDecl>(); :}
+              ;
+
+
+ClassDeclaration ::= CLASS:op ID:name LBRACE VarDeclList:varlist MethodDeclrationList:methodlist RBRACE
+                  {: RESULT = new TopClassDecl(op.line, op.pos, name.toString(), varlist, methodlist); :}
+                  ;
+
+MethodDeclration ::= PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, type, name.toString(), formallist, varlist, stmtlist, exp); :}
+
+                  | PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, type, name.toString(), formallist, varlist, stmtlist, (IExp)null); :}
+                  ;
 
 Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:exp2 COMMA Expression:exp3 RPAREN SEMI
                 {: RESULT = new MeggySetPixel(op.line, op.pos, exp1, exp2, exp3); :}
@@ -170,14 +204,14 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |   IF:op LPAREN Expression:exp1 RPAREN Statement:stmt1 ELSE Statement:stmt2
           			{: RESULT = new IfStatement(op.line, op.pos, exp1, stmt1, stmt2); :}
 
-            | IF LPAREN:op Expression:exp RPAREN Statement:stmt
+            |   IF LPAREN:op Expression:exp RPAREN Statement:stmt
           			{: RESULT = new IfStatement(op.line, op.pos, exp, stmt, (IStatement)null); :}
 
             |   WHILE:op LPAREN Expression:exp1 RPAREN Statement:stmt1
           			{: RESULT = new WhileStatement(op.line, op.pos, exp1, stmt1); :}
 
             |   Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN SEMI
-                {: //RESULT = new CallStatement(dot.line, dot.pos, exp1, id.toString(), explist); :}
+                {: RESULT = new CallStatement(dot.line, dot.pos, exp1, id.toString(), explist); :}
 
             |    LBRACE:op StatementList:stmtlist RBRACE
                 {: RESULT = new BlockStatement(op.line, op.pos, stmtlist);  :}
@@ -245,6 +279,34 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
                 | NEW:op ID:id LPAREN RPAREN
                 {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
 
-                | Expression:exp DOT:dot ID:id LPAREN ExpressionList:explist RPAREN
-                {: RESULT = new CallExp(dot.line, dot.pos, exp, id.lexeme, explist); :}
                 ;
+
+
+VariableDecl   ::= Type:t  ID:name SEMI:op
+                {: RESULT = new VarDecl(name.line, name.pos, t, name.toString()); :}
+                ;
+FormalVar      ::= Type:t  ID:name
+                {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
+                ;
+
+Type   ::=  BOOLEAN:op
+        {: RESULT = new BoolType(op.line, op.pos); :}
+
+        | BYTE:op
+        {: RESULT = new ByteType(op.line, op.pos); :}
+
+        | INT:op
+        {: RESULT = new IntType(op.line, op.pos); :}
+
+	      | VOID:op
+        {: RESULT = new VoidType(op.line, op.pos); :}
+
+	      | MEGGYCOLOR:op
+        {: RESULT = new ColorArrayType(op.line, op.pos); :}
+
+	      | MEGGYBUTTON:op
+        {: RESULT = new ButtonType(op.line, op.pos); :}
+
+	      | MEGGYTONE:op
+        {: RESULT = new ToneType(op.line, op.pos); :}
+        ;

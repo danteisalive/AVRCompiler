@@ -4,8 +4,8 @@
 #   ./regress.sh
 
 
-files='Byte.java PA2bluedot.java CondExpr.java If.java IfStmt.java PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java PA3Expressions.java PA3Test1.java PA3Test2.java PA3Test3.java'
-#files='PA4bluedot.java'
+#files='Byte.java PA2bluedot.java CondExpr.java If.java IfStmt.java PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java PA3Expressions.java PA3Test1.java PA3Test2.java PA3Test3.java'
+files='PA4bluedot.java'
 #for filename in `ls *.java`
 for filename in $files;
 do

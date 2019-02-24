@@ -72,6 +72,7 @@ single_line_comment   =   "//".*
 "length"                {return new Symbol(sym.LENGTH,new SymbolValue(yyline+1, yychar+1, yytext()));}
 "import"                {return new Symbol(sym.IMPORT,new SymbolValue(yyline+1, yychar+1, yytext()));}
 
+
 "meggy.Meggy"           {return new Symbol(sym.MEGGY,new SymbolValue(yyline+1, yychar+1, yytext()));}
 "Meggy.setPixel"        {return new Symbol(sym.MEGGYSETPIXEL,new SymbolValue(yyline+1, yychar+1, yytext()));}
 "Meggy.setAuxLEDs"      {return new Symbol(sym.MEGGYSETAUXLEDS,new SymbolValue(yyline+1, yychar+1, yytext()));}
@@ -124,7 +125,7 @@ single_line_comment   =   "//".*
 
 "{"                     {return new Symbol(sym.LBRACE,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 "}"                     {return new Symbol(sym.RBRACE,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
-
+"."                     {return new Symbol(sym.DOT,new SymbolValue(yyline+1, yychar+1, yytext()));}
 "["                     {return new Symbol(sym.LBRACKET,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 "]"                     {return new Symbol(sym.RBRACKET,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
 "="                     {return new Symbol(sym.ASSIGN,new SymbolValue(yyline+1, yychar+1, yytext(), -1));}
