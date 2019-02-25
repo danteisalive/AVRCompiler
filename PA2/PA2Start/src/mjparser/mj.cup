@@ -121,7 +121,7 @@ Program ::=
     MainClass:mainclass
     ClassDeclarationList:classlist
     {:
-        System.out.println("PROGRAM");
+        //System.out.println("PROGRAM");
         RESULT =  new Program(imp.line, imp.pos, mainclass, classlist);
 
     :}
@@ -130,7 +130,7 @@ Program ::=
 MainClass ::=
         CLASS:op ID:name
             {:
-                System.out.println(name.toString());
+                //System.out.println(name.toString());
                 String t_name = name.toString() + ".java";
 
                 if (!parser.programName.contains(t_name)){
@@ -143,13 +143,13 @@ MainClass ::=
         LPAREN STRING LBRACKET RBRACKET ID:param RPAREN
         LBRACE
           {:
-              System.out.println(param.toString());
+              //System.out.println(param.toString());
           :}
         StatementList:stmtlist
         RBRACE
         RBRACE
           {:
-              System.out.println("END OF FILE");
+              //System.out.println("END OF FILE");
               RESULT  = new MainClass(op.line, op.pos, name.toString(), param.toString(),  new BlockStatement(op.line, op.pos, stmtlist));
           :}
     ;

@@ -43,7 +43,7 @@ public class MJDriver {
 
            java.io.PrintStream astout =
             new java.io.PrintStream(
-                new java.io.FileOutputStream(filename + ".ast.dot.final"));
+                new java.io.FileOutputStream(filename + ".ast.dot"));
            Program ast_root = (Program)mjparser.parse().value;
            ast_root.accept(new DotVisitor(new PrintWriter(astout)));
 
