@@ -4,20 +4,20 @@
 #   ./regress.sh
 
 
-files='Byte.java CondExpr.java If.java IfStmt.java PA2bluedot.java
-      PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java
-      PA3Expressions.java PA3Test1.java PA3Test2.java
-      PA3Test3.java PA4bluedot.java PA4MazeSolver.java
-      PA4raindrop.java PA5Cylon.java PA5movedot.java
-      PA5obj.java PA5PaddleBall.java PA5RunningExample.java'
+# files='Byte.java CondExpr.java If.java IfStmt.java PA2bluedot.java
+#       PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java
+#       PA3Expressions.java PA3Test1.java PA3Test2.java
+#       PA3Test3.java PA4bluedot.java PA4MazeSolver.java
+#       PA4raindrop.java PA5Cylon.java PA5movedot.java
+#       PA5obj.java PA5PaddleBall.java PA5RunningExample.java'
 
-#for filename in `ls *.java`
-for filename in $files;
+for filename in `ls *.java`
+#for filename in $files;
 do
-    echo "Regression testing MJ.jar $filename"
+    echo "Regression testing MJPA2.jar $filename"
 
     # run the input file with our MJ Parser
-    java -jar ../PA2Start/MJ.jar $filename
+    java -jar ../PA2Start/MJPA2.jar $filename
     mv   $filename.ast.dot myOutput.java.ast.dot
     # run the input file with reference MJ Parser
     java -jar ../../ReferenceCompiler/MJ.jar $filename > /dev/null 2>&1
