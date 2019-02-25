@@ -28,7 +28,8 @@ do
     if [ "$result" = "" ]
     then
         echo "SUCCESS!"
-    else 
+    else
+        echo "ERROR!"
     fi
 
     rm *.java.s  > /dev/null 2>&1
