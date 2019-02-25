@@ -27,7 +27,7 @@ JAVA_CUP_RUNTIME = $(shell pwd)
 
 SRC_DIR = src
 PARSE_DIR = $(SRC_DIR)/mjparser
-PROG = MJ
+PROG = MJPA2
 
 .SUFFIXES: .java.class
 

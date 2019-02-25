@@ -11,7 +11,7 @@ import mjparser.*;
 import ast_visitors.*;
 import ast.node.*;
 import ast_visitors.DotVisitor;
-public class MJDriver {
+public class MJPA2Driver {
 
       private static void usage() {
           System.err.println(
