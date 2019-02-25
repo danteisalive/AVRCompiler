@@ -97,6 +97,7 @@ non terminal        List<MethodDecl>          MethodDeclrationList;
 non terminal        List<Formal>              FormalList;
 non terminal        List<VarDecl>             VarDeclList;
 
+
 /* Declare precedence and associativity  here */
 precedence right THIS;
 precedence left AND;
@@ -156,8 +157,14 @@ MainClass ::=
 
 
 
-StatementList    ::= StatementList:stmtlist Statement:stmt
-                    {:  if (stmt != null) {stmtlist.add(stmt);} RESULT = stmtlist;  :}
+StatementList    ::=  Statement:stmt StatementList:stmtlist
+                    {:
+                        List list = new LinkedList<IStatement>();
+                        if (stmt     != null) {list.add(stmt);}
+                        if (stmtlist != null) {list.addAll(stmtlist);}
+                        RESULT = list;
+                    :}
+
                     |   /* empty */ {: RESULT = new LinkedList<IStatement>(); :}
                     ;
 
@@ -180,7 +187,11 @@ FormalList  ::= FormalList:formallist COMMA FormalVar:formal  {: if(formal!=null
             |   /*  empty  */                                 {: RESULT = new LinkedList<Formal>(); :}
             ;
 
-VarDeclList  ::= VarDeclList:varlist VariableDecl:variable    {: if(variable!=null) {varlist.add(variable);} RESULT=varlist; :}
+VarDeclList  ::= VarDeclList:varlist Type:t ID:name SEMI:op
+              {:
+                  varlist.add(new VarDecl(name.line, name.pos, t, name.toString()));
+                  RESULT=varlist;
+              :}
               | /*  empty  */                                 {: RESULT = new LinkedList<VarDecl>(); :}
               ;
 
@@ -220,8 +231,9 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |    LBRACE:op StatementList:stmtlist RBRACE
                 {: RESULT = new BlockStatement(op.line, op.pos, stmtlist);  :}
 
-            |   ID:name ASSIGN:op Expression:exp SEMI
-                {: RESULT = new AssignStatement(op.line, op.pos, name.toString(), exp); :}
+            |   Expression:exp1 ASSIGN:op Expression:exp2 SEMI
+                {: RESULT = new AssignStatement(op.line, op.pos, exp1.toString(), exp2); :}
+
             ;
 
 
@@ -294,11 +306,6 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
                 ;
 
 
-VariableDecl   ::= Type:t  ID:name SEMI:op
-                {: RESULT = new VarDecl(name.line, name.pos, t, name.toString()); :}
-                ;
-
-
 FormalVar      ::= Type:t  ID:name
                 {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
                 ;
@@ -324,4 +331,6 @@ Type   ::=  BOOLEAN:op
 	      | MEGGYTONE:op
         {: RESULT = new ToneType(op.line, op.pos); :}
 
+        | ID:op
+        {: RESULT = new ClassType(op.line, op.pos, op.toString()); :}
         ;

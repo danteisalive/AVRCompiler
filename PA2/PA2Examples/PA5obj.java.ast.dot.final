@@ -44,38 +44,38 @@ digraph ASTGraph {
 13 -> 21
 22 [ label="ClassType" ];
 21 -> 22
-23 [ label="MeggySetPixel" ];
+23 [ label="AssignStatement" ];
 13 -> 23
-24 [ label="CallExp" ];
+24 [ label="NewExp" ];
 23 -> 24
-25 [ label="IdLiteral\nox" ];
-24 -> 25
-26 [ label="CallExp" ];
-23 -> 26
-27 [ label="IdLiteral\noy" ];
-26 -> 27
-28 [ label="IdLiteral\nc" ];
-23 -> 28
-29 [ label="CallStatement" ];
-13 -> 29
-30 [ label="IdLiteral\noy" ];
-29 -> 30
-31 [ label="IdLiteral\ny" ];
-29 -> 31
-32 [ label="AssignStatement" ];
-13 -> 32
-33 [ label="NewExp" ];
-32 -> 33
-34 [ label="CallStatement" ];
-13 -> 34
+25 [ label="CallStatement" ];
+13 -> 25
+26 [ label="IdLiteral\nox" ];
+25 -> 26
+27 [ label="IdLiteral\nx" ];
+25 -> 27
+28 [ label="AssignStatement" ];
+13 -> 28
+29 [ label="NewExp" ];
+28 -> 29
+30 [ label="CallStatement" ];
+13 -> 30
+31 [ label="IdLiteral\noy" ];
+30 -> 31
+32 [ label="IdLiteral\ny" ];
+30 -> 32
+33 [ label="MeggySetPixel" ];
+13 -> 33
+34 [ label="CallExp" ];
+33 -> 34
 35 [ label="IdLiteral\nox" ];
 34 -> 35
-36 [ label="IdLiteral\nx" ];
-34 -> 36
-37 [ label="AssignStatement" ];
-13 -> 37
-38 [ label="NewExp" ];
-37 -> 38
+36 [ label="CallExp" ];
+33 -> 36
+37 [ label="IdLiteral\noy" ];
+36 -> 37
+38 [ label="IdLiteral\nc" ];
+33 -> 38
 39 [ label="TopClassDecl" ];
 0 -> 39
 40 [ label="VarDecl" ];
