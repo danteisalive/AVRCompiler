@@ -249,9 +249,6 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
             |   Expression:exp1 ASSIGN:op Expression:exp2 SEMI
                 {: RESULT = new AssignStatement(op.line, op.pos, exp1.toString(), exp2); :}
 
-            |   Expression:exp1 ASSIGN:op Expression:exp2 LBRACKET Expression:exp3 RBRACKET SEMI
-                {: RESULT = new AssignStatement(op.line, op.pos, exp1.toString(), exp3); :}
-
             |   Expression:exp1 LBRACKET Expression:exp2 RBRACKET ASSIGN:op Expression:exp3 SEMI
                 {: RESULT = new ArrayAssignStatement(op.line, op.pos, (IdLiteral)exp1, exp2, exp3); :}
             ;
@@ -321,13 +318,14 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
                 | NEW:op ID:id LPAREN RPAREN
                 {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
 
-                | NEW:op Type:t
-                {: RESULT = new NewArrayExp(op.line, op.pos, t, (IExp)null); :}
+                | NEW:op Type:t LBRACKET Expression:exp1 RBRACKET
+                {: RESULT = new NewArrayExp(op.line, op.pos, t, exp1); :}
 
                 | Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN
                 {: RESULT = new CallExp(dot.line, dot.pos, exp1, id.toString(), explist); :}
 
-                | 
+                | Expression:exp1 LBRACKET:op Expression:exp2 RBRACKET
+                {: RESULT = new ArrayExp(op.line, op.pos, exp1, exp2); :}
                 ;
 
 
