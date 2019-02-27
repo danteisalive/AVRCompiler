@@ -11,7 +11,7 @@
 #       PA4raindrop.java PA5Cylon.java PA5movedot.java
 #       PA5obj.java PA5PaddleBall.java PA5RunningExample.java'
 
-files='ArrayExp.java'
+files='PA6rainbow.java'
 
 for filename in `ls *.java`
 #for filename in $files;

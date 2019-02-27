@@ -16,6 +16,6 @@ class MyClass {
         x[0] = 1;
         x[1] = 6;
         x[6] = 3;
-        return x[0] + x[1];     
+        return x[0] + x[x[1]];     
     }
 }

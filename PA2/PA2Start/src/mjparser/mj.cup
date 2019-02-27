@@ -99,11 +99,15 @@ non terminal        List<VarDecl>             VarDeclList;
 
 
 /* Declare precedence and associativity  here */
+
+precedence right RETURN;
+
 precedence right THIS;
 precedence left AND;
 precedence left EQUAL;
 precedence left LT;
 precedence left PLUS, MINUS;
+precedence left LBRACKET, RBRACKET;
 precedence left TIMES;
 precedence right NOT;
 precedence right UMINUS, LPAREN, RPAREN, NOT;
@@ -331,6 +335,11 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
 
 FormalVar      ::= Type:t  ID:name
                 {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
+                | MEGGYCOLOR:op LBRACKET RBRACKET ID:name
+                {: RESULT = new Formal(name.line, name.pos, new ColorArrayType(op.line, op.pos), name.toString()); :}
+
+                | INT:op LBRACKET RBRACKET ID:name
+                {: RESULT = new Formal(name.line, name.pos, new IntArrayType(op.line, op.pos), name.toString()); :}
                 ;
 
 Type   ::=  BOOLEAN:op
@@ -356,4 +365,5 @@ Type   ::=  BOOLEAN:op
 
         | ID:op
         {: RESULT = new ClassType(op.line, op.pos, op.toString()); :}
+
         ;
