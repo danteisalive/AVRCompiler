@@ -255,6 +255,9 @@ Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:e
 
             |   Expression:exp1 LBRACKET Expression:exp2 RBRACKET ASSIGN:op Expression:exp3 SEMI
                 {: RESULT = new ArrayAssignStatement(op.line, op.pos, (IdLiteral)exp1, exp2, exp3); :}
+
+            |   MEGGYSETAUXLEDS LPAREN:op Expression:exp RPAREN SEMI
+                {: RESULT = new MeggySetAuxLEDs(op.line, op.pos, exp);:}
             ;
 
 
@@ -318,6 +321,9 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
 
                 | THIS:op
                 {: RESULT = new ThisLiteral(op.line, op.pos, op.lexeme, op.value); :}
+
+                | Expression:exp DOT LENGTH:op
+                {: RESULT = new LengthExp(op.line, op.pos, exp); :}
 
                 | NEW:op ID:id LPAREN RPAREN
                 {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
