@@ -4,15 +4,17 @@
 #   ./regress.sh
 
 
-# files='Byte.java CondExpr.java If.java IfStmt.java PA2bluedot.java
-#       PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java
-#       PA3Expressions.java PA3Test1.java PA3Test2.java
-#       PA3Test3.java PA4bluedot.java PA4MazeSolver.java
-#       PA4raindrop.java PA5Cylon.java PA5movedot.java
-#       PA5obj.java PA5PaddleBall.java PA5RunningExample.java'
+files='Byte.java CondExpr.java If.java IfStmt.java PA2bluedot.java
+      PA2FlowerSimple.java PA3buttondot.java PA3Cylon.java
+      PA3Expressions.java PA3Test1.java PA3Test2.java
+      PA3Test3.java PA4bluedot.java PA4MazeSolver.java
+      PA4raindrop.java PA5Cylon.java PA5movedot.java
+      PA5obj.java PA5PaddleBall.java PA5RunningExample.java'
 
-for filename in `ls *.java`
-#for filename in $files;
+#files='ArrayExp.java'
+
+#for filename in `ls *.java`
+for filename in $files;
 do
     echo "Regression testing MJPA2.jar $filename"
 
