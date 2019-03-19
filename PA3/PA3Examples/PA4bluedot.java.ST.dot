@@ -11,9 +11,9 @@ digraph SymTable {
 	3:<f3> -> 4:<f0>;
 	4 [label=" <f0> Scope | <f1> mDict\[this\] | <f2> mDict\[x\] | <f3> mDict\[y\] "];
 	4:<f1> -> 5:<f0>;
-	5 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_Simple;| <f3> mBase = INVALID| <f4> mOffset = 0"];
+	5 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_Simple;| <f3> mBase = Y| <f4> mOffset = 1"];
 	4:<f2> -> 6:<f0>;
-	6 [label=" <f0> VarSTE | <f1> mName = x| <f2> mType = BYTE| <f3> mBase = INVALID| <f4> mOffset = 0"];
+	6 [label=" <f0> VarSTE | <f1> mName = x| <f2> mType = BYTE| <f3> mBase = Y| <f4> mOffset = 3"];
 	4:<f3> -> 7:<f0>;
-	7 [label=" <f0> VarSTE | <f1> mName = y| <f2> mType = BYTE| <f3> mBase = INVALID| <f4> mOffset = 0"];
+	7 [label=" <f0> VarSTE | <f1> mName = y| <f2> mType = BYTE| <f3> mBase = Y| <f4> mOffset = 4"];
 }
