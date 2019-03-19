@@ -37,42 +37,74 @@ public class CheckTypes extends DepthFirstVisitor
 
    //========================= Overriding the visitor interface
 
-   public void defaultOut(Node node) {
-       System.err.println("Node not implemented in CheckTypes, " + node.getClass());
-   }
-   // program type check.
-   public void outProgram(Program node){}
+     public void defaultOut(Node node) {
+         System.err.println("Node not implemented in CheckTypes, " + node.getClass());
+     }
+     // program type check.
+     public void outProgram(Program node){}
 
-   // main class type check.
-   public void outMainClass(MainClass node){}
+     // main class type check.
+     public void outMainClass(MainClass node){}
 
-   // blocked statement.
-   public void outBlockStatement(BlockStatement node){}
+     // blocked statement.
+     public void outBlockStatement(BlockStatement node){}
 
 
-   public void outIntegerExp(IntLiteral node){
-      this.mCurrentST.setExpType(node, Type.INT);
- 	 }
+     public void outIntegerExp(IntLiteral node){
+        this.mCurrentST.setExpType(node, Type.INT);
+   	 }
 
- 	 public void outColorExp(ColorLiteral node){
-      this.mCurrentST.setExpType(node, Type.COLOR);
- 	 }
+   	 public void outColorExp(ColorLiteral node){
+        this.mCurrentST.setExpType(node, Type.COLOR);
+   	 }
 
- 	 public void outButtonExp(ButtonLiteral node){
-      this.mCurrentST.setExpType(node, Type.BUTTON);
- 	 }
+   	 public void outButtonExp(ButtonLiteral node){
+        this.mCurrentST.setExpType(node, Type.BUTTON);
+   	 }
 
-   public void outToneExp(ToneLiteral node){
-      this.mCurrentST.setExpType(node, Type.TONE);
- 	 }
+     public void outToneExp(ToneLiteral node){
+        this.mCurrentST.setExpType(node, Type.TONE);
+   	 }
 
- 	 public void outTrueExp(TrueLiteral node){
-      this.mCurrentST.setExpType(node, Type.BOOL);
- 	 }
+   	 public void outTrueExp(TrueLiteral node){
+        this.mCurrentST.setExpType(node, Type.BOOL);
+   	 }
 
- 	 public void outFalseExp(FalseLiteral node){
-      this.mCurrentST.setExpType(node, Type.BOOL);
- 	 }
+   	 public void outFalseExp(FalseLiteral node){
+        this.mCurrentST.setExpType(node, Type.BOOL);
+   	 }
+
+
+     public void outMeggyDelay(MeggyDelay node){
+         Type expType = this.mCurrentST.getExpType(node.getExp());
+         if(expType != Type.INT){
+             throw new SemanticException("Invalid param type for Meggy Delay.",
+                                          node.getExp().getLine(),
+                                          node.getExp().getPos()
+                                          );
+         }
+     }
+
+     public void outIfStatement(IfStatement node){
+         Type expType = this.mCurrentST.getExpType(node.getExp());
+         if (expType != Type.BOOL){
+             throw new SemanticException("Invalid param type for if statement",
+  			                                 node.getExp().getLine(),
+                                         node.getExp().getPos()
+                                         );
+         }
+     }
+
+     public void outWhileStatement(WhileStatement node){
+         Type expType = this.mCurrentST.getExpType(node.getExp());
+         if(expType !=Type.BOOL){
+             throw new SemanticException("Invalid param type for while statement",
+                                          node.getExp().getLine(),
+                                          node.getExp().getPos()
+                                          );
+         }
+     }
+
 
     public void outMeggySetPixel(MeggySetPixel node){
 
