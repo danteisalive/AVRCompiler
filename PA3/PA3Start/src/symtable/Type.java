@@ -12,6 +12,7 @@ public class Type
   public static final Type COLOR = new Type();
   public static final Type BUTTON = new Type();
   public static final Type VOID = new Type();
+  public static final Type TONE = new Type();
 
   private Type()
   {
@@ -19,7 +20,7 @@ public class Type
   }
 
 
-    
+
 /*
 */
 
@@ -50,12 +51,16 @@ public class Type
       return "BUTTON";
     }
 
-    
+    if(this == TONE)
+    {
+      return "TONE";
+    }
+
 /*
 */
     return "MAINCLASS;";
   }
-  
+
   public int getAVRTypeSize() {
       if(this == INT) { return 2; }
       if(this == BOOL) { return 1; }
@@ -67,8 +72,8 @@ public class Type
       return 2; // class references are 2 bytes
   }
 
-    
-/*  
+
+/*
 */
 
 }

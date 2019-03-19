@@ -341,6 +341,7 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
 
 FormalVar      ::= Type:t  ID:name
                 {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
+                
                 | MEGGYCOLOR:op LBRACKET RBRACKET ID:name
                 {: RESULT = new Formal(name.line, name.pos, new ColorArrayType(op.line, op.pos), name.toString()); :}
 

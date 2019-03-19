@@ -13,6 +13,8 @@ import ast.node.*;
 import ast_visitors.DotVisitor;
 import ast_visitors.CheckTypes;
 
+import symtable.SymTable;
+
 public class MJPA3Driver {
 
       private static void usage() {
@@ -36,18 +38,15 @@ public class MJPA3Driver {
           // construct the lexer and feed it to the parser
           // the lexer will be the same for all of the parsers
           /* open input files, etc. here */
-          Symbol parse_tree = null;
           mj mjparser = new mj (new Yylex(new FileReader(filename)));
           mjparser.programName = filename;
-
-        //  parse_tree = mjparser.parse();
-          //parse_tree = mjparser.debug_parse();
-
-           java.io.PrintStream astout =
+          java.io.PrintStream astout =
             new java.io.PrintStream(
                 new java.io.FileOutputStream(filename + ".ast.dot"));
+
            Program ast_root = (Program)mjparser.parse().value;
            ast_root.accept(new DotVisitor(new PrintWriter(astout)));
+           ast_root.accept(new CheckTypes(new SymTable()));
 
         }catch (Exception e) {
             e.printStackTrace();
