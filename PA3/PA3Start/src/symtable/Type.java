@@ -68,7 +68,7 @@ public class Type
       if(this == COLOR) { return 1; }
       if(this == BUTTON) { return 1; }
       if(this == VOID) { return 0; }
-
+      if(this == TONE) { return 1;}
       return 2; // class references are 2 bytes
   }
 

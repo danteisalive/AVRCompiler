@@ -33,7 +33,7 @@ public class MJPA3Driver {
 
         // filename should be the last command line option
         String filename = args[args.length-1];
-
+        symtable.SymTable SymbolTable = new SymTable();
         try {
           // construct the lexer and feed it to the parser
           // the lexer will be the same for all of the parsers
@@ -44,9 +44,9 @@ public class MJPA3Driver {
             new java.io.PrintStream(
                 new java.io.FileOutputStream(filename + ".ast.dot"));
 
-           Program ast_root = (Program)mjparser.parse().value;
-           ast_root.accept(new DotVisitor(new PrintWriter(astout)));
-           ast_root.accept(new CheckTypes(new SymTable()));
+          Program ast_root = (Program)mjparser.parse().value;
+          ast_root.accept(new DotVisitor(new PrintWriter(astout)));
+          ast_root.accept(new CheckTypes(SymbolTable));
 
         }catch (Exception e) {
             e.printStackTrace();
