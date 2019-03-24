@@ -20,8 +20,8 @@ public class Scope {
 
 	public STE lookupInnermost (String steName){
 
-		System.out.println("in Scope.lookup(" + steName + ") ...");
-		System.out.println("Looking for " + steName);
+		System.out.println("in Scope(" + scopeType + ")" + ".lookup(" + steName + ") ...");
+		//System.out.println("Looking for " + steName);
 
 		if(mDict.containsKey(steName)){
 			return mDict.get(steName);
@@ -39,8 +39,7 @@ public class Scope {
 				throw new SemanticException("Variable " + ste.getSTEName() + "has already been defined");
 			}
 		}
-		System.out.println("in Scope.insert(" + ste.getSTEName() + ") ...");
-		System.out.println("insert " + ste.getSTEName());
+		System.out.println("in Scope(" + scopeType + ")" + "insert(" + ste.getSTEName() + ") ...");
 		mDict.put(ste.getSTEName(), ste);
 	}
 

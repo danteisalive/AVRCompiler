@@ -46,8 +46,8 @@ public class MJPA3Driver {
 
           Program ast_root = (Program)mjparser.parse().value;
           ast_root.accept(new DotVisitor(new PrintWriter(astout)));
-          ast_root.accept(new CheckTypes(SymbolTable));
-
+          //ast_root.accept(new CheckTypes(SymbolTable));
+          ast_root.accept(new BuildSymTable(new SymTable()));
         }catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

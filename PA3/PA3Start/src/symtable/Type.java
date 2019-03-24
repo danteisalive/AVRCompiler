@@ -14,18 +14,28 @@ public class Type
   public static final Type VOID = new Type();
   public static final Type TONE = new Type();
 
+
+  private final String className;
+
   private Type()
   {
+    className = null;
+  }
 
+  public Type(String id)
+  {
+    className = id;
   }
 
 
-
-/*
-*/
-
   public String toString()
   {
+
+    if (className != null)
+    {
+      return "class_" + className;
+    }
+
     if(this == INT)
     {
       return "INT";
@@ -56,12 +66,11 @@ public class Type
       return "TONE";
     }
 
-/*
-*/
     return "MAINCLASS;";
   }
 
   public int getAVRTypeSize() {
+      if (className != null) { throw new InternalException("This VarSTE size is not defined!\n");}
       if(this == INT) { return 2; }
       if(this == BOOL) { return 1; }
       if(this == BYTE) { return 1; }
@@ -72,8 +81,5 @@ public class Type
       return 2; // class references are 2 bytes
   }
 
-
-/*
-*/
 
 }

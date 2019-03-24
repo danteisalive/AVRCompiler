@@ -25,6 +25,7 @@ public class ClassSTE extends STE{
 		return " mName: " + getSTEName() + " mMain: " + String.valueOf(mMain) + " mSuperClass: " + mSuperClass;
 	}
 
+	
 
 
 }
