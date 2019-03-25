@@ -33,7 +33,7 @@ public class Type
 
     if (className != null)
     {
-      return "class_" + className;
+      return "class_" + className + ";";
     }
 
     if(this == INT)
@@ -68,7 +68,7 @@ public class Type
 
     if (this == VOID)
     {
-      return "class_null";
+      return "class_null;";
     }
     return "MAINCLASS;";
   }

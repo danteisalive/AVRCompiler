@@ -26,10 +26,10 @@ public class VarSTE extends STE{
 	}
 
 	public String toString(){
-		
+
 		return " <f0> VarSTE | <f1> mName = " +
 					 getSTEName() + "| <f2> mType = " + mType.toString() +
-					 "| <f2> mType = " + mBase +
+					 "| <f2> mBase = " + mBase +
 					 "| <f4> mOffset = " + mOffset;
 
 	}

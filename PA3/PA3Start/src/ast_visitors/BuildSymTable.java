@@ -177,7 +177,7 @@ public class BuildSymTable extends DepthFirstVisitor
   }
 
 
-  
+
   public void inMainClass(MainClass node){
      // check to see the name of file is the same as main class
   }
@@ -186,6 +186,11 @@ public class BuildSymTable extends DepthFirstVisitor
       STout.println("digraph SymTable {");
       STout.println("  graph [rankdir=\"LR\"];");
       STout.println("  node [shape=record];");
+      STout.flush();
+
+      Scope globalScope = SymbolTable.getGlobalScope();
+      globalScope.printSTEs(STout, 0);
+      STout.println("}");
       STout.flush();
   }
 
