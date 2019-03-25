@@ -1,0 +1,3 @@
+digraph SymTable {
+  graph [rankdir="LR"];
+  node [shape=record];

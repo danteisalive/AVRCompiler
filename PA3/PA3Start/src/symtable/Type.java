@@ -66,6 +66,10 @@ public class Type
       return "TONE";
     }
 
+    if (this == VOID)
+    {
+      return "class_null";
+    }
     return "MAINCLASS;";
   }
 

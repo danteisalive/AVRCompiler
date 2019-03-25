@@ -25,5 +25,14 @@ public class VarSTE extends STE{
 		return mBase;
 	}
 
+	public String toString(){
+		
+		return " <f0> VarSTE | <f1> mName = " +
+					 getSTEName() + "| <f2> mType = " + mType.toString() +
+					 "| <f2> mType = " + mBase +
+					 "| <f4> mOffset = " + mOffset;
+
+	}
+
 
 }

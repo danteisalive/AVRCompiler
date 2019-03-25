@@ -18,12 +18,12 @@ import exceptions.SemanticException;
 public class SymTable {
     private final HashMap<Node,Type> mExpType = new HashMap<Node,Type>();
     private final Stack<Scope> mScopeStack = new Stack<Scope>();
-
+    private final Scope mGlobalScope = new Scope("Global", null);
 
     public SymTable()
     {
       System.out.println("Creating a symbol table. Initiating a global scope...");
-      mScopeStack.push(new Scope("Global", null));
+      mScopeStack.push(mGlobalScope);
     }
 
 
@@ -108,7 +108,9 @@ public class SymTable {
     public Stack<Scope> getStackScope(){
         return mScopeStack;
     }
-/*
- */
+
+    public Scope getGlobalScope(){
+        return mGlobalScope;
+    }
 
 }

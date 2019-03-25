@@ -17,6 +17,7 @@ package ast_visitors;
 import ast.node.*;
 import ast.visitor.DepthFirstVisitor;
 import java.util.*;
+import java.io.PrintWriter;
 
 import symtable.SymTable;
 import symtable.ClassSTE;
@@ -31,15 +32,18 @@ import exceptions.SemanticException;
 
 public class BuildSymTable extends DepthFirstVisitor
 {
-
+   private PrintWriter STout;
    private SymTable SymbolTable;
    private ClassSTE currClass;
+   private int  offset;
 
-   public BuildSymTable(SymTable st) {
+   public BuildSymTable(PrintWriter out, SymTable st) {
      if(st==null) {
           throw new InternalException("unexpected null argument");
       }
-      SymbolTable = st;
+
+      this.STout = out;
+      this.SymbolTable = st;
    }
 
    //========================= Overriding the visitor interface
@@ -102,12 +106,13 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		// push it to the top on the scope stack
    		SymbolTable.pushScope(node.getName());
-   		System.out.println("pushed " + methodSTE.toString());
    		System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
 
-   		VarSTE varSte = new VarSTE("this", new Type(currClass.getSTEName()), "Y", 1);
+      offset = 1;
+
+   		VarSTE varSte = new VarSTE("this", new Type(currClass.getSTEName()), "Y", offset);
    		SymbolTable.insert(varSte);
-      System.out.println("Added VarSTE: " + varSte.getSTEName());
+      System.out.println("Added VarSTE: " + varSte.toString());
    		// an easy way to associate function to it's ste.
    		// to deal with same method name in different class.
    		// String func_name = currClass.getName() + "_" + node.getName();
@@ -121,6 +126,7 @@ public class BuildSymTable extends DepthFirstVisitor
    		System.out.println("pop top of the scope stack");
    		SymbolTable.popScope();
    		System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
+      offset = 0;
 
    	}
 
@@ -132,9 +138,10 @@ public class BuildSymTable extends DepthFirstVisitor
   		if(ste != null){
   			throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
   		} else {
-  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , 1);
+        offset += 1;
+  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , offset);
         SymbolTable.insert(varSte);
-        System.out.println("Added VarSTE: " + varSte.getSTEName());
+        System.out.println("Added VarSTE: " + varSte.toString());
   		}
   	}
 
@@ -161,11 +168,25 @@ public class BuildSymTable extends DepthFirstVisitor
           return Type.TONE;
         }
         if (iType instanceof ClassType) {
+              System.out.println("FUCK: " + (String)((ClassType)iType).getName());
               return new Type((String)((ClassType)iType).getName());
-      }
+        }
         else {
           return null;
         }
+  }
+
+
+  
+  public void inMainClass(MainClass node){
+     // check to see the name of file is the same as main class
+  }
+
+  public void outProgram(Program node){
+      STout.println("digraph SymTable {");
+      STout.println("  graph [rankdir=\"LR\"];");
+      STout.println("  node [shape=record];");
+      STout.flush();
   }
 
 }

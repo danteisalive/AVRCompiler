@@ -22,10 +22,15 @@ public class ClassSTE extends STE{
 	}
 
 	public String toString(){
-		return " mName: " + getSTEName() + " mMain: " + String.valueOf(mMain) + " mSuperClass: " + mSuperClass;
+
+			return " <f0> ClassSTE | <f1> mName = " + getSTEName() +
+			"| <f2> mMain = " + String.valueOf(mMain) +
+			"| <f3> mSuperClass = " + mSuperClass +
+			"| <f4> mScope ";
+
 	}
 
-	
+
 
 
 }

@@ -44,10 +44,14 @@ public class MJPA3Driver {
             new java.io.PrintStream(
                 new java.io.FileOutputStream(filename + ".ast.dot"));
 
+          java.io.PrintStream STout =
+            new java.io.PrintStream(
+                new java.io.FileOutputStream(filename + ".ST.dot.temp"));
+
           Program ast_root = (Program)mjparser.parse().value;
           ast_root.accept(new DotVisitor(new PrintWriter(astout)));
           //ast_root.accept(new CheckTypes(SymbolTable));
-          ast_root.accept(new BuildSymTable(new SymTable()));
+          ast_root.accept(new BuildSymTable(new PrintWriter(STout), SymbolTable));
         }catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

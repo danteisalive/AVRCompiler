@@ -16,7 +16,11 @@ public class MethodSTE extends STE{
 	}
 
 	public String toString(){
-		return "mName: " + getSTEName();
+
+		return " <f0> MethodSTE | <f1> mName = " + getSTEName() +
+		"| <f2> mSignature = " + mSignature.toString() +
+		"| <f3> mScope ";
+
 	}
 
 	public Signature getSignature(){

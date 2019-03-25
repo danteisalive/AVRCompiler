@@ -20,4 +20,19 @@ public class Signature{
 	public Type getReturnType(){
 		return returnType;
 	}
+
+	public String toString(){
+
+		String formalsStrings = new String();
+
+		Iterator itr = formals.iterator();
+		while(itr.hasNext()){
+			formalsStrings += ((Type)itr.next()).toString();
+			formalsStrings += ", ";
+		}
+
+		formalsStrings = formalsStrings.substring(0,formalsStrings.length() - 2);
+
+		return "(" + formalsStrings + ") returns " + returnType.toString();
+	}
 }
