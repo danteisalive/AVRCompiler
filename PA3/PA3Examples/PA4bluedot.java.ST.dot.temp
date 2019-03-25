@@ -13,7 +13,7 @@ digraph SymTable {
   4:<f1> -> 5:<f0>;
   5 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_Simple;| <f2> mBase = Y| <f4> mOffset = 1"];
   4:<f2> -> 6:<f0>;
-  6 [label=" <f0> VarSTE | <f1> mName = x| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 2"];
+  6 [label=" <f0> VarSTE | <f1> mName = x| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 3"];
   4:<f3> -> 7:<f0>;
-  7 [label=" <f0> VarSTE | <f1> mName = y| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 3"];
+  7 [label=" <f0> VarSTE | <f1> mName = y| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 4"];
 }

@@ -112,6 +112,8 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		VarSTE varSte = new VarSTE("this", new Type(currClass.getSTEName()), "Y", offset);
    		SymbolTable.insert(varSte);
+      offset += varSte.getSTEType().getAVRTypeSize();
+
       System.out.println("Added VarSTE: " + varSte.toString());
    		// an easy way to associate function to it's ste.
    		// to deal with same method name in different class.
@@ -138,8 +140,9 @@ public class BuildSymTable extends DepthFirstVisitor
   		if(ste != null){
   			throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
   		} else {
-        offset += 1;
+
   			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , offset);
+        offset += varSte.getSTEType().getAVRTypeSize();
         SymbolTable.insert(varSte);
         System.out.println("Added VarSTE: " + varSte.toString());
   		}

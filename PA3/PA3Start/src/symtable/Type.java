@@ -74,14 +74,14 @@ public class Type
   }
 
   public int getAVRTypeSize() {
-      if (className != null) { throw new InternalException("This VarSTE size is not defined!\n");}
+      //if (className != null) { throw new InternalException("This VarSTE size is not defined!\n");}
       if(this == INT) { return 2; }
       if(this == BOOL) { return 1; }
       if(this == BYTE) { return 1; }
       if(this == COLOR) { return 1; }
       if(this == BUTTON) { return 1; }
       if(this == VOID) { return 0; }
-      if(this == TONE) { return 1;}
+      if(this == TONE) { return 2;}
       return 2; // class references are 2 bytes
   }
 
