@@ -1,6 +1,6 @@
 /**
  * PA4doubleDef
- * 
+ *
  * doubly defined method
  * LEGAL java Not legal Meggy Java
  * WB, 3/12
@@ -17,13 +17,13 @@ class PA4doubleDef {
 }
 
 class C {
-    
+
     public void setP(byte x, byte y, Meggy.Color c) {
-            Meggy.setPixel(x, x, c);    
+          Meggy.setPixel(x, x, c);    
     }
 
     public void setP(int x, byte y, Meggy.Color c) {
-	Meggy.setPixel((byte)x, y, c);    
+	       Meggy.setPixel((byte)x, y, c);
     }
-    
+
 }

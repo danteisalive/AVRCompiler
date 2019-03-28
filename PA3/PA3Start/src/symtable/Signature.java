@@ -31,8 +31,10 @@ public class Signature{
 			formalsStrings += ", ";
 		}
 
-		formalsStrings = formalsStrings.substring(0,formalsStrings.length() - 2);
+		if (formalsStrings.length() > 0)
+			formalsStrings = formalsStrings.substring(0,formalsStrings.length() - 2);
 
 		return "(" + formalsStrings + ") returns " + returnType.toString();
+		
 	}
 }

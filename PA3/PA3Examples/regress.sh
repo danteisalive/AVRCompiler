@@ -19,7 +19,7 @@ do
     echo "Regression testing MJPA3.jar $filename"
 
     # run the input file with our MJ Parser
-    java -jar ../PA3Start/MJPA3.jar $filename
+    java -jar ../PA3Start/MJPA3.jar $filename 
     mv   $filename.ast.dot myOutput.java.ast.dot
     # run the input file with reference MJ Parser
     java -jar ../../ReferenceCompiler/MJ.jar $filename

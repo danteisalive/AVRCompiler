@@ -189,10 +189,13 @@ public class BuildSymTable extends DepthFirstVisitor
       STout.println("digraph SymTable {");
       STout.println("  graph [rankdir=\"LR\"];");
       STout.println("  node [shape=record];");
-      STout.flush();
 
-      Scope globalScope = SymbolTable.getGlobalScope();
-      globalScope.printSTEs(STout, 0);
+       Scope globalScope = SymbolTable.getGlobalScope();
+      // globalScope.printSTEs(STout, 0);
+
+
+      SymbolTable.printSymTable(this.STout, globalScope);
+
       STout.println("}");
       STout.flush();
   }

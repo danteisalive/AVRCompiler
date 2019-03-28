@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 
 public class Scope {
 
-	public final HashMap<String,STE> mDict = new HashMap<String,STE>();
+	public HashMap<String,STE> mDict = new HashMap<String,STE>();
 	public Scope mEnclosing; // parent scope
 	public String scopeType; // for debugging: global, class, method
 
@@ -50,6 +50,9 @@ public class Scope {
 		return scopeType;
 	}
 
+	public HashMap<String,STE> getHashMap(){
+		return mDict;
+	}
 
 
 	public String toString(){
@@ -93,13 +96,11 @@ public class Scope {
 					blocks += 1;
 					scopeString += "<f" + f.toString() + "> -> " + blocks.toString() + ":<f0>;";
 					STout.println(scopeString);
-					STout.flush();
 
 					scopeString = "  ";
 					scopeString += blocks.toString();
 					scopeString += " [label=\"" + pair.getValue().toString() + "\"];";
 					STout.println(scopeString);
-					STout.flush();
 
 					blocks += 1;
 					Integer newLv = lv + 1;
@@ -108,7 +109,6 @@ public class Scope {
 					scopeString += newLv.toString();
 					scopeString += ":<f4> -> " + blocks.toString() + ":<f0>;";
 					STout.println(scopeString);
-					STout.flush();
 
 					((ClassSTE)pair.getValue()).getScope().printSTEs(STout, newLv + 1);
 				}
@@ -119,13 +119,11 @@ public class Scope {
 					blocks += 1;
 					scopeString += "<f" + f.toString() + "> -> " + blocks.toString() + ":<f0>;";
 					STout.println(scopeString);
-					STout.flush();
 
 					scopeString = "  ";
 					scopeString += blocks.toString();
 					scopeString += " [label=\"" + pair.getValue().toString() + "\"];";
 					STout.println(scopeString);
-					STout.flush();
 
 					blocks += 1;
 					Integer newLv = lv + 1;
@@ -134,7 +132,6 @@ public class Scope {
 					scopeString += newLv.toString();
 					scopeString += ":<f3> -> " + blocks.toString() + ":<f0>;";
 					STout.println(scopeString);
-					STout.flush();
 
 					((MethodSTE)pair.getValue()).getScope().printSTEs(STout, newLv + 1);
 				}
@@ -146,13 +143,11 @@ public class Scope {
 					scopeString = "  ";
 					scopeString += lv.toString() + ":<f" + f.toString() + "> -> " + blocks.toString() + ":<f0>;";
 					STout.println(scopeString);
-					STout.flush();
 
 					scopeString = "  ";
 					scopeString += blocks.toString();
 					scopeString += " [label=\"" + pair.getValue().toString() + "\"];";
 					STout.println(scopeString);
-					STout.flush();
 
 				}
 				else

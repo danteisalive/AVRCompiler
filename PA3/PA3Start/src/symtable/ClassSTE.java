@@ -21,6 +21,10 @@ public class ClassSTE extends STE{
 		return mScope;
 	}
 
+	public String getClassName(){
+		return getSTEName();
+	}
+
 	public String toString(){
 
 			return " <f0> ClassSTE | <f1> mName = " + getSTEName() +
