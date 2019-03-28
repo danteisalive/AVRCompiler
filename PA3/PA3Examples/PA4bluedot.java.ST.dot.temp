@@ -1,11 +1,7 @@
-digraph SymTable {
-  graph [rankdir="LR"];
-  node [shape=record];
 Classes in global scope: Simple
 
 In class Simple scope
 Methods in current scope: bluedot
 In method bluedot scope
-Method Signature: (BYTE, BYTE) returns class_null;
-Vars in current scope: this:class_Simple; x:BYTE y:BYTE
-}
+Method Signature: (BYTE,BYTE) returns class_null
+Vars in current scope: THIS:class_Simple x:BYTE y:BYTE

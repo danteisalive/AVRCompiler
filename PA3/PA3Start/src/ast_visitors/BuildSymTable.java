@@ -50,7 +50,7 @@ public class BuildSymTable extends DepthFirstVisitor
 
     public void inTopClassDecl(TopClassDecl node){
  		   // look up class name
-   		 System.out.println("\nin BuildSymTable.inTopClassDecl(" + node.getName() + ") ... ");
+   		 //System.out.println("\nin BuildSymTable.inTopClassDecl(" + node.getName() + ") ... ");
    		 if(SymbolTable.lookupInnermost(node.getName()) != null){
    			   throw new SemanticException("Class " + node.getName() + " already defined!");
  		   }
@@ -63,24 +63,24 @@ public class BuildSymTable extends DepthFirstVisitor
   		//System.out.println("inserted " + classSte.toString());
       // push it to the top on the scope stack
   		SymbolTable.pushScope(node.getName());
-  		System.out.println("pushed " + classSte.toString());
-  		System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
+  		//System.out.println("pushed " + classSte.toString());
+  		//System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
   		// memorize current class ste
   		currClass = classSte;
     }
 
    public void outTopClassDecl(TopClassDecl node){
-      System.out.println("\nin BuildSymTable.outTopClassDecl(" + node.getName() + ") ... ");
-      System.out.println("pop top of the scope stack");
+      //System.out.println("\nin BuildSymTable.outTopClassDecl(" + node.getName() + ") ... ");
+      //System.out.println("pop top of the scope stack");
       SymbolTable.popScope();
-      System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
+      //System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
    }
 
 
    	public void inMethodDecl(MethodDecl node){
    		// Look up method name in current symbol table to see if there are any duplicates.
    		// only look into the innermost scope
-   		System.out.println("\nin BuildSymTable.inMethodDecl(" + node.getName() + ") ... ");
+   		//System.out.println("\nin BuildSymTable.inMethodDecl(" + node.getName() + ") ... ");
 
    		if(SymbolTable.lookupInnermost(node.getName()) != null){
    			throw new SemanticException("Method " + node.getName() + " already defined!");
@@ -102,19 +102,20 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		// insert the MethodSTE into the symbol table with SymbolTable.insert
    		SymbolTable.insert(methodSTE);
-   		System.out.println("inserted " + methodSTE.toString());
+   		//System.out.println("inserted " + methodSTE.toString());
 
    		// push it to the top on the scope stack
    		SymbolTable.pushScope(node.getName());
-   		System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
+   		//System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
 
       offset = 1;
 
-   		VarSTE varSte = new VarSTE("this", new Type(currClass.getSTEName()), "Y", offset);
+   		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", offset);
    		SymbolTable.insert(varSte);
       offset += varSte.getSTEType().getAVRTypeSize();
 
-      System.out.println("Added VarSTE: " + varSte.toString());
+      //System.out.println("Added VarSTE: " + varSte.toString());
+
    		// an easy way to associate function to it's ste.
    		// to deal with same method name in different class.
    		// String func_name = currClass.getName() + "_" + node.getName();
@@ -124,10 +125,10 @@ public class BuildSymTable extends DepthFirstVisitor
 
    	public void outMethodDecl(MethodDecl node){
 
-   		System.out.println("\nin BuildSymTable.outMethodDecl(" + node.getName() + ") ... ");
-   		System.out.println("pop top of the scope stack");
+   		//System.out.println("\nin BuildSymTable.outMethodDecl(" + node.getName() + ") ... ");
+   		//System.out.println("pop top of the scope stack");
    		SymbolTable.popScope();
-   		System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
+   		//System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
       offset = 0;
 
    	}
@@ -135,7 +136,7 @@ public class BuildSymTable extends DepthFirstVisitor
 
     public void outFormal(Formal node){
   		// check if var name has already been inserted in SymTable using st.lookup(name).  Error if 		   there is a duplicate.
-  		System.out.println("\nin BuildSymTable.outFormal(" + node.getName() + ") ... ");
+  		//System.out.println("\nin BuildSymTable.outFormal(" + node.getName() + ") ... ");
   		STE ste = SymbolTable.lookupInnermost(node.getName());
   		if(ste != null){
   			throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
@@ -144,7 +145,7 @@ public class BuildSymTable extends DepthFirstVisitor
   			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , offset);
         offset += varSte.getSTEType().getAVRTypeSize();
         SymbolTable.insert(varSte);
-        System.out.println("Added VarSTE: " + varSte.toString());
+        //System.out.println("Added VarSTE: " + varSte.toString());
   		}
   	}
 
@@ -171,7 +172,7 @@ public class BuildSymTable extends DepthFirstVisitor
           return Type.TONE;
         }
         if (iType instanceof ClassType) {
-              System.out.println("FUCK: " + (String)((ClassType)iType).getName());
+              //System.out.println("ClassType: " + (String)((ClassType)iType).getName());
               return new Type((String)((ClassType)iType).getName());
         }
         else {
@@ -186,17 +187,8 @@ public class BuildSymTable extends DepthFirstVisitor
   }
 
   public void outProgram(Program node){
-      STout.println("digraph SymTable {");
-      STout.println("  graph [rankdir=\"LR\"];");
-      STout.println("  node [shape=record];");
-
-       Scope globalScope = SymbolTable.getGlobalScope();
-      // globalScope.printSTEs(STout, 0);
-
-
+      Scope globalScope = SymbolTable.getGlobalScope();
       SymbolTable.printSymTable(this.STout, globalScope);
-
-      STout.println("}");
       STout.flush();
   }
 

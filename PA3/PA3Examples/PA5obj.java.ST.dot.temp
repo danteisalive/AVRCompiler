@@ -1,39 +1,16 @@
-digraph SymTable {
-  graph [rankdir="LR"];
-  node [shape=record];
-  0 [label=" <f0> Scope | <f1> mDict\[C\] | <f2> mDict\[Ind\] "];
-  0:<f1> -> 1:<f0>;
-  1 [label=" <f0> ClassSTE | <f1> mName = C| <f2> mMain = false| <f3> mSuperClass = null| <f4> mScope "];
-  1:<f4> -> 2:<f0>;
-  2 [label=" <f0> Scope | <f1> mDict\[setP\] "];
-  2:<f1> -> 3:<f0>;
-  3 [label=" <f0> MethodSTE | <f1> mName = setP| <f2> mSignature = (BYTE, BYTE, COLOR) returns class_null;| <f3> mScope "];
-  3:<f3> -> 4:<f0>;
-  4 [label=" <f0> Scope | <f1> mDict\[c\] | <f2> mDict\[this\] | <f3> mDict\[x\] | <f4> mDict\[y\] "];
-  4:<f1> -> 5:<f0>;
-  5 [label=" <f0> VarSTE | <f1> mName = c| <f2> mType = COLOR| <f2> mBase = Y| <f4> mOffset = 5"];
-  4:<f2> -> 6:<f0>;
-  6 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_C;| <f2> mBase = Y| <f4> mOffset = 1"];
-  4:<f3> -> 7:<f0>;
-  7 [label=" <f0> VarSTE | <f1> mName = x| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 3"];
-  4:<f4> -> 8:<f0>;
-  8 [label=" <f0> VarSTE | <f1> mName = y| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 4"];
-  0:<f2> -> 9:<f0>;
-  9 [label=" <f0> ClassSTE | <f1> mName = Ind| <f2> mMain = false| <f3> mSuperClass = null| <f4> mScope "];
-  1:<f4> -> 10:<f0>;
-  2 [label=" <f0> Scope | <f1> mDict\[get\] | <f2> mDict\[put\] "];
-  2:<f1> -> 11:<f0>;
-  11 [label=" <f0> MethodSTE | <f1> mName = get| <f2> mSignature = () returns BYTE| <f3> mScope "];
-  3:<f3> -> 12:<f0>;
-  4 [label=" <f0> Scope | <f1> mDict\[this\] "];
-  4:<f1> -> 13:<f0>;
-  13 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_Ind;| <f2> mBase = Y| <f4> mOffset = 1"];
-  2:<f2> -> 14:<f0>;
-  14 [label=" <f0> MethodSTE | <f1> mName = put| <f2> mSignature = (BYTE) returns class_null;| <f3> mScope "];
-  3:<f3> -> 15:<f0>;
-  4 [label=" <f0> Scope | <f1> mDict\[this\] | <f2> mDict\[i\] "];
-  4:<f1> -> 16:<f0>;
-  16 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_Ind;| <f2> mBase = Y| <f4> mOffset = 1"];
-  4:<f2> -> 17:<f0>;
-  17 [label=" <f0> VarSTE | <f1> mName = i| <f2> mType = BYTE| <f2> mBase = Y| <f4> mOffset = 3"];
-}
+Classes in global scope: C Ind
+
+In class C scope
+Methods in current scope: setP
+In method setP scope
+Method Signature: (BYTE,BYTE,COLOR) returns class_null
+Vars in current scope: THIS:class_C c:COLOR x:BYTE y:BYTE
+
+In class Ind scope
+Methods in current scope: get put
+In method get scope
+Method Signature: () returns BYTE
+Vars in current scope: THIS:class_Ind
+In method put scope
+Method Signature: (BYTE) returns class_null
+Vars in current scope: THIS:class_Ind i:BYTE

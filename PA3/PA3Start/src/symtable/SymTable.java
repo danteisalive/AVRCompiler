@@ -23,7 +23,7 @@ public class SymTable {
 
     public SymTable()
     {
-      System.out.println("Creating a symbol table. Initiating a global scope...");
+      //System.out.println("Creating a symbol table. Initiating a global scope...");
       mScopeStack.push(mGlobalScope);
     }
 
@@ -37,7 +37,7 @@ public class SymTable {
 
     public void insert(STE ste) {
 
-        System.out.println("in SymTable.insert(" + ste.mName + ") ...");
+      //  System.out.println("in SymTable.insert(" + ste.mName + ") ...");
     	//	System.out.println("insert " + ste.mName);
     		if(mScopeStack.peek() != null){
     			   mScopeStack.peek().insert(ste);
@@ -48,7 +48,7 @@ public class SymTable {
     }
 
     public STE lookup(String id){
-    	System.out.println("in SymTable.lookup(" + id + ") ...");
+    //	System.out.println("in SymTable.lookup(" + id + ") ...");
     	Stack<Scope> copyStack = (Stack<Scope>) mScopeStack.clone();
         STE ste = null;
         while (!copyStack.isEmpty()){
@@ -62,7 +62,7 @@ public class SymTable {
             	} else {
             		t = "var";
             	}
-            	System.out.println("found " + t + " ste " + id);
+            //	System.out.println("found " + t + " ste " + id);
                 break;
             }
             mScopeStack.pop();
@@ -75,15 +75,15 @@ public class SymTable {
     */
     public void pushScope(String id) {
        // actually only need to look up the top of the scope since we just inserted the STE
-       System.out.println("in SymTable.pushScope(" + id + ") ...");
+       //System.out.println("in SymTable.pushScope(" + id + ") ...");
        STE ste = lookupInnermost(id);
 
        if(ste instanceof ClassSTE){
          mScopeStack.push(((ClassSTE)ste).getScope());
-         System.out.println("pushed a class scope onto stack");
+         //System.out.println("pushed a class scope onto stack");
        } else if (ste instanceof MethodSTE){
          mScopeStack.push(((MethodSTE)ste).getScope());
-         System.out.println("pushed a method scope onto stack");
+        // System.out.println("pushed a method scope onto stack");
        } else {
          throw new SemanticException("Did not find scope with id: " + id + " in SymTable.pushScope");
        }

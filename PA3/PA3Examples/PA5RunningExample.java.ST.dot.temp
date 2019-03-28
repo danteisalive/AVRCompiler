@@ -1,21 +1,9 @@
-digraph SymTable {
-  graph [rankdir="LR"];
-  node [shape=record];
-  0 [label=" <f0> Scope | <f1> mDict\[B\] | <f2> mDict\[C\] "];
-  0:<f1> -> 1:<f0>;
-  1 [label=" <f0> ClassSTE | <f1> mName = B| <f2> mMain = false| <f3> mSuperClass = null| <f4> mScope "];
-  1:<f4> -> 2:<f0>;
-  2 [label=" <f0> Scope "];
-  0:<f2> -> 3:<f0>;
-  3 [label=" <f0> ClassSTE | <f1> mName = C| <f2> mMain = false| <f3> mSuperClass = null| <f4> mScope "];
-  1:<f4> -> 4:<f0>;
-  2 [label=" <f0> Scope | <f1> mDict\[foo\] "];
-  2:<f1> -> 5:<f0>;
-  5 [label=" <f0> MethodSTE | <f1> mName = foo| <f2> mSignature = (BOOL) returns INT| <f3> mScope "];
-  3:<f3> -> 6:<f0>;
-  4 [label=" <f0> Scope | <f1> mDict\[p\] | <f2> mDict\[this\] "];
-  4:<f1> -> 7:<f0>;
-  7 [label=" <f0> VarSTE | <f1> mName = p| <f2> mType = BOOL| <f2> mBase = Y| <f4> mOffset = 3"];
-  4:<f2> -> 8:<f0>;
-  8 [label=" <f0> VarSTE | <f1> mName = this| <f2> mType = class_C;| <f2> mBase = Y| <f4> mOffset = 1"];
-}
+Classes in global scope: B C
+
+In class B scope
+
+In class C scope
+Methods in current scope: foo
+In method foo scope
+Method Signature: (BOOL) returns INT
+Vars in current scope: THIS:class_C p:BOOL

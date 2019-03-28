@@ -28,13 +28,13 @@ public class Signature{
 		Iterator itr = formals.iterator();
 		while(itr.hasNext()){
 			formalsStrings += ((Type)itr.next()).toString();
-			formalsStrings += ", ";
+			formalsStrings += ",";
 		}
 
 		if (formalsStrings.length() > 0)
-			formalsStrings = formalsStrings.substring(0,formalsStrings.length() - 2);
+			formalsStrings = formalsStrings.substring(0,formalsStrings.length() - 1);
 
 		return "(" + formalsStrings + ") returns " + returnType.toString();
-		
+
 	}
 }
