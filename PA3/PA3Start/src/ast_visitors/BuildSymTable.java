@@ -1,5 +1,7 @@
 package ast_visitors;
 
+
+
 /**
  * BuildSymTable
  *
@@ -36,6 +38,7 @@ public class BuildSymTable extends DepthFirstVisitor
    private SymTable SymbolTable;
    private ClassSTE currClass;
    private int  offset;
+   private String errors;
 
    public BuildSymTable(PrintWriter out, SymTable st) {
      if(st==null) {
@@ -44,6 +47,7 @@ public class BuildSymTable extends DepthFirstVisitor
 
       this.STout = out;
       this.SymbolTable = st;
+      errors  = new String();
    }
 
    //========================= Overriding the visitor interface
@@ -52,7 +56,8 @@ public class BuildSymTable extends DepthFirstVisitor
  		   // look up class name
    		 //System.out.println("\nin BuildSymTable.inTopClassDecl(" + node.getName() + ") ... ");
    		 if(SymbolTable.lookupInnermost(node.getName()) != null){
-   			   throw new SemanticException("Class " + node.getName() + " already defined!");
+           errors += "[" + node.getLine() + "," + node.getPos() + "] Redefined Class " + node.getName() + "\n";
+   			   //throw new SemanticException("Class " + node.getName() + " already defined!");
  		   }
 
    		Scope classScope = new Scope("Class",SymbolTable.peekScopeStack());
@@ -80,10 +85,11 @@ public class BuildSymTable extends DepthFirstVisitor
    	public void inMethodDecl(MethodDecl node){
    		// Look up method name in current symbol table to see if there are any duplicates.
    		// only look into the innermost scope
-   		//System.out.println("\nin BuildSymTable.inMethodDecl(" + node.getName() + ") ... ");
+
 
    		if(SymbolTable.lookupInnermost(node.getName()) != null){
-   			throw new SemanticException("Method " + node.getName() + " already defined!");
+        errors += "[" + node.getLine() + "," + node.getPos() + "] Redefined Method " + node.getName() + "\n";
+   			//throw new SemanticException("Method " + node.getName() + " already defined!");
    		}
    		// create a function signature
    		LinkedList<Formal> formal_list = node.getFormals();
@@ -136,10 +142,10 @@ public class BuildSymTable extends DepthFirstVisitor
 
     public void outFormal(Formal node){
   		// check if var name has already been inserted in SymTable using st.lookup(name).  Error if 		   there is a duplicate.
-  		//System.out.println("\nin BuildSymTable.outFormal(" + node.getName() + ") ... ");
   		STE ste = SymbolTable.lookupInnermost(node.getName());
   		if(ste != null){
-  			throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
+        errors += "[" + node.getLine() + "," + node.getPos() + "] Redefined Formal " + node.getName() + "\n";
+  			//throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
   		} else {
 
   			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , offset);
@@ -190,6 +196,11 @@ public class BuildSymTable extends DepthFirstVisitor
       Scope globalScope = SymbolTable.getGlobalScope();
       SymbolTable.printSymTable(this.STout, globalScope);
       STout.flush();
+
+      if (errors != null){
+        System.out.println(errors);
+        throw new SemanticException("Errors found while building symbol table");
+      }
   }
 
 }

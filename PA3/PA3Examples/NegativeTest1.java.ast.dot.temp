@@ -1,0 +1,119 @@
+digraph ASTGraph {
+0 [ label="Program" ];
+1 [ label="MainClass" ];
+0 -> 1
+2 [ label="BlockStatement" ];
+1 -> 2
+3 [ label="TopClassDecl" ];
+0 -> 3
+4 [ label="VarDecl" ];
+3 -> 4
+5 [ label="IntType" ];
+4 -> 5
+6 [ label="VarDecl" ];
+3 -> 6
+7 [ label="ByteType" ];
+6 -> 7
+8 [ label="VarDecl" ];
+3 -> 8
+9 [ label="BoolType" ];
+8 -> 9
+10 [ label="VarDecl" ];
+3 -> 10
+11 [ label="ByteType" ];
+10 -> 11
+12 [ label="MethodDecl" ];
+3 -> 12
+13 [ label="VoidType" ];
+12 -> 13
+14 [ label="Formal" ];
+12 -> 14
+15 [ label="ColorType" ];
+14 -> 15
+16 [ label="VarDecl" ];
+12 -> 16
+17 [ label="ColorType" ];
+16 -> 17
+18 [ label="VarDecl" ];
+12 -> 18
+19 [ label="ColorType" ];
+18 -> 19
+20 [ label="VarDecl" ];
+12 -> 20
+21 [ label="IntType" ];
+20 -> 21
+22 [ label="MethodDecl" ];
+3 -> 22
+23 [ label="VoidType" ];
+22 -> 23
+24 [ label="MethodDecl" ];
+3 -> 24
+25 [ label="VoidType" ];
+24 -> 25
+26 [ label="MethodDecl" ];
+3 -> 26
+27 [ label="VoidType" ];
+26 -> 27
+28 [ label="Formal" ];
+26 -> 28
+29 [ label="IntType" ];
+28 -> 29
+30 [ label="Formal" ];
+26 -> 30
+31 [ label="IntType" ];
+30 -> 31
+32 [ label="TopClassDecl" ];
+0 -> 32
+33 [ label="MethodDecl" ];
+32 -> 33
+34 [ label="VoidType" ];
+33 -> 34
+35 [ label="TopClassDecl" ];
+0 -> 35
+36 [ label="VarDecl" ];
+35 -> 36
+37 [ label="IntType" ];
+36 -> 37
+38 [ label="MethodDecl" ];
+35 -> 38
+39 [ label="VoidType" ];
+38 -> 39
+40 [ label="TopClassDecl" ];
+0 -> 40
+41 [ label="TopClassDecl" ];
+0 -> 41
+42 [ label="MethodDecl" ];
+41 -> 42
+43 [ label="VoidType" ];
+42 -> 43
+44 [ label="Formal" ];
+42 -> 44
+45 [ label="IntType" ];
+44 -> 45
+46 [ label="TopClassDecl" ];
+0 -> 46
+47 [ label="MethodDecl" ];
+46 -> 47
+48 [ label="VoidType" ];
+47 -> 48
+49 [ label="Formal" ];
+47 -> 49
+50 [ label="IntType" ];
+49 -> 50
+51 [ label="VarDecl" ];
+47 -> 51
+52 [ label="IntType" ];
+51 -> 52
+53 [ label="MethodDecl" ];
+46 -> 53
+54 [ label="VoidType" ];
+53 -> 54
+55 [ label="Formal" ];
+53 -> 55
+56 [ label="IntType" ];
+55 -> 56
+57 [ label="VarDecl" ];
+53 -> 57
+58 [ label="IntType" ];
+57 -> 58
+}

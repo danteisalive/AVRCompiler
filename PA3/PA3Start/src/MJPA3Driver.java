@@ -42,7 +42,7 @@ public class MJPA3Driver {
           mjparser.programName = filename;
           java.io.PrintStream astout =
             new java.io.PrintStream(
-                new java.io.FileOutputStream(filename + ".ast.dot"));
+                new java.io.FileOutputStream(filename + ".ast.dot.temp"));
 
           java.io.PrintStream STout =
             new java.io.PrintStream(
