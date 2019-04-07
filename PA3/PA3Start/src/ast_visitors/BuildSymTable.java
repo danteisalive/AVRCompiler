@@ -47,7 +47,7 @@ public class BuildSymTable extends DepthFirstVisitor
 
       this.STout = out;
       this.SymbolTable = st;
-      errors  = new String();
+      errors  = null;
    }
 
    //========================= Overriding the visitor interface
@@ -65,20 +65,32 @@ public class BuildSymTable extends DepthFirstVisitor
 
   		// insert into current scope stack
   		SymbolTable.insert(classSte);
-  		//System.out.println("inserted " + classSte.toString());
       // push it to the top on the scope stack
   		SymbolTable.pushScope(node.getName());
-  		//System.out.println("pushed " + classSte.toString());
-  		//System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
   		// memorize current class ste
   		currClass = classSte;
+
+      LinkedList<VarDecl> vars_list = node.getVarDecls();
+      Iterator vars_itr = vars_list.iterator();
+      while(vars_itr.hasNext())
+      {
+        VarDecl var_node = (VarDecl)vars_itr.next();
+        STE ste = SymbolTable.lookupInnermost(var_node.getName());
+        if(ste != null)
+        {
+            errors += "[" + var_node.getLine() + "," + var_node.getPos() + "] Redefined Class Variable " + var_node.getName() + "\n";
+        }
+        else
+        {
+            SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Z", 0));
+        }
+      }
+
     }
 
    public void outTopClassDecl(TopClassDecl node){
-      //System.out.println("\nin BuildSymTable.outTopClassDecl(" + node.getName() + ") ... ");
-      //System.out.println("pop top of the scope stack");
       SymbolTable.popScope();
-      //System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
+
    }
 
 
@@ -116,25 +128,31 @@ public class BuildSymTable extends DepthFirstVisitor
 
       offset = 1;
 
-   		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", offset);
+   		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", 0);
    		SymbolTable.insert(varSte);
-      offset += varSte.getSTEType().getAVRTypeSize();
-
-      //System.out.println("Added VarSTE: " + varSte.toString());
-
-   		// an easy way to associate function to it's ste.
-   		// to deal with same method name in different class.
-   		// String func_name = currClass.getName() + "_" + node.getName();
-   		// SymbolTable.methodList.put(func_name, methodSTE);
-   		// System.out.println("added func_name: " + func_name + " into methodList\n");
+      //offset += varSte.getSTEType().getAVRTypeSize();
    	}
 
    	public void outMethodDecl(MethodDecl node){
 
-   		//System.out.println("\nin BuildSymTable.outMethodDecl(" + node.getName() + ") ... ");
-   		//System.out.println("pop top of the scope stack");
+      LinkedList<VarDecl> vars_list = node.getVarDecls();
+      Iterator vars_itr = vars_list.iterator();
+      while(vars_itr.hasNext())
+      {
+        VarDecl var_node = (VarDecl)vars_itr.next();
+        STE ste = SymbolTable.lookupInnermost(var_node.getName());
+        if(ste != null)
+        {
+            errors += "[" + var_node.getLine() + "," + var_node.getPos() + "] Redefined Method Variable " + var_node.getName() + "\n";
+        }
+        else
+        {
+            SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Y", 0));
+        }
+      }
+
    		SymbolTable.popScope();
-   		//System.out.println("after pop, scope is like this: "+ SymbolTable.getStackScope() +"\n");
+
       offset = 0;
 
    	}
@@ -148,14 +166,14 @@ public class BuildSymTable extends DepthFirstVisitor
   			//throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
   		} else {
 
-  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , offset);
-        offset += varSte.getSTEType().getAVRTypeSize();
+  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , 0);
+        //offset += varSte.getSTEType().getAVRTypeSize();
         SymbolTable.insert(varSte);
         //System.out.println("Added VarSTE: " + varSte.toString());
   		}
   	}
 
-    public static Type convertType(IType iType){
+    public Type convertType(IType iType){
         if(iType instanceof BoolType){
           return Type.BOOL;
         }
@@ -177,11 +195,18 @@ public class BuildSymTable extends DepthFirstVisitor
         if(iType instanceof ToneType){
           return Type.TONE;
         }
+        if (iType instanceof IntArrayType){
+          return Type.INTARRAY;
+        }
+        if (iType instanceof ColorArrayType){
+          return Type.COLORARRAY;
+        }
         if (iType instanceof ClassType) {
               //System.out.println("ClassType: " + (String)((ClassType)iType).getName());
               return new Type((String)((ClassType)iType).getName());
         }
         else {
+          errors += "type " + " is not defined\n";
           return null;
         }
   }

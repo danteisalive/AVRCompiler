@@ -1,6 +1,10 @@
 Classes in global scope: A B C D E
 
 In class A scope
+Methods in current scope: return_type
+In method return_type scope
+Method Signature: () returns INT
+Vars in current scope: THIS:class_A c:class_C
 
 In class B scope
 Methods in current scope: B

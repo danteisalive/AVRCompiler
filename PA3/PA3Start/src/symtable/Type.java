@@ -13,7 +13,8 @@ public class Type
   public static final Type BUTTON = new Type();
   public static final Type VOID = new Type();
   public static final Type TONE = new Type();
-
+  public static final Type INTARRAY = new Type();
+  public static final Type COLORARRAY = new Type();
 
   private final String className;
 
@@ -70,6 +71,17 @@ public class Type
     {
       return "class_null";
     }
+
+    if (this == INTARRAY)
+    {
+      return "INTARRAY";
+    }
+
+    if (this == COLORARRAY)
+    {
+      return "COLORARRAY";
+    }
+
     return "MAINCLASS;";
   }
 
@@ -82,6 +94,8 @@ public class Type
       if(this == BUTTON) { return 1; }
       if(this == VOID) { return 0; }
       if(this == TONE) { return 2;}
+      if(this == INTARRAY) {return 2;}
+      if(this == COLORARRAY) {return 2;}
       return 2; // class references are 2 bytes
   }
 

@@ -5,7 +5,7 @@
 
 
 files='PA4bluedot.java PA4MazeSolver.java PA4raindrop.java  PA5movedot.java
-      PA5RunningExample.java PA5obj.java'
+      PA5RunningExample.java PA5obj.java PositiveTest2.java PositiveTest1.java'
 
 #for filename in `ls *.java`
 for filename in $files;
@@ -13,7 +13,7 @@ do
     echo "Regression testing MJPA3.jar $filename"
 
     # run the input file with our MJ Parser
-    java -jar ../PA3Start/MJPA3.jar $filename
+    java -jar ../PA3Start/MJPA3.jar $filename > /dev/null 2>&1
     #mv   $filename.ST.dot myOutput.java.ast.dot
     # run the input file with reference MJ Parser
     #java -jar ../../ReferenceCompiler/MJ.jar $filename

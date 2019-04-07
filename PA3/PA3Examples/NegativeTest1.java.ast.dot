@@ -80,16 +80,16 @@ digraph ASTGraph {
 38 -> 39
 40 [ label="TopClassDecl" ];
 0 -> 40
-41 [ label="TopClassDecl" ];
-0 -> 41
-42 [ label="MethodDecl" ];
+41 [ label="MethodDecl" ];
+40 -> 41
+42 [ label="IntType" ];
 41 -> 42
-43 [ label="VoidType" ];
-42 -> 43
-44 [ label="Formal" ];
-42 -> 44
-45 [ label="IntType" ];
-44 -> 45
+43 [ label="VarDecl" ];
+41 -> 43
+44 [ label="ClassType" ];
+43 -> 44
+45 [ label="IdLiteral\nc" ];
+41 -> 45
 46 [ label="TopClassDecl" ];
 0 -> 46
 47 [ label="MethodDecl" ];
@@ -100,20 +100,30 @@ digraph ASTGraph {
 47 -> 49
 50 [ label="IntType" ];
 49 -> 50
-51 [ label="VarDecl" ];
-47 -> 51
-52 [ label="IntType" ];
+51 [ label="TopClassDecl" ];
+0 -> 51
+52 [ label="MethodDecl" ];
 51 -> 52
-53 [ label="MethodDecl" ];
-46 -> 53
-54 [ label="VoidType" ];
-53 -> 54
-55 [ label="Formal" ];
-53 -> 55
-56 [ label="IntType" ];
-55 -> 56
-57 [ label="VarDecl" ];
-53 -> 57
-58 [ label="IntType" ];
-57 -> 58
+53 [ label="VoidType" ];
+52 -> 53
+54 [ label="Formal" ];
+52 -> 54
+55 [ label="IntType" ];
+54 -> 55
+56 [ label="VarDecl" ];
+52 -> 56
+57 [ label="IntType" ];
+56 -> 57
+58 [ label="MethodDecl" ];
+51 -> 58
+59 [ label="VoidType" ];
+58 -> 59
+60 [ label="Formal" ];
+58 -> 60
+61 [ label="IntType" ];
+60 -> 61
+62 [ label="VarDecl" ];
+58 -> 62
+63 [ label="IntType" ];
+62 -> 63
 }

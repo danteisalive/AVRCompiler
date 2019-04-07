@@ -125,15 +125,15 @@ public class SymTable {
  		      STE s = tempHashMap.get(scopeName);
        		if(s instanceof ClassSTE) {
        			if(!flag) {
-       				out.print("Classes in global scope:");
+       				System.out.print("Classes in global scope:");
        				flag = true;
        			}
-       			out.print(" "+ s.getSTEName());
+       			System.out.print(" "+ s.getSTEName());
        		}
  	    }
 
      	if(flag) {
-     		out.print("\n");
+     		System.out.print("\n");
      		flag = false;
      	}
 
@@ -141,15 +141,15 @@ public class SymTable {
      		STE s = tempHashMap.get(scopeName);
      		if(s instanceof VarSTE) {
      			if(!flag) {
-     				out.print("Vars in current scope:");
+     				System.out.print("Vars in current scope:");
      				flag = true;
      			}
-     			out.print(" "+ s.getSTEName() + ":"+ ((VarSTE)s).getSTEType().toString());
+     			System.out.print(" "+ s.getSTEName() + ":"+ ((VarSTE)s).getSTEType().toString());
      		}
      	}
 
      	if(flag) {
-     		out.print("\n");
+     		System.out.print("\n");
      		flag = false;
      	}
 
@@ -157,31 +157,31 @@ public class SymTable {
        		STE s = tempHashMap.get(scopeName);
        		if(s instanceof MethodSTE) {
        			if(!flag) {
-       				out.print("Methods in current scope:");
+       				System.out.print("Methods in current scope:");
        				flag = true;
        			}
-       			out.print(" "+ s.getSTEName());
+       			System.out.print(" "+ s.getSTEName());
        		}
      	}
 
      	if(flag) {
-     		out.print("\n");
+     		System.out.print("\n");
      	}
 
      	for (String scopeName : keyList) {
        		STE s = tempHashMap.get(scopeName);
        		if(s instanceof ClassSTE)
           {
-       			out.println("\nIn class "+ s.getSTEName() +" scope");
+       			System.out.println("\nIn class "+ s.getSTEName() +" scope");
        			this.printSymTable(out, ((ClassSTE)s).getScope());
        		}
           else if(s instanceof MethodSTE)
           {
-       			out.println("In method "+ s.getSTEName() +" scope");
+       			System.out.println("In method "+ s.getSTEName() +" scope");
        			//print method signature here
        			//String formals; //add logic to populate formals
        			//String retType; //add logic to populate return type
-       			out.println("Method Signature: " + ((MethodSTE)s).getSignature().toString());
+       			System.out.println("Method Signature: " + ((MethodSTE)s).getSignature().toString());
        			this.printSymTable(out, ((MethodSTE)s).getScope());
        		}
      	}

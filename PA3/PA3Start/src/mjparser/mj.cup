@@ -224,6 +224,11 @@ MethodDeclration ::= PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RP
 
                   | PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RBRACE
                   {: RESULT = new MethodDecl(op.line, op.pos, type, name.toString(), formallist, varlist, stmtlist, (IExp)null); :}
+                  | PUBLIC INT:op LBRACKET RBRACKET ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, new IntArrayType(op.line, op.pos), name.toString(), formallist, varlist, stmtlist, exp); :}
+
+                  | PUBLIC MEGGYCOLOR:op LBRACKET RBRACKET ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, new ColorArrayType(op.line, op.pos), name.toString(), formallist, varlist, stmtlist, exp); :}
                   ;
 
 Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:exp2 COMMA Expression:exp3 RPAREN SEMI
@@ -341,7 +346,7 @@ Expression ::=  Expression:lhs TIMES:op Expression:rhs
 
 FormalVar      ::= Type:t  ID:name
                 {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
-                
+
                 | MEGGYCOLOR:op LBRACKET RBRACKET ID:name
                 {: RESULT = new Formal(name.line, name.pos, new ColorArrayType(op.line, op.pos), name.toString()); :}
 

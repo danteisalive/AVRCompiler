@@ -61,7 +61,10 @@ class C {
 }
 
 class A {		//ERROR: conflicts with previous declaration of class A
-
+  public int return_type(){
+    C c;
+    return c;    // reference compiler says its fine!
+  }
 }
 
 class D {

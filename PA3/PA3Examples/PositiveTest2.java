@@ -4,7 +4,7 @@ import meggy.Meggy;
 
 class PositiveTest2 {		//Main class
 	public static void main(String[] whatever){
-		
+
 	}
 }
 
@@ -18,7 +18,7 @@ class A {
 		Meggy.Button 	vButton;
 		Meggy.Tone 		vTone;
 		B 				vClassB;
-		
+
 		// && operator expression
 		vBool = vBool && true && false && vBool;
 
@@ -55,13 +55,13 @@ class A {
 		//getPixel and checkButton expressions
 		vColor = Meggy.getPixel((byte)6, vByte);
 		vBool = Meggy.checkButton(Meggy.Button.Right) == false;
-		
+
 
 		// Complex mixed operator expression
 		vBool = ((new Meggy.Color[(byte)5 * vByte] == vColorArr) && (-vByte < -120) && (23 < (byte)-4) && ((3+4) - 2 == 1))
 				== ((new int[vByte * (byte)09][001] == 3+2) && (vInt == vIntArr[2+3-5])
 				&& Meggy.checkButton(Meggy.Button.Up));
-		
+
 
 		// Call expressions
 		vInt = vClassB.mth2();		//class B instance without new

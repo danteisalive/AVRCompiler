@@ -14,7 +14,7 @@ class A {
 	byte 	vByte;
 	int[] 	vIntArr;
 	boolean	vBool;
-	
+
 
 	public void mth1() {
 		Meggy.Color[] vColorArr;
@@ -24,7 +24,7 @@ class A {
 		vInt = new int[10];			//ERROR: wrong type assigned to vInt
 		vIntArr = new int[vInt];	//valid
 		vIntArr = new int[vBool];	//ERROR: invalid array index type
-		
+
 		new A().mth10();			//ERROR: Method not defined: mth10
 		new D().mth1();				//ERROR: Class not defined: D
 
@@ -35,7 +35,7 @@ class A {
 		vColorArr = vClassB.mth2(vIntArr, 2, (byte)10, true, 2); //ERROR: wrong number
 														//of arguments (more)
 		vColor = vClassB.mth2(vIntArr, 2, (byte)10, true); //ERROR: Assigned to wrong type
-		
+
 		vInt = vInt * vInt;		//ERROR: wrong type. Mul operation works on two bytes only
 	}
 
@@ -49,8 +49,8 @@ class A {
 }
 
 class B {
-	public Meggy.Color[] mth2(int[] a, int b, byte c, boolean d){
+	public /*Meggy.Color[]*/ void mth2(int[] a, int b, byte c, boolean d){
 		vInt = 1;		//ERROR: Symbol not defined in current scope
-		return new Meggy.Color[a[6] + b - (byte)2 * c];
+		//return new Meggy.Color[a[6] + b - (byte)2 * c];
 	}
 }
