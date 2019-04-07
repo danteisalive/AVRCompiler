@@ -27,21 +27,21 @@ public class CheckTypes extends DepthFirstVisitor
 {
 
    private SymTable mCurrentST;
+   private String errors;
 
    public CheckTypes(SymTable st) {
      if(st==null) {
           throw new InternalException("unexpected null argument");
       }
       mCurrentST = st;
+      errors = null;
    }
 
    //========================= Overriding the visitor interface
 
      public void defaultOut(Node node) {
-         System.err.println("Node not implemented in CheckTypes, " + node.getClass());
+         //System.err.println("Node not implemented in CheckTypes, " + node.getClass());
      }
-     // program type check.
-     public void outProgram(Program node){}
 
      // main class type check.
      public void outMainClass(MainClass node){}
@@ -78,30 +78,36 @@ public class CheckTypes extends DepthFirstVisitor
      public void outMeggyDelay(MeggyDelay node){
          Type expType = this.mCurrentST.getExpType(node.getExp());
          if(expType != Type.INT){
-             throw new SemanticException("Invalid param type for Meggy Delay.",
-                                          node.getExp().getLine(),
-                                          node.getExp().getPos()
-                                          );
+             errors +=  "[" + node.getLine() + "," + node.getPos() + "]" +
+                      " Invalid param type for Meggy Delay\n";
+             // throw new SemanticException("Invalid param type for Meggy Delay.",
+             //                              node.getExp().getLine(),
+             //                              node.getExp().getPos()
+             //                              );
          }
      }
 
      public void outIfStatement(IfStatement node){
          Type expType = this.mCurrentST.getExpType(node.getExp());
          if (expType != Type.BOOL){
-             throw new SemanticException("Invalid param type for if statement",
-  			                                 node.getExp().getLine(),
-                                         node.getExp().getPos()
-                                         );
+             errors +=  "[" + node.getLine() + "," + node.getPos() + "]" +
+                        " Invalid param type for if statement\n";
+             // throw new SemanticException("Invalid param type for if statement",
+  			     //                             node.getExp().getLine(),
+             //                             node.getExp().getPos()
+             //                             );
          }
      }
 
      public void outWhileStatement(WhileStatement node){
          Type expType = this.mCurrentST.getExpType(node.getExp());
          if(expType !=Type.BOOL){
-             throw new SemanticException("Invalid param type for while statement",
-                                          node.getExp().getLine(),
-                                          node.getExp().getPos()
-                                          );
+             errors +=  "[" + node.getLine() + "," + node.getPos() + "]" +
+                      " Invalid param type for while statement\n";
+             // throw new SemanticException("Invalid param type for while statement",
+             //                              node.getExp().getLine(),
+             //                              node.getExp().getPos()
+             //                              );
          }
      }
 
@@ -113,22 +119,28 @@ public class CheckTypes extends DepthFirstVisitor
       Type colorExpType = this.mCurrentST.getExpType(node.getColor());
 
       if(xexpType != Type.BYTE){
-        throw new SemanticException("Invalid argument type for method MeggySetPixel",
-                                    node.getXExp().getLine(),
-                                    node.getXExp().getPos()
-                                    );
+        errors +=  "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+                " Invalid argument type for method MeggySetPixel\n";
+        // throw new SemanticException("Invalid argument type for method MeggySetPixel",
+        //                             node.getXExp().getLine(),
+        //                             node.getXExp().getPos()
+        //                             );
       }
       if(yexpType != Type.BYTE){
-        throw new SemanticException("Invalid argument type for method MeggySetPixel",
-                                    node.getXExp().getLine(),
-                                    node.getXExp().getPos()
-                                    );
+        errors +=  "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+                  " Invalid argument type for method MeggySetPixel\n";
+        // throw new SemanticException("Invalid argument type for method MeggySetPixel",
+        //                             node.getXExp().getLine(),
+        //                             node.getXExp().getPos()
+        //                             );
       }
       if(colorExpType != Type.COLOR){
-        throw new SemanticException("Invalid argument type for method MeggySetPixel",
-                                    node.getXExp().getLine(),
-                                    node.getXExp().getPos()
-                                    );
+        errors += "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+                  " Invalid argument type for method MeggySetPixel\n";
+        // throw new SemanticException("Invalid argument type for method MeggySetPixel",
+        //                             node.getXExp().getLine(),
+        //                             node.getXExp().getPos()
+        //                             );
       }
     }
 
@@ -138,10 +150,12 @@ public class CheckTypes extends DepthFirstVisitor
           this.mCurrentST.setExpType(node, Type.BYTE);
       }
       else{
-         throw new SemanticException("Byte Cast is only possible on INT or BYTE operands!",
-                                      node.getExp().getLine(),
-                                      node.getExp().getPos()
-                                      );
+          errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                    " Byte Cast is only possible on INT or BYTE operands!\n";
+          // throw new SemanticException("Byte Cast is only possible on INT or BYTE operands!",
+          //                             node.getExp().getLine(),
+          //                             node.getExp().getPos()
+          //                             );
       }
    }
 
@@ -151,10 +165,12 @@ public class CheckTypes extends DepthFirstVisitor
         this.mCurrentST.setExpType(node, Type.BOOL);
      }
      else{
-        throw new SemanticException("Meggy Check Button expects Button Type argument!",
-                                    node.getExp().getLine(),
-                                    node.getExp().getPos()
-                                    );
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Meggy Check Button expects Button Type argument!\n";
+        // throw new SemanticException("Meggy Check Button expects Button Type argument!",
+        //                             node.getExp().getLine(),
+        //                             node.getExp().getPos()
+        //                             );
      }
    }
 
@@ -167,17 +183,21 @@ public class CheckTypes extends DepthFirstVisitor
            this.mCurrentST.setExpType(node, Type.COLOR);
         }
         else{
-           throw new SemanticException("Y cordination should be Int or Byte!",
-                                       node.getYExp().getLine(),
-                                       node.getYExp().getPos()
-                                       );
+          errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                    " Y cordination should be Int or Byte!\n";
+           // throw new SemanticException("Y cordination should be Int or Byte!",
+           //                             node.getYExp().getLine(),
+           //                             node.getYExp().getPos()
+           //                             );
         }
       }
       else{
-        throw new SemanticException("X cordination should be Int or Byte!",
-                                    node.getXExp().getLine(),
-                                    node.getYExp().getPos()
-                                    );
+        errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                  " X cordination should be Int or Byte!\n";
+        // throw new SemanticException("X cordination should be Int or Byte!",
+        //                             node.getXExp().getLine(),
+        //                             node.getYExp().getPos()
+        //                             );
       }
    }
 
@@ -186,25 +206,31 @@ public class CheckTypes extends DepthFirstVisitor
        if ((expType==Type.INT  || expType==Type.BYTE)){
            this.mCurrentST.setExpType(node, Type.INT);
        } else {
-           throw new SemanticException(
-            "Operands to - operator must be INT or BYTE",
-            node.getExp().getLine(),
-            node.getExp().getPos());
+         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                   " Operands to - operator must be INT or BYTE\n";
+           // throw new SemanticException(
+           //  "Operands to - operator must be INT or BYTE",
+           //  node.getExp().getLine(),
+           //  node.getExp().getPos());
        }
    }
 
    public void outAndExp(AndExp node)
    {
      if(this.mCurrentST.getExpType(node.getLExp()) != Type.BOOL) {
-       throw new SemanticException(
-         "Invalid left operand type for operator &&",
-         node.getLExp().getLine(), node.getLExp().getPos());
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Invalid left operand type for operator &&\n";
+       // throw new SemanticException(
+       //   "Invalid left operand type for operator &&",
+       //   node.getLExp().getLine(), node.getLExp().getPos());
      }
 
      if(this.mCurrentST.getExpType(node.getRExp()) != Type.BOOL) {
-       throw new SemanticException(
-         "Invalid right operand type for operator &&",
-         node.getRExp().getLine(), node.getRExp().getPos());
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Invalid right operand type for operator &&\n";
+       // throw new SemanticException(
+       //   "Invalid right operand type for operator &&",
+       //   node.getRExp().getLine(), node.getRExp().getPos());
      }
 
      this.mCurrentST.setExpType(node, Type.BOOL);
@@ -234,9 +260,11 @@ public class CheckTypes extends DepthFirstVisitor
      }
      else
      {
-       throw new SemanticException("Operands to == operator must be INT or BYTE or COLOR or BOOL or TONE",
-                                    node.getLExp().getLine(),
-                                    node.getLExp().getPos());
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Operands to == operator must be INT or BYTE or COLOR or BOOL or TONE\n";
+       // throw new SemanticException("Operands to == operator must be INT or BYTE or COLOR or BOOL or TONE",
+       //                              node.getLExp().getLine(),
+       //                              node.getLExp().getPos());
      }
    }
 
@@ -252,9 +280,11 @@ public class CheckTypes extends DepthFirstVisitor
      }
      else
      {
-       throw new SemanticException("Operands to < operator must be INT or BYTE!",
-                                    node.getLExp().getLine(),
-                                    node.getLExp().getPos());
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Operands to < operator must be INT or BYTE!\n";
+       // throw new SemanticException("Operands to < operator must be INT or BYTE!",
+       //                              node.getLExp().getLine(),
+       //                              node.getLExp().getPos());
      }
    }
 
@@ -263,10 +293,12 @@ public class CheckTypes extends DepthFirstVisitor
      Type expType = this.mCurrentST.getExpType(node.getExp());
 
      if(expType != Type.BOOL) {
-       throw new SemanticException(
-         " Operand type for operator ! should be BOOL type!",
-         node.getExp().getLine(),
-         node.getExp().getPos());
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Operand type for operator ! should be BOOL type!\n";
+       // throw new SemanticException(
+       //   " Operand type for operator ! should be BOOL type!",
+       //   node.getExp().getLine(),
+       //   node.getExp().getPos());
      }
 
      this.mCurrentST.setExpType(node, Type.BOOL);
@@ -281,10 +313,12 @@ public class CheckTypes extends DepthFirstVisitor
           ){
            this.mCurrentST.setExpType(node, Type.INT);
        } else {
-           throw new SemanticException(
-                   "Operands to + operator must be INT or BYTE",
-                   node.getLExp().getLine(),
-                   node.getLExp().getPos());
+         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                   " Operands to + operator must be INT or BYTE\n";
+           // throw new SemanticException(
+           //         "Operands to + operator must be INT or BYTE",
+           //         node.getLExp().getLine(),
+           //         node.getLExp().getPos());
        }
    }
 
@@ -297,10 +331,12 @@ public class CheckTypes extends DepthFirstVisitor
           ){
            this.mCurrentST.setExpType(node, Type.INT);
        } else {
-           throw new SemanticException(
-                   "Operands to - operator must be INT or BYTE",
-                   node.getLExp().getLine(),
-                   node.getLExp().getPos());
+         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                   " Operands to - operator must be INT or BYTE\n";
+           // throw new SemanticException(
+           //         "Operands to - operator must be INT or BYTE",
+           //         node.getLExp().getLine(),
+           //         node.getLExp().getPos());
        }
 
    }
@@ -314,11 +350,19 @@ public class CheckTypes extends DepthFirstVisitor
           ){
            this.mCurrentST.setExpType(node, Type.INT);
        } else {
-           throw new SemanticException(
-                   "Operands to * operator must be INT or BYTE",
-                   node.getLExp().getLine(),
-                   node.getLExp().getPos());
+          errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                   " Operands to * operator must be INT or BYTE\n";
+           // throw new SemanticException(
+           //         "Operands to * operator must be INT or BYTE",
+           //         node.getLExp().getLine(),
+           //         node.getLExp().getPos());
        }
 
+   }
+
+   public void outProgram(Program node){
+       if (errors != null){
+         System.out.println(errors);
+       }
    }
 }

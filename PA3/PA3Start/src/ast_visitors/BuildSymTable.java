@@ -224,7 +224,6 @@ public class BuildSymTable extends DepthFirstVisitor
 
       if (errors != null){
         System.out.println(errors);
-        throw new SemanticException("Errors found while building symbol table");
       }
   }
 

@@ -23,7 +23,6 @@ public class SymTable {
 
     public SymTable()
     {
-      //System.out.println("Creating a symbol table. Initiating a global scope...");
       mScopeStack.push(mGlobalScope);
     }
 
@@ -37,8 +36,6 @@ public class SymTable {
 
     public void insert(STE ste) {
 
-      //  System.out.println("in SymTable.insert(" + ste.mName + ") ...");
-    	//	System.out.println("insert " + ste.mName);
     		if(mScopeStack.peek() != null){
     			   mScopeStack.peek().insert(ste);
     		} else {
@@ -48,7 +45,7 @@ public class SymTable {
     }
 
     public STE lookup(String id){
-    //	System.out.println("in SymTable.lookup(" + id + ") ...");
+
     	Stack<Scope> copyStack = (Stack<Scope>) mScopeStack.clone();
         STE ste = null;
         while (!copyStack.isEmpty()){
@@ -62,7 +59,6 @@ public class SymTable {
             	} else {
             		t = "var";
             	}
-            //	System.out.println("found " + t + " ste " + id);
                 break;
             }
             mScopeStack.pop();
@@ -74,16 +70,15 @@ public class SymTable {
     * scope.  That is, make it the top of the scope stack.
     */
     public void pushScope(String id) {
-       // actually only need to look up the top of the scope since we just inserted the STE
-       //System.out.println("in SymTable.pushScope(" + id + ") ...");
+
        STE ste = lookupInnermost(id);
 
        if(ste instanceof ClassSTE){
          mScopeStack.push(((ClassSTE)ste).getScope());
-         //System.out.println("pushed a class scope onto stack");
+
        } else if (ste instanceof MethodSTE){
          mScopeStack.push(((MethodSTE)ste).getScope());
-        // System.out.println("pushed a method scope onto stack");
+
        } else {
          throw new SemanticException("Did not find scope with id: " + id + " in SymTable.pushScope");
        }
@@ -125,15 +120,15 @@ public class SymTable {
  		      STE s = tempHashMap.get(scopeName);
        		if(s instanceof ClassSTE) {
        			if(!flag) {
-       				System.out.print("Classes in global scope:");
+       				out.print("Classes in global scope:");
        				flag = true;
        			}
-       			System.out.print(" "+ s.getSTEName());
+       			out.print(" "+ s.getSTEName());
        		}
  	    }
 
      	if(flag) {
-     		System.out.print("\n");
+     		out.print("\n");
      		flag = false;
      	}
 
@@ -141,15 +136,15 @@ public class SymTable {
      		STE s = tempHashMap.get(scopeName);
      		if(s instanceof VarSTE) {
      			if(!flag) {
-     				System.out.print("Vars in current scope:");
+     				out.print("Vars in current scope:");
      				flag = true;
      			}
-     			System.out.print(" "+ s.getSTEName() + ":"+ ((VarSTE)s).getSTEType().toString());
+     			out.print(" "+ s.getSTEName() + ":"+ ((VarSTE)s).getSTEType().toString());
      		}
      	}
 
      	if(flag) {
-     		System.out.print("\n");
+     		out.print("\n");
      		flag = false;
      	}
 
@@ -157,31 +152,31 @@ public class SymTable {
        		STE s = tempHashMap.get(scopeName);
        		if(s instanceof MethodSTE) {
        			if(!flag) {
-       				System.out.print("Methods in current scope:");
+       				out.print("Methods in current scope:");
        				flag = true;
        			}
-       			System.out.print(" "+ s.getSTEName());
+       			out.print(" "+ s.getSTEName());
        		}
      	}
 
      	if(flag) {
-     		System.out.print("\n");
+     		out.print("\n");
      	}
 
      	for (String scopeName : keyList) {
        		STE s = tempHashMap.get(scopeName);
        		if(s instanceof ClassSTE)
           {
-       			System.out.println("\nIn class "+ s.getSTEName() +" scope");
+       			out.println("\nIn class "+ s.getSTEName() +" scope");
        			this.printSymTable(out, ((ClassSTE)s).getScope());
        		}
           else if(s instanceof MethodSTE)
           {
-       			System.out.println("In method "+ s.getSTEName() +" scope");
+       			out.println("In method "+ s.getSTEName() +" scope");
        			//print method signature here
        			//String formals; //add logic to populate formals
        			//String retType; //add logic to populate return type
-       			System.out.println("Method Signature: " + ((MethodSTE)s).getSignature().toString());
+       			out.println("Method Signature: " + ((MethodSTE)s).getSignature().toString());
        			this.printSymTable(out, ((MethodSTE)s).getScope());
        		}
      	}
