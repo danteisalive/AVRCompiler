@@ -47,7 +47,7 @@ public class BuildSymTable extends DepthFirstVisitor
 
       this.STout = out;
       this.SymbolTable = st;
-      errors  = null;
+      errors  = "";
    }
 
    //========================= Overriding the visitor interface
@@ -131,9 +131,6 @@ public class BuildSymTable extends DepthFirstVisitor
    		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", 0);
    		SymbolTable.insert(varSte);
       //offset += varSte.getSTEType().getAVRTypeSize();
-   	}
-
-   	public void outMethodDecl(MethodDecl node){
 
       LinkedList<VarDecl> vars_list = node.getVarDecls();
       Iterator vars_itr = vars_list.iterator();
@@ -150,6 +147,10 @@ public class BuildSymTable extends DepthFirstVisitor
             SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Y", 0));
         }
       }
+
+   	}
+
+   	public void outMethodDecl(MethodDecl node){
 
    		SymbolTable.popScope();
 
@@ -211,7 +212,185 @@ public class BuildSymTable extends DepthFirstVisitor
         }
   }
 
+  public void outPlusExp(PlusExp node)
+  {
+      String lExpName; String rExpName;
 
+      if (node.getLExp() instanceof IdLiteral){
+        lExpName = ((IdLiteral)node.getLExp()).getLexeme();
+        STE ste = SymbolTable.lookup(lExpName);
+        if (ste != null){
+          if (ste instanceof VarSTE){
+            this.SymbolTable.setExpType(node.getLExp(), ((VarSTE)ste).getSTEType());
+          }
+          else{
+            errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+            " Unrecongnized variable type\n";
+          }
+        }
+        else {
+          errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+                    " Left Variable not defined\n";
+        }
+      }
+
+      if (node.getRExp() instanceof IdLiteral){
+        rExpName = ((IdLiteral)node.getRExp()).getLexeme();
+        STE ste = SymbolTable.lookup(rExpName);
+        if (ste != null){
+          if (ste instanceof VarSTE){
+            this.SymbolTable.setExpType(node.getRExp(), ((VarSTE)ste).getSTEType());
+          }
+          else{
+            errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                      " Unrecongnized variable type\n";
+          }
+        }
+        else {
+          errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                  " Right Variable not defined\n";
+        }
+      }
+
+  }
+
+
+  public void outMinusExp(MinusExp node)
+  {
+
+    String lExpName; String rExpName;
+
+    if (node.getLExp() instanceof IdLiteral){
+      lExpName = ((IdLiteral)node.getLExp()).getLexeme();
+      STE ste = SymbolTable.lookup(lExpName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getLExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+          " Unrecongnized variable type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+                  " Left Variable not defined\n";
+      }
+    }
+
+    if (node.getRExp() instanceof IdLiteral){
+      rExpName = ((IdLiteral)node.getRExp()).getLexeme();
+      STE ste = SymbolTable.lookup(rExpName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getRExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                    " Unrecongnized variable type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                " Right Variable not defined\n";
+      }
+    }
+
+  }
+
+  public void outMulExp(MulExp node)
+  {
+
+        String lExpName; String rExpName;
+
+        if (node.getLExp() instanceof IdLiteral){
+          lExpName = ((IdLiteral)node.getLExp()).getLexeme();
+          STE ste = SymbolTable.lookup(lExpName);
+          if (ste != null){
+            if (ste instanceof VarSTE){
+              this.SymbolTable.setExpType(node.getLExp(), ((VarSTE)ste).getSTEType());
+            }
+            else{
+              errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+              " Unrecongnized variable type\n";
+            }
+          }
+          else {
+            errors += "[" + node.getLExp().getLine() + "," + node.getLExp().getPos() + "]" +
+                      " Left Variable not defined\n";
+          }
+        }
+
+        if (node.getRExp() instanceof IdLiteral){
+          rExpName = ((IdLiteral)node.getRExp()).getLexeme();
+          STE ste = SymbolTable.lookup(rExpName);
+          if (ste != null){
+            if (ste instanceof VarSTE){
+              this.SymbolTable.setExpType(node.getRExp(), ((VarSTE)ste).getSTEType());
+            }
+            else{
+              errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                        " Unrecongnized variable type\n";
+            }
+          }
+          else {
+            errors += "[" + node.getRExp().getLine() + "," + node.getRExp().getPos() + "]" +
+                    " Right Variable not defined\n";
+          }
+        }
+  }
+
+  public void outNewArrayExp(NewArrayExp node){
+      if (convertType(node.getType()) == Type.INT ||
+          convertType(node.getType()) == Type.COLOR)
+      {
+        if (node.getExp() instanceof IdLiteral){
+          String expName = ((IdLiteral)node.getExp()).getLexeme();
+          STE ste = SymbolTable.lookup(expName);
+          if (ste != null){
+            if (ste instanceof VarSTE){
+              if (convertType(node.getType()) == Type.INT)
+                this.SymbolTable.setExpType(node, Type.INTARRAY);
+              else if (convertType(node.getType()) == Type.COLOR)
+                this.SymbolTable.setExpType(node, Type.COLORARRAY);
+            }
+            else{
+              errors += "[" + node.getExp().getLine() + "," + node.getExp().getPos() + "]" +
+                        " Unrecongnized variable type\n";
+            }
+          }
+          else {
+            errors += "[" + node.getExp().getLine() + "," + node.getExp().getPos() + "]" +
+                    " index variable is not defined\n";
+          }
+        }
+
+      }
+      else{
+        errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                  " Invalid type for new array expression\n";
+      }
+  }
+
+  public void outAssignStatement(AssignStatement node){
+
+        STE ste = SymbolTable.lookup(node.getId());
+        if (ste != null){
+          if (ste instanceof VarSTE){
+            this.SymbolTable.setExpType(node, ((VarSTE)ste).getSTEType());
+          }
+          else{
+            errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+            " Unrecongnized variable type\n";
+          }
+        }
+        else {
+          errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                    " Left side of assign statement is not defined\n";
+        }
+
+
+  }
 
   public void inMainClass(MainClass node){
      // check to see the name of file is the same as main class
@@ -222,7 +401,7 @@ public class BuildSymTable extends DepthFirstVisitor
       SymbolTable.printSymTable(this.STout, globalScope);
       STout.flush();
 
-      if (errors != null){
+      if (!errors.equals("")){
         System.out.println(errors);
       }
   }

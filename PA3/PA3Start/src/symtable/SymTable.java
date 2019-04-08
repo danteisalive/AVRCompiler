@@ -49,19 +49,11 @@ public class SymTable {
     	Stack<Scope> copyStack = (Stack<Scope>) mScopeStack.clone();
         STE ste = null;
         while (!copyStack.isEmpty()){
-            ste = lookupInnermost(id);
+            ste = copyStack.peek().lookupInnermost(id);
             if (ste != null){
-            	String t = "";
-            	if(ste instanceof MethodSTE){
-            		t = "method";
-            	} else if (ste instanceof ClassSTE){
-            		t = "class";
-            	} else {
-            		t = "var";
-            	}
                 break;
             }
-            mScopeStack.pop();
+            copyStack.pop();
         }
         return ste;
     }

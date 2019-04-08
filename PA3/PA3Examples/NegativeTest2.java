@@ -21,6 +21,8 @@ class A {
 		B vClassB;
 
 		vInt = vInt + d;			//ERROR: Variable not defined: d
+    vInt = vInt * vBool;			//ERROR: Variable vBool is bool
+    vInt = vInt - vBool;			//ERROR: Variable vBool is bool
 		vInt = new int[10];			//ERROR: wrong type assigned to vInt
 		vIntArr = new int[vInt];	//valid
 		vIntArr = new int[vBool];	//ERROR: invalid array index type
@@ -49,8 +51,8 @@ class A {
 }
 
 class B {
-	public /*Meggy.Color[]*/ void mth2(int[] a, int b, byte c, boolean d){
+	public Meggy.Color[] mth2(int[] a, int b, byte c, boolean d){
 		vInt = 1;		//ERROR: Symbol not defined in current scope
-		//return new Meggy.Color[a[6] + b - (byte)2 * c];
+		return new Meggy.Color[a[6] + b - (byte)2 * c];
 	}
 }
