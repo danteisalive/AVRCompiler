@@ -12,6 +12,7 @@ import ast_visitors.*;
 import ast.node.*;
 import ast_visitors.DotVisitor;
 import ast_visitors.CheckTypes;
+import ast_visitors.AVRAssemblyGeneratorVisitor;
 
 import symtable.SymTable;
 
@@ -53,6 +54,11 @@ public class MJPA4Driver {
           ast_root.accept(new BuildSymTable(new PrintWriter(STout), SymbolTable));
           ast_root.accept(new CheckTypes(SymbolTable));
 
+          java.io.PrintStream avrsout =
+            new java.io.PrintStream(
+                new java.io.FileOutputStream(filename + ".s.temp"));
+
+          ast_root.accept(new AVRAssemblyGeneratorVisitor(new PrintWriter(avrsout), SymbolTable));
 
         }catch (Exception e) {
             e.printStackTrace();

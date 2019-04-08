@@ -15,7 +15,7 @@ main:
     in r28,__SP_L__
     in r29,__SP_H__
 /* prologue: function */
-    call _Z18MeggyJrSimpleSetupv
+    call _Z18MeggyJrSimpleSetupv 
     /* Need to call this so that the meggy library gets set up */
 
     # Load constant int 1
@@ -67,3 +67,5 @@ main:
     jmp endLabel
     ret
     .size   main, .-main
+
+
