@@ -2,7 +2,7 @@
 
 import meggy.Meggy;
 
-class NegativeTest2 {
+class NegTest2 {
     public static void main(String[] whatever){
 
     }

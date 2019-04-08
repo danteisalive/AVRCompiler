@@ -5,13 +5,13 @@ Vars in current scope: aArray:INTARRAY b:BOOL cArray:COLORARRAY
 Methods in current scope: mth1 mth3
 In method mth1 scope
 Method Signature: (BYTE,INT,COLOR) returns COLORARRAY
-Vars in current scope: BClass:class_B THIS:class_A a:INT c:COLOR vByte:BYTE
+Vars in current scope: BClass:class_B THIS:class_A a:INT c:COLOR tempByte:BYTE
 In method mth3 scope
 Method Signature: (INT,BYTE) returns COLOR
 Vars in current scope: THIS:class_A a:INT b:BYTE
 
 In class B scope
-Methods in current scope: mth2
-In method mth2 scope
+Methods in current scope: func2
+In method func2 scope
 Method Signature: () returns INT
 Vars in current scope: THIS:class_B

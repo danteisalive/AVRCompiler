@@ -15,7 +15,7 @@ Errors found while building symbol table
 */
 import meggy.Meggy;
 
-class NegativeTest1 {
+class NegTest1 {
     public static void main(String[] whatever){
 
     }

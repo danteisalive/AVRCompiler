@@ -66,7 +66,7 @@ digraph ASTGraph {
 30 -> 32
 33 [ label="LtExp" ];
 29 -> 33
-34 [ label="IdLiteral\nvByte" ];
+34 [ label="IdLiteral\ntempByte" ];
 33 -> 34
 35 [ label="IntLiteral\n500" ];
 33 -> 35
@@ -74,7 +74,7 @@ digraph ASTGraph {
 10 -> 36
 37 [ label="PlusExp" ];
 36 -> 37
-38 [ label="IdLiteral\nvByte" ];
+38 [ label="IdLiteral\ntempByte" ];
 37 -> 38
 39 [ label="ByteCast" ];
 37 -> 39
@@ -90,7 +90,7 @@ digraph ASTGraph {
 43 -> 44
 45 [ label="IdLiteral\na" ];
 44 -> 45
-46 [ label="IdLiteral\nvByte" ];
+46 [ label="IdLiteral\ntempByte" ];
 44 -> 46
 47 [ label="IntLiteral\n10" ];
 43 -> 47
@@ -102,7 +102,7 @@ digraph ASTGraph {
 10 -> 50
 51 [ label="MinusExp" ];
 50 -> 51
-52 [ label="IdLiteral\nvByte" ];
+52 [ label="IdLiteral\ntempByte" ];
 51 -> 52
 53 [ label="ByteCast" ];
 51 -> 53
@@ -118,7 +118,7 @@ digraph ASTGraph {
 57 -> 58
 59 [ label="IdLiteral\na" ];
 58 -> 59
-60 [ label="IdLiteral\nvByte" ];
+60 [ label="IdLiteral\ntempByte" ];
 58 -> 60
 61 [ label="IntLiteral\n11" ];
 57 -> 61
@@ -130,7 +130,7 @@ digraph ASTGraph {
 10 -> 64
 65 [ label="MulExp" ];
 64 -> 65
-66 [ label="IdLiteral\nvByte" ];
+66 [ label="IdLiteral\ntempByte" ];
 65 -> 66
 67 [ label="ByteCast" ];
 65 -> 67
@@ -144,7 +144,7 @@ digraph ASTGraph {
 70 -> 71
 72 [ label="IntLiteral\n6" ];
 71 -> 72
-73 [ label="IdLiteral\nvByte" ];
+73 [ label="IdLiteral\ntempByte" ];
 70 -> 73
 74 [ label="AssignStatement" ];
 10 -> 74
@@ -208,58 +208,32 @@ digraph ASTGraph {
 102 -> 103
 104 [ label="IdLiteral\nBClass" ];
 103 -> 104
-105 [ label="AssignStatement" ];
+105 [ label="NewArrayExp" ];
 10 -> 105
-106 [ label="ArrayExp" ];
+106 [ label="ColorType" ];
 105 -> 106
-107 [ label="CallExp" ];
-106 -> 107
-108 [ label="NewExp" ];
-107 -> 108
-109 [ label="ByteCast" ];
-107 -> 109
-110 [ label="IntLiteral\n5" ];
-109 -> 110
-111 [ label="ArrayExp" ];
-107 -> 111
-112 [ label="NewArrayExp" ];
-111 -> 112
-113 [ label="IntType" ];
+107 [ label="IntLiteral\n100" ];
+105 -> 107
+108 [ label="MethodDecl" ];
+3 -> 108
+109 [ label="ColorType" ];
+108 -> 109
+110 [ label="Formal" ];
+108 -> 110
+111 [ label="IntType" ];
+110 -> 111
+112 [ label="Formal" ];
+108 -> 112
+113 [ label="ByteType" ];
 112 -> 113
-114 [ label="IntLiteral\n65" ];
-112 -> 114
-115 [ label="IntLiteral\n5" ];
-111 -> 115
-116 [ label="IdLiteral\nc" ];
-107 -> 116
-117 [ label="IntLiteral\n34" ];
-106 -> 117
-118 [ label="NewArrayExp" ];
-10 -> 118
-119 [ label="ColorType" ];
-118 -> 119
-120 [ label="IntLiteral\n100" ];
-118 -> 120
-121 [ label="MethodDecl" ];
-3 -> 121
-122 [ label="ColorType" ];
-121 -> 122
-123 [ label="Formal" ];
-121 -> 123
-124 [ label="IntType" ];
-123 -> 124
-125 [ label="Formal" ];
-121 -> 125
-126 [ label="ByteType" ];
-125 -> 126
-127 [ label="ColorLiteral\nMeggy.Color.RED" ];
-121 -> 127
-128 [ label="TopClassDecl" ];
-0 -> 128
-129 [ label="MethodDecl" ];
-128 -> 129
-130 [ label="IntType" ];
-129 -> 130
-131 [ label="IntLiteral\n6" ];
-129 -> 131
+114 [ label="ColorLiteral\nMeggy.Color.RED" ];
+108 -> 114
+115 [ label="TopClassDecl" ];
+0 -> 115
+116 [ label="MethodDecl" ];
+115 -> 116
+117 [ label="IntType" ];
+116 -> 117
+118 [ label="IntLiteral\n6" ];
+116 -> 118
 }

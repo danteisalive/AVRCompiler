@@ -3,7 +3,7 @@ variable declarations, and method calls between classes. */
 
 import meggy.Meggy;
 
-class PositiveTest1 {		//Main class
+class PosTest1 {		//Main class
 	public static void main(String[] whatever){
 		Meggy.setPixel((byte)3, (byte)10, Meggy.Color.GREEN);	//Meggy.setPixel(exp, exp, exp) statement
 		Meggy.setAuxLEDs(123);									//Meggy.setAuxLEDs(exp) statement
