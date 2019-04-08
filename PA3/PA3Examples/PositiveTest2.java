@@ -25,8 +25,8 @@ class A {
 		// < operator expression
 		vBool = (vInt  < 10) && (vByte < 500);
 
-		// == operator expression
-		vBool = (vColorArr == new Meggy.Color[10]) == (vIntArr == new int[120]) == (Meggy.Color.RED == Meggy.Color.BLUE);
+		// // == operator expression
+		// vBool = (vColorArr == new Meggy.Color[10]) == (vIntArr == new int[120]) == (Meggy.Color.RED == Meggy.Color.BLUE);
 
 		// + operator expression
 		vInt = vByte + (byte)10;		//promotes to int
@@ -49,8 +49,8 @@ class A {
 		// new and array expressions
 		vInt = vIntArr[10 + (byte)5];
 		vColor = vColorArr[(byte)3 - (byte)19];
-		vColor = new Meggy.Color[56][12];			//nice expression :)
-		vInt = new int[100][20];					//First creates and int array, then accesses 21st element
+		// vColor = new Meggy.Color[56][12];			//nice expression :)
+		// vInt = new int[100][20];					//First creates and int array, then accesses 21st element
 
 		//getPixel and checkButton expressions
 		vColor = Meggy.getPixel((byte)6, vByte);

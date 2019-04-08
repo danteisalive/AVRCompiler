@@ -80,400 +80,344 @@ digraph ASTGraph {
 37 -> 39
 40 [ label="AssignStatement" ];
 10 -> 40
-41 [ label="EqualExp" ];
+41 [ label="PlusExp" ];
 40 -> 41
-42 [ label="EqualExp" ];
+42 [ label="IdLiteral\nvByte" ];
 41 -> 42
-43 [ label="EqualExp" ];
-42 -> 43
-44 [ label="IdLiteral\nvColorArr" ];
+43 [ label="ByteCast" ];
+41 -> 43
+44 [ label="IntLiteral\n10" ];
 43 -> 44
-45 [ label="NewArrayExp" ];
-43 -> 45
-46 [ label="ColorType" ];
+45 [ label="AssignStatement" ];
+10 -> 45
+46 [ label="PlusExp" ];
 45 -> 46
-47 [ label="IntLiteral\n10" ];
-45 -> 47
-48 [ label="EqualExp" ];
-42 -> 48
-49 [ label="IdLiteral\nvIntArr" ];
+47 [ label="PlusExp" ];
+46 -> 47
+48 [ label="PlusExp" ];
+47 -> 48
+49 [ label="IdLiteral\nvInt" ];
 48 -> 49
-50 [ label="NewArrayExp" ];
+50 [ label="IdLiteral\nvByte" ];
 48 -> 50
-51 [ label="IntType" ];
-50 -> 51
-52 [ label="IntLiteral\n120" ];
-50 -> 52
-53 [ label="EqualExp" ];
-41 -> 53
-54 [ label="ColorLiteral\nMeggy.Color.RED" ];
-53 -> 54
-55 [ label="ColorLiteral\nMeggy.Color.BLUE" ];
-53 -> 55
-56 [ label="AssignStatement" ];
-10 -> 56
-57 [ label="PlusExp" ];
-56 -> 57
-58 [ label="IdLiteral\nvByte" ];
+51 [ label="IntLiteral\n10" ];
+47 -> 51
+52 [ label="ByteCast" ];
+46 -> 52
+53 [ label="IntLiteral\n100" ];
+52 -> 53
+54 [ label="AssignStatement" ];
+10 -> 54
+55 [ label="MinusExp" ];
+54 -> 55
+56 [ label="IdLiteral\nvByte" ];
+55 -> 56
+57 [ label="ByteCast" ];
+55 -> 57
+58 [ label="IntLiteral\n11" ];
 57 -> 58
-59 [ label="ByteCast" ];
-57 -> 59
-60 [ label="IntLiteral\n10" ];
+59 [ label="AssignStatement" ];
+10 -> 59
+60 [ label="MinusExp" ];
 59 -> 60
-61 [ label="AssignStatement" ];
-10 -> 61
-62 [ label="PlusExp" ];
+61 [ label="MinusExp" ];
+60 -> 61
+62 [ label="MinusExp" ];
 61 -> 62
-63 [ label="PlusExp" ];
+63 [ label="IdLiteral\nvInt" ];
 62 -> 63
-64 [ label="PlusExp" ];
-63 -> 64
-65 [ label="IdLiteral\nvInt" ];
-64 -> 65
-66 [ label="IdLiteral\nvByte" ];
-64 -> 66
-67 [ label="IntLiteral\n10" ];
-63 -> 67
-68 [ label="ByteCast" ];
-62 -> 68
-69 [ label="IntLiteral\n100" ];
+64 [ label="IdLiteral\nvByte" ];
+62 -> 64
+65 [ label="IntLiteral\n11" ];
+61 -> 65
+66 [ label="ByteCast" ];
+60 -> 66
+67 [ label="IntLiteral\n12" ];
+66 -> 67
+68 [ label="AssignStatement" ];
+10 -> 68
+69 [ label="MulExp" ];
 68 -> 69
-70 [ label="AssignStatement" ];
-10 -> 70
-71 [ label="MinusExp" ];
-70 -> 71
-72 [ label="IdLiteral\nvByte" ];
+70 [ label="IdLiteral\nvByte" ];
+69 -> 70
+71 [ label="ByteCast" ];
+69 -> 71
+72 [ label="IntLiteral\n234" ];
 71 -> 72
-73 [ label="ByteCast" ];
-71 -> 73
-74 [ label="IntLiteral\n11" ];
+73 [ label="AssignStatement" ];
+10 -> 73
+74 [ label="NegExp" ];
 73 -> 74
-75 [ label="AssignStatement" ];
-10 -> 75
-76 [ label="MinusExp" ];
+75 [ label="ByteCast" ];
+74 -> 75
+76 [ label="IntLiteral\n5" ];
 75 -> 76
-77 [ label="MinusExp" ];
-76 -> 77
-78 [ label="MinusExp" ];
+77 [ label="AssignStatement" ];
+10 -> 77
+78 [ label="NegExp" ];
 77 -> 78
 79 [ label="IdLiteral\nvInt" ];
 78 -> 79
-80 [ label="IdLiteral\nvByte" ];
-78 -> 80
-81 [ label="IntLiteral\n11" ];
-77 -> 81
-82 [ label="ByteCast" ];
-76 -> 82
-83 [ label="IntLiteral\n12" ];
+80 [ label="AssignStatement" ];
+10 -> 80
+81 [ label="AndExp" ];
+80 -> 81
+82 [ label="AndExp" ];
+81 -> 82
+83 [ label="NotExp" ];
 82 -> 83
-84 [ label="AssignStatement" ];
-10 -> 84
-85 [ label="MulExp" ];
-84 -> 85
-86 [ label="IdLiteral\nvByte" ];
+84 [ label="FalseLiteral\nfalse" ];
+83 -> 84
+85 [ label="NotExp" ];
+82 -> 85
+86 [ label="TrueLiteral\ntrue" ];
 85 -> 86
-87 [ label="ByteCast" ];
-85 -> 87
-88 [ label="IntLiteral\n234" ];
-87 -> 88
-89 [ label="AssignStatement" ];
-10 -> 89
-90 [ label="NegExp" ];
+87 [ label="IdLiteral\nvBool" ];
+81 -> 87
+88 [ label="AssignStatement" ];
+10 -> 88
+89 [ label="ArrayExp" ];
+88 -> 89
+90 [ label="IdLiteral\nvIntArr" ];
 89 -> 90
-91 [ label="ByteCast" ];
-90 -> 91
-92 [ label="IntLiteral\n5" ];
+91 [ label="PlusExp" ];
+89 -> 91
+92 [ label="IntLiteral\n10" ];
 91 -> 92
-93 [ label="AssignStatement" ];
-10 -> 93
-94 [ label="NegExp" ];
+93 [ label="ByteCast" ];
+91 -> 93
+94 [ label="IntLiteral\n5" ];
 93 -> 94
-95 [ label="IdLiteral\nvInt" ];
-94 -> 95
-96 [ label="AssignStatement" ];
-10 -> 96
-97 [ label="AndExp" ];
+95 [ label="AssignStatement" ];
+10 -> 95
+96 [ label="ArrayExp" ];
+95 -> 96
+97 [ label="IdLiteral\nvColorArr" ];
 96 -> 97
-98 [ label="AndExp" ];
-97 -> 98
-99 [ label="NotExp" ];
+98 [ label="MinusExp" ];
+96 -> 98
+99 [ label="ByteCast" ];
 98 -> 99
-100 [ label="FalseLiteral\nfalse" ];
+100 [ label="IntLiteral\n3" ];
 99 -> 100
-101 [ label="NotExp" ];
+101 [ label="ByteCast" ];
 98 -> 101
-102 [ label="TrueLiteral\ntrue" ];
+102 [ label="IntLiteral\n19" ];
 101 -> 102
-103 [ label="IdLiteral\nvBool" ];
-97 -> 103
-104 [ label="AssignStatement" ];
-10 -> 104
-105 [ label="ArrayExp" ];
+103 [ label="AssignStatement" ];
+10 -> 103
+104 [ label="MeggyGetPixel" ];
+103 -> 104
+105 [ label="ByteCast" ];
 104 -> 105
-106 [ label="IdLiteral\nvIntArr" ];
+106 [ label="IntLiteral\n6" ];
 105 -> 106
-107 [ label="PlusExp" ];
-105 -> 107
-108 [ label="IntLiteral\n10" ];
-107 -> 108
-109 [ label="ByteCast" ];
-107 -> 109
-110 [ label="IntLiteral\n5" ];
+107 [ label="IdLiteral\nvByte" ];
+104 -> 107
+108 [ label="AssignStatement" ];
+10 -> 108
+109 [ label="EqualExp" ];
+108 -> 109
+110 [ label="MeggyCheckButton" ];
 109 -> 110
-111 [ label="AssignStatement" ];
-10 -> 111
-112 [ label="ArrayExp" ];
-111 -> 112
-113 [ label="IdLiteral\nvColorArr" ];
-112 -> 113
-114 [ label="MinusExp" ];
-112 -> 114
-115 [ label="ByteCast" ];
+111 [ label="ButtonLiteral\nMeggy.Button.Right" ];
+110 -> 111
+112 [ label="FalseLiteral\nfalse" ];
+109 -> 112
+113 [ label="AssignStatement" ];
+10 -> 113
+114 [ label="EqualExp" ];
+113 -> 114
+115 [ label="AndExp" ];
 114 -> 115
-116 [ label="IntLiteral\n3" ];
+116 [ label="AndExp" ];
 115 -> 116
-117 [ label="ByteCast" ];
-114 -> 117
-118 [ label="IntLiteral\n19" ];
+117 [ label="AndExp" ];
+116 -> 117
+118 [ label="EqualExp" ];
 117 -> 118
-119 [ label="AssignStatement" ];
-10 -> 119
-120 [ label="ArrayExp" ];
+119 [ label="NewArrayExp" ];
+118 -> 119
+120 [ label="ColorType" ];
 119 -> 120
-121 [ label="NewArrayExp" ];
-120 -> 121
-122 [ label="ColorType" ];
+121 [ label="MulExp" ];
+119 -> 121
+122 [ label="ByteCast" ];
 121 -> 122
-123 [ label="IntLiteral\n56" ];
-121 -> 123
-124 [ label="IntLiteral\n12" ];
-120 -> 124
-125 [ label="AssignStatement" ];
-10 -> 125
-126 [ label="ArrayExp" ];
-125 -> 126
-127 [ label="NewArrayExp" ];
+123 [ label="IntLiteral\n5" ];
+122 -> 123
+124 [ label="IdLiteral\nvByte" ];
+121 -> 124
+125 [ label="IdLiteral\nvColorArr" ];
+118 -> 125
+126 [ label="LtExp" ];
+117 -> 126
+127 [ label="NegExp" ];
 126 -> 127
-128 [ label="IntType" ];
+128 [ label="IdLiteral\nvByte" ];
 127 -> 128
-129 [ label="IntLiteral\n100" ];
-127 -> 129
-130 [ label="IntLiteral\n20" ];
-126 -> 130
-131 [ label="AssignStatement" ];
-10 -> 131
-132 [ label="MeggyGetPixel" ];
+129 [ label="NegExp" ];
+126 -> 129
+130 [ label="IntLiteral\n120" ];
+129 -> 130
+131 [ label="LtExp" ];
+116 -> 131
+132 [ label="IntLiteral\n23" ];
 131 -> 132
 133 [ label="ByteCast" ];
-132 -> 133
-134 [ label="IntLiteral\n6" ];
+131 -> 133
+134 [ label="NegExp" ];
 133 -> 134
-135 [ label="IdLiteral\nvByte" ];
-132 -> 135
-136 [ label="AssignStatement" ];
-10 -> 136
-137 [ label="EqualExp" ];
+135 [ label="IntLiteral\n4" ];
+134 -> 135
+136 [ label="EqualExp" ];
+115 -> 136
+137 [ label="MinusExp" ];
 136 -> 137
-138 [ label="MeggyCheckButton" ];
+138 [ label="PlusExp" ];
 137 -> 138
-139 [ label="ButtonLiteral\nMeggy.Button.Right" ];
+139 [ label="IntLiteral\n3" ];
 138 -> 139
-140 [ label="FalseLiteral\nfalse" ];
-137 -> 140
-141 [ label="AssignStatement" ];
-10 -> 141
-142 [ label="EqualExp" ];
-141 -> 142
+140 [ label="IntLiteral\n4" ];
+138 -> 140
+141 [ label="IntLiteral\n2" ];
+137 -> 141
+142 [ label="IntLiteral\n1" ];
+136 -> 142
 143 [ label="AndExp" ];
-142 -> 143
+114 -> 143
 144 [ label="AndExp" ];
 143 -> 144
-145 [ label="AndExp" ];
+145 [ label="EqualExp" ];
 144 -> 145
-146 [ label="EqualExp" ];
+146 [ label="ArrayExp" ];
 145 -> 146
 147 [ label="NewArrayExp" ];
 146 -> 147
-148 [ label="ColorType" ];
+148 [ label="IntType" ];
 147 -> 148
 149 [ label="MulExp" ];
 147 -> 149
-150 [ label="ByteCast" ];
+150 [ label="IdLiteral\nvByte" ];
 149 -> 150
-151 [ label="IntLiteral\n5" ];
-150 -> 151
-152 [ label="IdLiteral\nvByte" ];
-149 -> 152
-153 [ label="IdLiteral\nvColorArr" ];
+151 [ label="ByteCast" ];
+149 -> 151
+152 [ label="IntLiteral\n09" ];
+151 -> 152
+153 [ label="IntLiteral\n001" ];
 146 -> 153
-154 [ label="LtExp" ];
+154 [ label="PlusExp" ];
 145 -> 154
-155 [ label="NegExp" ];
+155 [ label="IntLiteral\n3" ];
 154 -> 155
-156 [ label="IdLiteral\nvByte" ];
-155 -> 156
-157 [ label="NegExp" ];
-154 -> 157
-158 [ label="IntLiteral\n120" ];
+156 [ label="IntLiteral\n2" ];
+154 -> 156
+157 [ label="EqualExp" ];
+144 -> 157
+158 [ label="IdLiteral\nvInt" ];
 157 -> 158
-159 [ label="LtExp" ];
-144 -> 159
-160 [ label="IntLiteral\n23" ];
+159 [ label="ArrayExp" ];
+157 -> 159
+160 [ label="IdLiteral\nvIntArr" ];
 159 -> 160
-161 [ label="ByteCast" ];
+161 [ label="MinusExp" ];
 159 -> 161
-162 [ label="NegExp" ];
+162 [ label="PlusExp" ];
 161 -> 162
-163 [ label="IntLiteral\n4" ];
+163 [ label="IntLiteral\n2" ];
 162 -> 163
-164 [ label="EqualExp" ];
-143 -> 164
-165 [ label="MinusExp" ];
-164 -> 165
-166 [ label="PlusExp" ];
-165 -> 166
-167 [ label="IntLiteral\n3" ];
+164 [ label="IntLiteral\n3" ];
+162 -> 164
+165 [ label="IntLiteral\n5" ];
+161 -> 165
+166 [ label="MeggyCheckButton" ];
+143 -> 166
+167 [ label="ButtonLiteral\nMeggy.Button.Up" ];
 166 -> 167
-168 [ label="IntLiteral\n4" ];
-166 -> 168
-169 [ label="IntLiteral\n2" ];
-165 -> 169
-170 [ label="IntLiteral\n1" ];
-164 -> 170
-171 [ label="AndExp" ];
-142 -> 171
-172 [ label="AndExp" ];
+168 [ label="AssignStatement" ];
+10 -> 168
+169 [ label="CallExp" ];
+168 -> 169
+170 [ label="IdLiteral\nvClassB" ];
+169 -> 170
+171 [ label="AssignStatement" ];
+10 -> 171
+172 [ label="PlusExp" ];
 171 -> 172
-173 [ label="EqualExp" ];
+173 [ label="CallExp" ];
 172 -> 173
-174 [ label="ArrayExp" ];
+174 [ label="NewExp" ];
 173 -> 174
-175 [ label="NewArrayExp" ];
-174 -> 175
-176 [ label="IntType" ];
-175 -> 176
-177 [ label="MulExp" ];
-175 -> 177
-178 [ label="IdLiteral\nvByte" ];
+175 [ label="IntLiteral\n5" ];
+172 -> 175
+176 [ label="AssignStatement" ];
+10 -> 176
+177 [ label="ArrayExp" ];
+176 -> 177
+178 [ label="CallExp" ];
 177 -> 178
-179 [ label="ByteCast" ];
-177 -> 179
-180 [ label="IntLiteral\n09" ];
-179 -> 180
-181 [ label="IntLiteral\n001" ];
-174 -> 181
-182 [ label="PlusExp" ];
-173 -> 182
-183 [ label="IntLiteral\n3" ];
+179 [ label="NewExp" ];
+178 -> 179
+180 [ label="ByteCast" ];
+178 -> 180
+181 [ label="IntLiteral\n5" ];
+180 -> 181
+182 [ label="ArrayExp" ];
+178 -> 182
+183 [ label="NewArrayExp" ];
 182 -> 183
-184 [ label="IntLiteral\n2" ];
-182 -> 184
-185 [ label="EqualExp" ];
-172 -> 185
-186 [ label="IdLiteral\nvInt" ];
-185 -> 186
-187 [ label="ArrayExp" ];
-185 -> 187
-188 [ label="IdLiteral\nvIntArr" ];
-187 -> 188
-189 [ label="MinusExp" ];
-187 -> 189
-190 [ label="PlusExp" ];
+184 [ label="IntType" ];
+183 -> 184
+185 [ label="IntLiteral\n65" ];
+183 -> 185
+186 [ label="IntLiteral\n5" ];
+182 -> 186
+187 [ label="IdLiteral\nvColor" ];
+178 -> 187
+188 [ label="IntLiteral\n34" ];
+177 -> 188
+189 [ label="AssignStatement" ];
+10 -> 189
+190 [ label="EqualExp" ];
 189 -> 190
-191 [ label="IntLiteral\n2" ];
+191 [ label="CallExp" ];
 190 -> 191
-192 [ label="IntLiteral\n3" ];
-190 -> 192
-193 [ label="IntLiteral\n5" ];
-189 -> 193
-194 [ label="MeggyCheckButton" ];
-171 -> 194
-195 [ label="ButtonLiteral\nMeggy.Button.Up" ];
+192 [ label="ThisLiteral\nthis" ];
+191 -> 192
+193 [ label="IntLiteral\n4" ];
+191 -> 193
+194 [ label="ByteCast" ];
+191 -> 194
+195 [ label="IntLiteral\n6" ];
 194 -> 195
-196 [ label="AssignStatement" ];
-10 -> 196
-197 [ label="CallExp" ];
-196 -> 197
-198 [ label="IdLiteral\nvClassB" ];
+196 [ label="ColorLiteral\nMeggy.Color.BLUE" ];
+190 -> 196
+197 [ label="NewArrayExp" ];
+10 -> 197
+198 [ label="ColorType" ];
 197 -> 198
-199 [ label="AssignStatement" ];
-10 -> 199
-200 [ label="PlusExp" ];
-199 -> 200
-201 [ label="CallExp" ];
+199 [ label="IntLiteral\n100" ];
+197 -> 199
+200 [ label="MethodDecl" ];
+3 -> 200
+201 [ label="ColorType" ];
 200 -> 201
-202 [ label="NewExp" ];
-201 -> 202
-203 [ label="IntLiteral\n5" ];
-200 -> 203
-204 [ label="AssignStatement" ];
-10 -> 204
-205 [ label="ArrayExp" ];
+202 [ label="Formal" ];
+200 -> 202
+203 [ label="IntType" ];
+202 -> 203
+204 [ label="Formal" ];
+200 -> 204
+205 [ label="ByteType" ];
 204 -> 205
-206 [ label="CallExp" ];
-205 -> 206
-207 [ label="NewExp" ];
-206 -> 207
-208 [ label="ByteCast" ];
-206 -> 208
-209 [ label="IntLiteral\n5" ];
+206 [ label="ColorLiteral\nMeggy.Color.RED" ];
+200 -> 206
+207 [ label="TopClassDecl" ];
+0 -> 207
+208 [ label="MethodDecl" ];
+207 -> 208
+209 [ label="IntType" ];
 208 -> 209
-210 [ label="ArrayExp" ];
-206 -> 210
-211 [ label="NewArrayExp" ];
-210 -> 211
-212 [ label="IntType" ];
-211 -> 212
-213 [ label="IntLiteral\n65" ];
-211 -> 213
-214 [ label="IntLiteral\n5" ];
-210 -> 214
-215 [ label="IdLiteral\nvColor" ];
-206 -> 215
-216 [ label="IntLiteral\n34" ];
-205 -> 216
-217 [ label="AssignStatement" ];
-10 -> 217
-218 [ label="EqualExp" ];
-217 -> 218
-219 [ label="CallExp" ];
-218 -> 219
-220 [ label="ThisLiteral\nthis" ];
-219 -> 220
-221 [ label="IntLiteral\n4" ];
-219 -> 221
-222 [ label="ByteCast" ];
-219 -> 222
-223 [ label="IntLiteral\n6" ];
-222 -> 223
-224 [ label="ColorLiteral\nMeggy.Color.BLUE" ];
-218 -> 224
-225 [ label="NewArrayExp" ];
-10 -> 225
-226 [ label="ColorType" ];
-225 -> 226
-227 [ label="IntLiteral\n100" ];
-225 -> 227
-228 [ label="MethodDecl" ];
-3 -> 228
-229 [ label="ColorType" ];
-228 -> 229
-230 [ label="Formal" ];
-228 -> 230
-231 [ label="IntType" ];
-230 -> 231
-232 [ label="Formal" ];
-228 -> 232
-233 [ label="ByteType" ];
-232 -> 233
-234 [ label="ColorLiteral\nMeggy.Color.RED" ];
-228 -> 234
-235 [ label="TopClassDecl" ];
-0 -> 235
-236 [ label="MethodDecl" ];
-235 -> 236
-237 [ label="IntType" ];
-236 -> 237
-238 [ label="IntLiteral\n6" ];
-236 -> 238
+210 [ label="IntLiteral\n6" ];
+208 -> 210
 }
