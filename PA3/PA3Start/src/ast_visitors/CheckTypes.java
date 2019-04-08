@@ -289,12 +289,21 @@ public class CheckTypes extends DepthFirstVisitor
    }
 
    public void outNewArrayExp(NewArrayExp node){
-     
+
+   }
+
+   public void outCallStatement(CallStatement node){
+
+     Type expType = this.mCurrentST.getExpType(node.getExp());
+     if (expType.isClassType()){
+       //System.out.println(expType.getClassName());
+     }
+
    }
 
    public void outProgram(Program node){
        if (!errors.equals("")){
-         System.out.println(errors);
+         System.out.print(errors);
        }
    }
 }

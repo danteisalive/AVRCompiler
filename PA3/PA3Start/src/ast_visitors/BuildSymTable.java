@@ -477,10 +477,126 @@ public class BuildSymTable extends DepthFirstVisitor
       }
       else {
         errors += "[" + node.getExp().getLine() + "," + node.getExp().getPos() + "]" +
-                  " Nge exp varaible is not defined\n";
+                  " Neg exp varaible is not defined\n";
       }
     }
 
+  }
+
+  public void outMeggyGetPixel(MeggyGetPixel node){
+
+    if (node.getXExp() instanceof IdLiteral){
+      String expName = ((IdLiteral)node.getXExp()).getLexeme();
+      STE ste = SymbolTable.lookup(expName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getXExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+          " Unrecongnized arg type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+                  " MeggyGetPixel X arg is not defined\n";
+      }
+    }
+
+    if (node.getYExp() instanceof IdLiteral){
+      String expName = ((IdLiteral)node.getYExp()).getLexeme();
+      STE ste = SymbolTable.lookup(expName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getYExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getYExp().getLine() + "," + node.getYExp().getPos() + "]" +
+          " Unrecongnized arg type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getYExp().getLine() + "," + node.getYExp().getPos() + "]" +
+                  " MeggyGetPixel Y arg is not defined\n";
+      }
+    }
+
+  }
+
+  public void outMeggyCheckButton(MeggyCheckButton node){
+    if (node.getExp() instanceof IdLiteral){
+      String expName = ((IdLiteral)node.getExp()).getLexeme();
+      STE ste = SymbolTable.lookup(expName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getExp().getLine() + "," + node.getExp().getPos() + "]" +
+          " Unrecongnized arg type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getExp().getLine() + "," + node.getExp().getPos() + "]" +
+                  " MeggyCheckButton arg is not defined\n";
+      }
+    }
+  }
+
+  public void outMeggySetPixel(MeggySetPixel node){
+    if (node.getXExp() instanceof IdLiteral){
+      String expName = ((IdLiteral)node.getXExp()).getLexeme();
+      STE ste = SymbolTable.lookup(expName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getXExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+          " Unrecongnized arg type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getXExp().getLine() + "," + node.getXExp().getPos() + "]" +
+                  " MeggySetPixel X arg is not defined\n";
+      }
+    }
+
+    if (node.getYExp() instanceof IdLiteral){
+      String expName = ((IdLiteral)node.getYExp()).getLexeme();
+      STE ste = SymbolTable.lookup(expName);
+      if (ste != null){
+        if (ste instanceof VarSTE){
+          this.SymbolTable.setExpType(node.getYExp(), ((VarSTE)ste).getSTEType());
+        }
+        else{
+          errors += "[" + node.getYExp().getLine() + "," + node.getYExp().getPos() + "]" +
+          " Unrecongnized arg type\n";
+        }
+      }
+      else {
+        errors += "[" + node.getYExp().getLine() + "," + node.getYExp().getPos() + "]" +
+                  " MeggySetPixel Y arg is not defined\n";
+      }
+    }
+
+    if (node.getColor() instanceof IdLiteral){
+          String expName = ((IdLiteral)node.getColor()).getLexeme();
+          STE ste = SymbolTable.lookup(expName);
+          if (ste != null){
+            if (ste instanceof VarSTE){
+              this.SymbolTable.setExpType(node.getColor(), ((VarSTE)ste).getSTEType());
+            }
+            else{
+              errors += "[" + node.getColor().getLine() + "," + node.getColor().getPos() + "]" +
+              " Unrecongnized arg type\n";
+            }
+          }
+          else {
+            errors += "[" + node.getColor().getLine() + "," + node.getColor().getPos() + "]" +
+                      " MeggySetPixel Color arg is not defined\n";
+          }
+    }
   }
 
   public void outNewArrayExp(NewArrayExp node){
@@ -554,11 +670,16 @@ public class BuildSymTable extends DepthFirstVisitor
                       " Class is not declared\n";
           }
       }
+
+    if (node.getExp() instanceof ThisLiteral){
+        this.SymbolTable.setExpType(node.getExp(), new Type(currClass.getSTEName()));
+    }
   }
 
   public void outNewExp(NewExp node){
       this.SymbolTable.setExpType(node, new Type(node.getId()));
   }
+
 
   public void inMainClass(MainClass node){
      // check to see the name of file is the same as main class
@@ -570,7 +691,7 @@ public class BuildSymTable extends DepthFirstVisitor
       STout.flush();
 
       if (!errors.equals("")){
-        System.out.println(errors);
+        System.out.print(errors);
       }
   }
 

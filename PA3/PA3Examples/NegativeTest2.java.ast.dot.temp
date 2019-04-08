@@ -38,7 +38,7 @@ digraph ASTGraph {
 12 -> 18
 19 [ label="PlusExp" ];
 18 -> 19
-20 [ label="IdLiteral\nvInt" ];
+20 [ label="IdLiteral\ni" ];
 19 -> 20
 21 [ label="IdLiteral\nd" ];
 19 -> 21
@@ -46,17 +46,17 @@ digraph ASTGraph {
 12 -> 22
 23 [ label="MulExp" ];
 22 -> 23
-24 [ label="IdLiteral\nvInt" ];
+24 [ label="IdLiteral\ni" ];
 23 -> 24
-25 [ label="IdLiteral\nvBool" ];
+25 [ label="IdLiteral\nb" ];
 23 -> 25
 26 [ label="AssignStatement" ];
 12 -> 26
 27 [ label="MinusExp" ];
 26 -> 27
-28 [ label="IdLiteral\nvInt" ];
+28 [ label="IdLiteral\ni" ];
 27 -> 28
-29 [ label="IdLiteral\nvBool" ];
+29 [ label="IdLiteral\nb" ];
 27 -> 29
 30 [ label="AssignStatement" ];
 12 -> 30
@@ -72,7 +72,7 @@ digraph ASTGraph {
 34 -> 35
 36 [ label="IntType" ];
 35 -> 36
-37 [ label="IdLiteral\nvInt" ];
+37 [ label="IdLiteral\ni" ];
 35 -> 37
 38 [ label="AssignStatement" ];
 12 -> 38
@@ -80,7 +80,7 @@ digraph ASTGraph {
 38 -> 39
 40 [ label="IntType" ];
 39 -> 40
-41 [ label="IdLiteral\nvBool" ];
+41 [ label="IdLiteral\nb" ];
 39 -> 41
 42 [ label="CallStatement" ];
 12 -> 42
@@ -92,148 +92,28 @@ digraph ASTGraph {
 44 -> 45
 46 [ label="AssignStatement" ];
 12 -> 46
-47 [ label="CallExp" ];
+47 [ label="MulExp" ];
 46 -> 47
-48 [ label="IdLiteral\nvClassB" ];
+48 [ label="IdLiteral\ni" ];
 47 -> 48
-49 [ label="IdLiteral\nvIntArr" ];
+49 [ label="IdLiteral\ni" ];
 47 -> 49
-50 [ label="IntLiteral\n2" ];
-47 -> 50
-51 [ label="ByteCast" ];
-47 -> 51
-52 [ label="IntLiteral\n10" ];
-51 -> 52
-53 [ label="TrueLiteral\ntrue" ];
-47 -> 53
-54 [ label="AssignStatement" ];
-12 -> 54
-55 [ label="CallExp" ];
+50 [ label="MethodDecl" ];
+3 -> 50
+51 [ label="VoidType" ];
+50 -> 51
+52 [ label="VarDecl" ];
+50 -> 52
+53 [ label="ClassType" ];
+52 -> 53
+54 [ label="TopClassDecl" ];
+0 -> 54
+55 [ label="MethodDecl" ];
 54 -> 55
-56 [ label="IdLiteral\nvClassB" ];
+56 [ label="VoidType" ];
 55 -> 56
-57 [ label="IdLiteral\nvInt" ];
+57 [ label="AssignStatement" ];
 55 -> 57
-58 [ label="IntLiteral\n2" ];
-55 -> 58
-59 [ label="ByteCast" ];
-55 -> 59
-60 [ label="IntLiteral\n10" ];
-59 -> 60
-61 [ label="TrueLiteral\ntrue" ];
-55 -> 61
-62 [ label="AssignStatement" ];
-12 -> 62
-63 [ label="CallExp" ];
-62 -> 63
-64 [ label="IdLiteral\nvClassB" ];
-63 -> 64
-65 [ label="IdLiteral\nvIntArr" ];
-63 -> 65
-66 [ label="IntLiteral\n2" ];
-63 -> 66
-67 [ label="ByteCast" ];
-63 -> 67
-68 [ label="IntLiteral\n10" ];
-67 -> 68
-69 [ label="AssignStatement" ];
-12 -> 69
-70 [ label="CallExp" ];
-69 -> 70
-71 [ label="IdLiteral\nvClassB" ];
-70 -> 71
-72 [ label="IdLiteral\nvIntArr" ];
-70 -> 72
-73 [ label="IntLiteral\n2" ];
-70 -> 73
-74 [ label="ByteCast" ];
-70 -> 74
-75 [ label="IntLiteral\n10" ];
-74 -> 75
-76 [ label="TrueLiteral\ntrue" ];
-70 -> 76
-77 [ label="IntLiteral\n2" ];
-70 -> 77
-78 [ label="AssignStatement" ];
-12 -> 78
-79 [ label="CallExp" ];
-78 -> 79
-80 [ label="IdLiteral\nvClassB" ];
-79 -> 80
-81 [ label="IdLiteral\nvIntArr" ];
-79 -> 81
-82 [ label="IntLiteral\n2" ];
-79 -> 82
-83 [ label="ByteCast" ];
-79 -> 83
-84 [ label="IntLiteral\n10" ];
-83 -> 84
-85 [ label="TrueLiteral\ntrue" ];
-79 -> 85
-86 [ label="AssignStatement" ];
-12 -> 86
-87 [ label="MulExp" ];
-86 -> 87
-88 [ label="IdLiteral\nvInt" ];
-87 -> 88
-89 [ label="IdLiteral\nvInt" ];
-87 -> 89
-90 [ label="MethodDecl" ];
-3 -> 90
-91 [ label="VoidType" ];
-90 -> 91
-92 [ label="VarDecl" ];
-90 -> 92
-93 [ label="ClassType" ];
-92 -> 93
-94 [ label="TopClassDecl" ];
-0 -> 94
-95 [ label="MethodDecl" ];
-94 -> 95
-96 [ label="ColorArrayType" ];
-95 -> 96
-97 [ label="Formal" ];
-95 -> 97
-98 [ label="IntArrayType" ];
-97 -> 98
-99 [ label="Formal" ];
-95 -> 99
-100 [ label="IntType" ];
-99 -> 100
-101 [ label="Formal" ];
-95 -> 101
-102 [ label="ByteType" ];
-101 -> 102
-103 [ label="Formal" ];
-95 -> 103
-104 [ label="BoolType" ];
-103 -> 104
-105 [ label="AssignStatement" ];
-95 -> 105
-106 [ label="IntLiteral\n1" ];
-105 -> 106
-107 [ label="NewArrayExp" ];
-95 -> 107
-108 [ label="ColorType" ];
-107 -> 108
-109 [ label="MinusExp" ];
-107 -> 109
-110 [ label="PlusExp" ];
-109 -> 110
-111 [ label="ArrayExp" ];
-110 -> 111
-112 [ label="IdLiteral\na" ];
-111 -> 112
-113 [ label="IntLiteral\n6" ];
-111 -> 113
-114 [ label="IdLiteral\nb" ];
-110 -> 114
-115 [ label="MulExp" ];
-109 -> 115
-116 [ label="ByteCast" ];
-115 -> 116
-117 [ label="IntLiteral\n2" ];
-116 -> 117
-118 [ label="IdLiteral\nc" ];
-115 -> 118
+58 [ label="IntLiteral\n1" ];
+57 -> 58
 }

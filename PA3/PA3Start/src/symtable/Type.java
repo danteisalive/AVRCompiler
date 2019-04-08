@@ -28,7 +28,16 @@ public class Type
     className = id;
   }
 
+  public boolean isClassType(){
+    if (className != null)  return true;
+    else                    return false;
+  }
 
+  public String getClassName(){
+
+    return className;
+
+  }
   public String toString()
   {
 
