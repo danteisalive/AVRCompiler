@@ -15,7 +15,7 @@ main:
     in r28,__SP_L__
     in r29,__SP_H__
 /* prologue: function */
-    call _Z18MeggyJrSimpleSetupv 
+    call _Z18MeggyJrSimpleSetupv
     /* Need to call this so that the meggy library gets set up */
 
 
@@ -227,6 +227,11 @@ main:
     pop    r24
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
+
+
+
+
+
 
     # Load constant int 3
     ldi    r24,lo8(3)
@@ -1201,5 +1206,3 @@ MJ_L35:
     jmp endLabel
     ret
     .size   main, .-main
-
-
