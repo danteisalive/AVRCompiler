@@ -25,7 +25,7 @@ import symtable.SymTable;
 import symtable.Type;
 import exceptions.InternalException;
 import exceptions.SemanticException;
-//import label.Label;
+import label.Label;
 
 public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 {
@@ -142,5 +142,107 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
        out.println("    call   _Z6DrawPxhhh");
        out.println("    call   _Z12DisplaySlatev");
      }
+     public void outPlusExp(PlusExp node){
+         String branch_1 = new Label().toString();
+         String branch_2 = new Label().toString();
+         String branch_3 = new Label().toString();
+         String branch_4 = new Label().toString();
+
+         if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
+           this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
+           out.println("# load a two byte expression off stack");
+           out.println("pop    r18");
+           out.println("pop    r19");
+           out.println("# load a two byte expression off stack");
+           out.println("pop    r24");
+           out.println("pop    r25");
+           out.println("# Do add operation");
+           out.println("add    r24, r18");
+           out.println("adc    r25, r19");
+           out.println("# push two byte expression onto stack");
+           out.println("push   r25");
+           out.println("push   r24");
+           out.println("");
+         }
+
+         else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
+             this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
+           out.println("# load a one byte expression off stack");
+           out.println("pop    r18");
+           out.println("# load a one byte expression off stack");
+           out.println("pop    r24");
+           out.println("# promoting a byte to an int");
+           out.println("tst     r24");
+           out.println("brlt     " + branch_1); // branch_1
+           out.println("ldi    r25, 0");
+           out.println("jmp    " + branch_2); // branch_2
+           out.println(branch_1 + ":"); // branch_1
+           out.println("ldi    r25, hi8(-1)");
+           out.println(branch_2 + ":"); // branch_2
+           out.println("# promoting a byte to an int");
+           out.println("tst     r18");
+           out.println("brlt     " + branch_3); // branch_3
+           out.println("ldi    r19, 0");
+           out.println("jmp    " + branch_4); // branch_4
+           out.println(branch_3 + ":"); // branch_3
+           out.println("ldi    r19, hi8(-1)");
+           out.println(branch_4 + ":");	// branch_4
+           out.println("# Do add operation");
+           out.println("add    r24, r18");
+           out.println("adc    r25, r19");
+           out.println("# push two byte expression onto stack");
+           out.println("push   r25");
+           out.println("push   r24");
+           out.println("");
+
+         }
+
+       else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
+           this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
+           out.println("# load a two byte expression off stack");
+           out.println("pop    r18");
+           out.println("pop    r19");
+           out.println("# load a one byte expression off stack");
+           out.println("pop    r24");
+           out.println("# promoting a byte to an int");
+           out.println("tst     r24");
+           out.println("brlt     " + branch_1); // branch_1
+           out.println("ldi    r25, 0");
+           out.println("jmp    " + branch_2); // branch_2
+           out.println(branch_1 + ":"); // branch_1
+           out.println("ldi    r25, hi8(-1)");
+           out.println(branch_2 + ":"); // branch_2
+           out.println("# Do add operation");
+           out.println("add    r24, r18");
+           out.println("adc    r25, r19");
+           out.println("# push two byte expression onto stack");
+           out.println("push   r25");
+           out.println("push   r24");
+           out.println("");
+       }
+       else if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
+           this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
+           out.println("# load a one byte expression off stack");
+           out.println("pop    r18");
+           out.println("# load a two byte expression off stack");
+           out.println("pop    r24");
+           out.println("pop    r25");
+           out.println("# promoting a byte to an int");
+           out.println("tst     r18");
+           out.println("brlt     " + branch_1); // branch_1
+           out.println("ldi    r19, 0");
+           out.println("jmp    " + branch_2); // branch_2
+           out.println(branch_1 + ":"); // branch_1
+           out.println("ldi    r19, hi8(-1)");
+           out.println(branch_2 + ":"); // branch_2
+           out.println("# Do add operation");
+           out.println("add    r24, r18");
+           out.println("adc    r25, r19");
+           out.println("# push two byte expression onto stack");
+           out.println("push   r25");
+           out.println("push   r24");
+           out.println("");
+       }
+ }
 
 }
