@@ -422,7 +422,65 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
     }
 
 
+    public void outMeggyCheckButton(MeggyCheckButton node){
 
+  		String[] buttonSplited = ((ButtonLiteral)node.getExp()).getLexeme().split("\\.");
 
+  		out.println("    ### MeggyCheckButton");
+  		out.println("    call    _Z16CheckButtonsDownv");
+  		out.println("    lds    r24, " + buttonSplited[1] + "_" + buttonSplited[2]);
+  		out.println("    # push one byte expression onto stack");
+  		out.println("    push   r24");
+  		out.println("");
+
+  	}
+
+    public void inIfStatement(IfStatement node){
+          out.println("    #### if statement");
+          out.println("");
+  	}
+
+    public void visitIfStatement(IfStatement node){
+        inIfStatement(node);
+        String branch_then = new Label().toString();
+        String branch_else = new Label().toString();
+        String branch_done = new Label().toString();
+        if(node.getExp() != null)
+        {
+            node.getExp().accept(this);
+        }
+        out.println("# load condition and branch if false");
+        out.println("# load a one byte expression off stack");
+        out.println("pop    r24");
+        out.println("#load zero into reg");
+        out.println("ldi    r25, 0\n");
+        out.println("#use cp to set SREG");
+        out.println("cp     r24, r25");
+        out.println("#WANT breq " + branch_else); // branch_else
+        out.println("brne   " + branch_then); // branch_then
+        out.println("jmp    " + branch_else + "\n"); // branch_else
+        out.println("# then label for if");
+        out.println(branch_then + ":"); // branch_then
+        out.println("");
+
+        if(node.getThenStatement() != null)
+        {
+            node.getThenStatement().accept(this);
+        }
+        out.println("jmp    " + branch_done); // branch_done
+        out.println("\n# else label for if");
+        out.println(branch_else + ":"); // branch_else
+        out.println("");
+
+        if(node.getElseStatement() != null)
+        {
+            node.getElseStatement().accept(this);
+        }
+        out.println("# done label for if");
+        out.println(branch_done + ":"); // branch_done
+        out.println("");
+
+        outIfStatement(node);
+}
 
 }
