@@ -449,17 +449,17 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         {
             node.getExp().accept(this);
         }
-        out.println("# load condition and branch if false");
-        out.println("# load a one byte expression off stack");
-        out.println("pop    r24");
-        out.println("#load zero into reg");
-        out.println("ldi    r25, 0\n");
-        out.println("#use cp to set SREG");
-        out.println("cp     r24, r25");
-        out.println("#WANT breq " + branch_else); // branch_else
-        out.println("brne   " + branch_then); // branch_then
-        out.println("jmp    " + branch_else + "\n"); // branch_else
-        out.println("# then label for if");
+        out.println("    # load condition and branch if false");
+        out.println("    # load a one byte expression off stack");
+        out.println("    pop    r24");
+        out.println("    #load zero into reg");
+        out.println("    ldi    r25, 0\n");
+        out.println("    #use cp to set SREG");
+        out.println("    cp     r24, r25");
+        out.println("    #WANT breq " + branch_else); // branch_else
+        out.println("    brne   " + branch_then); // branch_then
+        out.println("    jmp    " + branch_else + "\n"); // branch_else
+        out.println("    # then label for if");
         out.println(branch_then + ":"); // branch_then
         out.println("");
 
@@ -467,8 +467,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         {
             node.getThenStatement().accept(this);
         }
-        out.println("jmp    " + branch_done); // branch_done
-        out.println("\n# else label for if");
+        out.println("    jmp    " + branch_done); // branch_done
+        out.println("\n    # else label for if");
         out.println(branch_else + ":"); // branch_else
         out.println("");
 
@@ -476,7 +476,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         {
             node.getElseStatement().accept(this);
         }
-        out.println("# done label for if");
+        out.println("    # done label for if");
         out.println(branch_done + ":"); // branch_done
         out.println("");
 

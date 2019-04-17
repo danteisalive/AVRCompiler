@@ -26,19 +26,19 @@ main:
     # push one byte expression onto stack
     push   r24
 
-# load condition and branch if false
-# load a one byte expression off stack
-pop    r24
-#load zero into reg
-ldi    r25, 0
+    # load condition and branch if false
+    # load a one byte expression off stack
+    pop    r24
+    #load zero into reg
+    ldi    r25, 0
 
-#use cp to set SREG
-cp     r24, r25
-#WANT breq MJ_L1
-brne   MJ_L0
-jmp    MJ_L1
+    #use cp to set SREG
+    cp     r24, r25
+    #WANT breq MJ_L1
+    brne   MJ_L0
+    jmp    MJ_L1
 
-# then label for if
+    # then label for if
 MJ_L0:
 
     # Load constant int 3
@@ -104,12 +104,12 @@ MJ_L0:
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
 
-jmp    MJ_L2
+    jmp    MJ_L2
 
-# else label for if
+    # else label for if
 MJ_L1:
 
-# done label for if
+    # done label for if
 MJ_L2:
 
     #### if statement
@@ -120,19 +120,19 @@ MJ_L2:
     # push one byte expression onto stack
     push   r24
 
-# load condition and branch if false
-# load a one byte expression off stack
-pop    r24
-#load zero into reg
-ldi    r25, 0
+    # load condition and branch if false
+    # load a one byte expression off stack
+    pop    r24
+    #load zero into reg
+    ldi    r25, 0
 
-#use cp to set SREG
-cp     r24, r25
-#WANT breq MJ_L8
-brne   MJ_L7
-jmp    MJ_L8
+    #use cp to set SREG
+    cp     r24, r25
+    #WANT breq MJ_L8
+    brne   MJ_L7
+    jmp    MJ_L8
 
-# then label for if
+    # then label for if
 MJ_L7:
 
     # Load constant int 3
@@ -178,12 +178,12 @@ MJ_L7:
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
 
-jmp    MJ_L9
+    jmp    MJ_L9
 
-# else label for if
+    # else label for if
 MJ_L8:
 
-# done label for if
+    # done label for if
 MJ_L9:
 
 
