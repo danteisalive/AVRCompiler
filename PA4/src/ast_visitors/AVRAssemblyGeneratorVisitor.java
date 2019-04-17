@@ -421,8 +421,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
     }
 
-
-    public void outMeggyCheckButton(MeggyCheckButton node){
+    public void outMeggyCheckButton(MeggyCheckButton node)
+    {
 
   		String[] buttonSplited = ((ButtonLiteral)node.getExp()).getLexeme().split("\\.");
 
@@ -433,6 +433,22 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		out.println("    push   r24");
   		out.println("");
 
+  	}
+
+    public void outTrueExp(TrueLiteral node){
+  		out.println("# True/1 expression");
+  		out.println("ldi    r22, 1");
+  		out.println("# push one byte expression onto stack");
+  		out.println("push   r22");
+  		out.println("");
+  	}
+
+  	public void outFalseExp(FalseLiteral node){
+  		out.println("# False/0 expression");
+  		out.println("ldi    r22,0");
+  		out.println("# push one byte expression onto stack");
+  		out.println("push   r22");
+  		out.println("");
   	}
 
     public void inIfStatement(IfStatement node){
@@ -481,6 +497,68 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("");
 
         outIfStatement(node);
-}
+    }
+      public void outMeggyDelay(MeggyDelay node){
+        out.println("### Meggy.delay() call");
+        out.println("# load delay parameter");
+        out.println("# load a two byte expression off stack");
+        out.println("pop    r24");
+        out.println("pop    r25");
+        out.println("call   _Z8delay_msj");
+        out.println("");
+      }
+
+      public void outMeggyGetPixel(MeggyGetPixel node){
+    		out.println("### Meggy.getPixel(x,y) call");
+    		out.println("# load a one byte expression off stack");
+    		out.println("pop    r22");
+    		out.println("# load a one byte expression off stack");
+    		out.println("pop    r24");
+    		out.println("call   _Z6ReadPxhh");
+    		out.println("# push one byte expression onto stack");
+    		out.println("push   r24");
+    		out.println("");
+    	}
+
+      public void inWhileStatement(WhileStatement node){
+            out.println("#### while statement\n");
+      }
+      public void visitWhileStatement(WhileStatement node){
+
+        String start = new Label().toString();
+        String body = new Label().toString();
+        String end = new Label().toString();
+
+        inWhileStatement(node);
+        out.println(start + ":");
+            if(node.getExp() != null)
+            {
+                node.getExp().accept(this);
+            }
+            // loop body
+            out.println("# if not(condition)");
+            out.println("# load a one byte expression off stack");
+            out.println("pop    r24");
+            out.println("ldi    r25,0");
+            out.println("cp     r24, r25");
+            out.println("# WANT breq " + end);
+            out.println("brne   " + body);
+            out.println("jmp    " + end);
+            out.println("# while loop body");
+            out.println(body + ":");
+            out.println("");
+            if(node.getStatement() != null)
+            {
+                node.getStatement().accept(this);
+            }
+            out.println("# jump to while test");
+            out.println("jmp    " + start);
+            out.println("# end of while");
+            out.println(end + ":");
+            out.println("");
+
+            outWhileStatement(node);
+      }
+
 
 }
