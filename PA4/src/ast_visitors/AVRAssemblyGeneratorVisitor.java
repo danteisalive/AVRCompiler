@@ -166,11 +166,6 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
      }
 
      public void outPlusExp(PlusExp node){
-         String b1 = new Label().toString();
-         String b2 = new Label().toString();
-         String b3 = new Label().toString();
-         String b4 = new Label().toString();
-
          if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
            this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
            out.println("    # load a two byte expression off stack");
@@ -190,38 +185,44 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
          else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
              this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
-           out.println("    # load a one byte expression off stack");
-           out.println("    pop    r18");
-           out.println("    # load a one byte expression off stack");
-           out.println("    pop    r24");
-           out.println("    # promoting a byte to an int");
-           out.println("    tst     r24");
-           out.println("    brlt     " + b1);
-           out.println("    ldi    r25, 0");
-           out.println("    jmp    " + b2);
-           out.println(b1 + ":");
-           out.println("    ldi    r25, hi8(-1)");
-           out.println(b2 + ":");
-           out.println("    # promoting a byte to an int");
-           out.println("    tst     r18");
-           out.println("    brlt     " + b3);
-           out.println("    ldi    r19, 0");
-           out.println("    jmp    " + b4);
-           out.println(b3 + ":");
-           out.println("    ldi    r19, hi8(-1)");
-           out.println(b4 + ":");
-           out.println("    # Do add operation");
-           out.println("    add    r24, r18");
-           out.println("    adc    r25, r19");
-           out.println("    # push two byte expression onto stack");
-           out.println("    push   r25");
-           out.println("    push   r24");
-           out.println("");
+               String b1 = new Label().toString();
+               String b2 = new Label().toString();
+               String b3 = new Label().toString();
+               String b4 = new Label().toString();
+               out.println("    # load a one byte expression off stack");
+               out.println("    pop    r18");
+               out.println("    # load a one byte expression off stack");
+               out.println("    pop    r24");
+               out.println("    # promoting a byte to an int");
+               out.println("    tst     r24");
+               out.println("    brlt     " + b1);
+               out.println("    ldi    r25, 0");
+               out.println("    jmp    " + b2);
+               out.println(b1 + ":");
+               out.println("    ldi    r25, hi8(-1)");
+               out.println(b2 + ":");
+               out.println("    # promoting a byte to an int");
+               out.println("    tst     r18");
+               out.println("    brlt     " + b3);
+               out.println("    ldi    r19, 0");
+               out.println("    jmp    " + b4);
+               out.println(b3 + ":");
+               out.println("    ldi    r19, hi8(-1)");
+               out.println(b4 + ":");
+               out.println("    # Do add operation");
+               out.println("    add    r24, r18");
+               out.println("    adc    r25, r19");
+               out.println("    # push two byte expression onto stack");
+               out.println("    push   r25");
+               out.println("    push   r24");
+               out.println("");
 
          }
 
        else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
            this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
+             String b1 = new Label().toString();
+             String b2 = new Label().toString();
            out.println("    # load a two byte expression off stack");
            out.println("    pop    r18");
            out.println("    pop    r19");
@@ -245,6 +246,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
        }
        else if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
            this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
+             String b1 = new Label().toString();
+             String b2 = new Label().toString();
            out.println("    # load a one byte expression off stack");
            out.println("    pop    r18");
            out.println("    # load a two byte expression off stack");
@@ -289,11 +292,6 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
      public void outMinusExp(MinusExp node){
-         String b1 = new Label().toString();
-         String b2 = new Label().toString();
-         String b3 = new Label().toString();
-         String b4 = new Label().toString();
-
          if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
              this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
              out.println("    # load a two byte expression off stack");
@@ -315,6 +313,10 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
            else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
              this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
+               String b1 = new Label().toString();
+               String b2 = new Label().toString();
+               String b3 = new Label().toString();
+               String b4 = new Label().toString();
              out.println("    # load a one byte expression off stack");
              out.println("    pop    r18");
              out.println("    # load a one byte expression off stack");
@@ -348,6 +350,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
            else if(this.mCurrentST.getExpType(node.getLExp()) == Type.BYTE &&
              this.mCurrentST.getExpType(node.getRExp()) == Type.INT){
+               String b1 = new Label().toString();
+               String b2 = new Label().toString();
              out.println("    # load a two byte expression off stack");
              out.println("    pop    r18");
              out.println("    pop    r19");
@@ -373,6 +377,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
            else if(this.mCurrentST.getExpType(node.getLExp()) == Type.INT &&
              this.mCurrentST.getExpType(node.getRExp()) == Type.BYTE){
+               String b1 = new Label().toString();
+               String b2 = new Label().toString();
              out.println("    # load a one byte expression off stack");
              out.println("    pop    r18");
              out.println("    # load a two byte expression off stack");
@@ -455,7 +461,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
     		out.println("    # push two byte expression onto stack");
     		out.println("    push   r1");
     		out.println("    push   r0");
-    		out.println("    # clear r0 and r1");
+    		out.println("    # clear r0 and r1, thanks Brendan!");
     		out.println("    eor    r0,r0");
     		out.println("    eor    r1,r1");
     		out.println("");
@@ -680,14 +686,14 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   	}
 
     public void inIfStatement(IfStatement node){
-          out.println("    #### if statement");
-          out.println("");
   	}
 
     public void visitIfStatement(IfStatement node){
-        inIfStatement(node);
-        String branch_then = new Label().toString();
+        out.println("    #### if statement");
+        out.println("");
+      //  inIfStatement(node);
         String branch_else = new Label().toString();
+        String branch_then = new Label().toString();
         String branch_done = new Label().toString();
         if(node.getExp() != null)
         {
@@ -700,20 +706,20 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("    ldi    r25, 0\n");
         out.println("    #use cp to set SREG");
         out.println("    cp     r24, r25");
-        out.println("    #WANT breq " + branch_else); // branch_else
-        out.println("    brne   " + branch_then); // branch_then
-        out.println("    jmp    " + branch_else + "\n"); // branch_else
+        out.println("    #WANT breq " + branch_else);
+        out.println("    brne   " + branch_then);
+        out.println("    jmp    " + branch_else + "\n");
         out.println("    # then label for if");
-        out.println(branch_then + ":"); // branch_then
+        out.println(branch_then + ":");
         out.println("");
 
         if(node.getThenStatement() != null)
         {
             node.getThenStatement().accept(this);
         }
-        out.println("    jmp    " + branch_done); // branch_done
+        out.println("    jmp    " + branch_done);
         out.println("\n    # else label for if");
-        out.println(branch_else + ":"); // branch_else
+        out.println(branch_else + ":");
         out.println("");
 
         if(node.getElseStatement() != null)
@@ -721,30 +727,30 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
             node.getElseStatement().accept(this);
         }
         out.println("    # done label for if");
-        out.println(branch_done + ":"); // branch_done
+        out.println(branch_done + ":");
         out.println("");
 
-        outIfStatement(node);
+        //outIfStatement(node);
     }
       public void outMeggyDelay(MeggyDelay node){
-        out.println("### Meggy.delay() call");
-        out.println("# load delay parameter");
-        out.println("# load a two byte expression off stack");
-        out.println("pop    r24");
-        out.println("pop    r25");
-        out.println("call   _Z8delay_msj");
+        out.println("    ### Meggy.delay() call");
+        out.println("    # load delay parameter");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r24");
+        out.println("    pop    r25");
+        out.println("    call   _Z8delay_msj");
         out.println("");
       }
 
       public void outMeggyGetPixel(MeggyGetPixel node){
-    		out.println("### Meggy.getPixel(x,y) call");
-    		out.println("# load a one byte expression off stack");
-    		out.println("pop    r22");
-    		out.println("# load a one byte expression off stack");
-    		out.println("pop    r24");
-    		out.println("call   _Z6ReadPxhh");
-    		out.println("# push one byte expression onto stack");
-    		out.println("push   r24");
+    		out.println("    ### Meggy.getPixel(x,y) call");
+    		out.println("    # load a one byte expression off stack");
+    		out.println("    pop    r22");
+    		out.println("    # load a one byte expression off stack");
+    		out.println("    pop    r24");
+    		out.println("    call   _Z6ReadPxhh");
+    		out.println("    # push one byte expression onto stack");
+    		out.println("    push   r24");
     		out.println("");
     	}
 
@@ -817,128 +823,133 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		Type rexpType = this.mCurrentST.getExpType(node.getRExp());
 
   		if(lexpType == Type.INT && rexpType == Type.INT){
+        String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
-  			String false_branch = new Label().toString();
   			String result_branch = new Label().toString();
-  			out.println("# equality check expression");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("pop    r19");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("pop    r25");
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("breq      " + true_branch); // true
-  			out.println("# result is false");
+  			out.println("  	 # equality check expression");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    pop    r19");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    pop    r25");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    breq      " + true_branch); // true
+  			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + result_branch); // result
-  			out.println("# result is true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + result_branch); // result
+  			out.println("    # result is true");
   			out.println(true_branch + ":"); // true
-  			out.println("ldi     r24, 1");
-  			out.println("# store result of equal expression");
+  			out.println("    ldi     r24, 1");
+  			out.println("    # store result of equal expression");
   			out.println(result_branch + ":"); // result
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
 
   		// first byte second int.
   		if(lexpType == Type.BYTE && rexpType == Type.INT){
+        String branch_3 = new Label().toString();
+        String branch_4 = new Label().toString();
+        String branch_5 = new Label().toString();
   			String branch_6 = new Label().toString();
   			String branch_7 = new Label().toString();
-  			String branch_4 = new Label().toString();
-  			String branch_3 = new Label().toString();
-  			String branch_5 = new Label().toString();
-  			out.println("# equality check expression");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("pop    r19");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("# promoting a byte to an int");
-  			out.println("tst     r24");
-  			out.println("brlt     " + branch_6); // branch_6
-  			out.println("ldi    r25, 0");
-  			out.println("jmp    " + branch_7); // branch_7
-  			out.println(branch_6 + ":"); // branch_6
-  			out.println("ldi    r25, hi8(-1)");
-  			out.println(branch_7 + ":"); // branch_7
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("breq " + branch_4); // branch_4
-  			out.println("# result is false");
-  			out.println(branch_3 + ":"); // branch_3
-  			out.println("ldi	   r24, 0");
-  			out.println("jmp      " + branch_5); // branch_5
-  			out.println("# result is true");
-  			out.println(branch_4 + ":"); // branch_4
-  			out.println("ldi     r24, 1");
-  			out.println("# store result of equal expression");
-  			out.println(branch_5 + ":"); // branch_5
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+
+  			out.println("    # equality check expression");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    pop    r19");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    # promoting a byte to an int");
+  			out.println("    tst     r24");
+  			out.println("    brlt     " + branch_6);
+  			out.println("    ldi    r25, 0");
+  			out.println("    jmp    " + branch_7);
+  			out.println(branch_6 + ":");
+  			out.println("    ldi    r25, hi8(-1)");
+  			out.println(branch_7 + ":");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    breq " + branch_4);
+  			out.println("    # result is false");
+  			out.println(branch_3 + ":");
+  			out.println("    ldi	   r24, 0");
+  			out.println("    jmp      " + branch_5);
+  			out.println("    # result is true");
+  			out.println(branch_4 + ":");
+  			out.println("    ldi     r24, 1");
+  			out.println("    # store result of equal expression");
+  			out.println(branch_5 + ":");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
   		// both byte
   		if(lexpType == Type.BYTE && rexpType == Type.BYTE){
+        String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
-  			String false_branch = new Label().toString();
   			String result_branch = new Label().toString();
-  			out.println("# equality check expression");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("cp    r24, r18");
-  			out.println("breq      " + true_branch); // true
-  			out.println("# result is false");
+  			out.println("    # equality check expression");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    cp    r24, r18");
+  			out.println("    breq      " + true_branch); // true
+  			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + result_branch); // result
-  			out.println("# result is true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + result_branch); // result
+  			out.println("    # result is true");
   			out.println(true_branch + ":"); // true
-  			out.println("ldi     r24, 1");
-  			out.println("# store result of equal expression");
+  			out.println("    ldi     r24, 1");
+  			out.println("    # store result of equal expression");
   			out.println(result_branch + ":"); // result
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
   		// first int second byte
   		if(lexpType == Type.INT && rexpType == Type.BYTE){
-  			String branch_6 = new Label().toString();
-  			String branch_7 = new Label().toString();
-  			String branch_4 = new Label().toString();
-  			String branch_5 = new Label().toString();
-  			out.println("# equality check expression");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("pop    r25");
-  			out.println("# promoting a byte to an int");
-  			out.println("tst     r18");
-  			out.println("brlt     " + branch_6); // branch_6
-  			out.println("ldi    r19, 0");
-  			out.println("jmp    " + branch_7); // branch_7
-  			out.println(branch_6 + ":"); // branch_6
-  			out.println("ldi    r19, hi8(-1)");
-  			out.println(branch_7 + ":"); // branch_7
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("breq " + branch_4); // branch_4
-  			out.println("# result is false");
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + branch_5); // branch_5
-  			out.println("# result is true");
-  			out.println(branch_4 + ":"); // branch_4
-  			out.println("ldi     r24, 1");
-  			out.println("# store result of equal expression");
-  			out.println(branch_5 + ":"); // branch_5
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+
+  			String branch_1 = new Label().toString();
+        String branch_2 = new Label().toString();
+        String branch_3 = new Label().toString();
+        String branch_4 = new Label().toString();
+        String branch_5 = new Label().toString();
+
+  			out.println("    # equality check expression");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    pop    r25");
+  			out.println("    # promoting a byte to an int");
+  			out.println("    tst     r18");
+  			out.println("    brlt     " + branch_4);
+  			out.println("    ldi    r19, 0");
+  			out.println("    jmp    " + branch_5);
+  			out.println(branch_4 + ":");
+  			out.println("    ldi    r19, hi8(-1)");
+  			out.println(branch_5 + ":");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    breq " + branch_2);
+  			out.println("    # result is false");
+        out.println(branch_1 + ":");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + branch_3);
+  			out.println("    # result is true");
+  			out.println(branch_2 + ":");
+  			out.println("    ldi     r24, 1");
+  			out.println("    # store result of equal expression");
+  			out.println(branch_3 + ":");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
   	}

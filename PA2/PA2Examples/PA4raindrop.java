@@ -12,9 +12,7 @@ import meggy.Meggy;
 class PA4raindrop {
 
     public static void main(String[] whatever){
-        // Not actually constructing object in PA5 compiler,
-        // but syntax needs to be there.
-        // Rain in column 3.
+        
         while (true) {
             new Cloud().rain((byte)3,(byte)7);
             Meggy.delay(500);

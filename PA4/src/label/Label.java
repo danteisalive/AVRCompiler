@@ -9,7 +9,7 @@ public class Label  {
    private static int count;
 
   /**
-   * a printable representation of the label, for use in assembly 
+   * a printable representation of the label, for use in assembly
    * language output.
    */
    public String toString() {return name;}
@@ -27,7 +27,9 @@ public class Label  {
    * Makes a new label with an arbitrary name.
    */
    public Label() {
+
     this("MJ_L" + count++);
+    //System.out.println(count);
    }
-    
+
 }
