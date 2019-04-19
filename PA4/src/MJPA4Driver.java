@@ -56,7 +56,7 @@ public class MJPA4Driver {
 
           java.io.PrintStream avrsout =
             new java.io.PrintStream(
-                new java.io.FileOutputStream(filename + "1.s"));
+                new java.io.FileOutputStream(filename + ".s"));
 
           ast_root.accept(new AVRAssemblyGeneratorVisitor(new PrintWriter(avrsout), SymbolTable));
 
