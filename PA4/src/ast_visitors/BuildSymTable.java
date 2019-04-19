@@ -521,6 +521,8 @@ public class BuildSymTable extends DepthFirstVisitor
       }
     }
 
+    this.SymbolTable.setExpType(node, Type.BYTE);
+
   }
 
   public void outMeggyCheckButton(MeggyCheckButton node){

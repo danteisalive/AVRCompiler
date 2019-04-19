@@ -145,11 +145,11 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
    	}
 
      public void outButtonExp(ButtonLiteral node){
-     out.println("# Button expression "+node.getLexeme());
-     out.println("ldi    r22" + node.getIntValue() + "");
-     out.println("# push onto stack as single byte");
-     out.println("push   r22");
-     out.println("");
+     // out.println("# Button expression "+node.getLexeme());
+     // out.println("ldi    r22" + node.getIntValue() + "");
+     // out.println("# push onto stack as single byte");
+     // out.println("push   r22");
+     // out.println("");
       }
 
      public void outMeggySetPixel(MeggySetPixel node){
@@ -468,14 +468,27 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
     }
 
+
+
+
     public void outMeggyCheckButton(MeggyCheckButton node)
     {
-
+      String branch_1 = new Label().toString();
+      String branch_2 = new Label().toString();
+      String branch_3 = new Label().toString();
   		String[] buttonSplited = ((ButtonLiteral)node.getExp()).getLexeme().split("\\.");
 
   		out.println("    ### MeggyCheckButton");
   		out.println("    call    _Z16CheckButtonsDownv");
   		out.println("    lds    r24, " + buttonSplited[1] + "_" + buttonSplited[2]);
+      out.println("    # if button value is zero, push 0 else push 1");
+      out.println("    tst    r24");
+      out.println("    breq   " + branch_1);
+      out.println(branch_2 + ":");
+      out.println("    ldi    r24, 1");
+      out.println("    jmp    " + branch_3);
+      out.println(branch_1 + ":");
+      out.println(branch_3 + ":");
   		out.println("    # push one byte expression onto stack");
   		out.println("    push   r24");
   		out.println("");
@@ -835,14 +848,17 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("    pop    r25");
   			out.println("    cp    r24, r18");
   			out.println("    cpc   r25, r19");
-  			out.println("    breq      " + true_branch); // true
+  			out.println("    breq " + true_branch); // true
+        out.println("");
   			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
   			out.println("    ldi     r24, 0");
   			out.println("    jmp      " + result_branch); // result
+        out.println("");
   			out.println("    # result is true");
   			out.println(true_branch + ":"); // true
   			out.println("    ldi     r24, 1");
+        out.println("");
   			out.println("    # store result of equal expression");
   			out.println(result_branch + ":"); // result
   			out.println("    # push one byte expression onto stack");
@@ -889,7 +905,9 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("");
   		}
   		// both byte
-  		if(lexpType == Type.BYTE && rexpType == Type.BYTE){
+  		if((lexpType == Type.BYTE || lexpType == Type.COLOR) &&
+          (rexpType == Type.BYTE || rexpType == Type.COLOR))
+      {
         String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
   			String result_branch = new Label().toString();
@@ -899,7 +917,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("    # load a one byte expression off stack");
   			out.println("    pop    r24");
   			out.println("    cp    r24, r18");
-  			out.println("    breq      " + true_branch); // true
+  			out.println("    breq " + true_branch); // true
   			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
   			out.println("    ldi     r24, 0");

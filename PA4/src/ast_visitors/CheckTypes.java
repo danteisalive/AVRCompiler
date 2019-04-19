@@ -140,6 +140,8 @@ public class CheckTypes extends DepthFirstVisitor
        errors += "[" + node.getLine() + "," + node.getPos() + "]" +
                  " Meggy Check Button expects Button Type argument!\n";
      }
+     
+
    }
 
    public void outMeggyGetPixel(MeggyGetPixel node){

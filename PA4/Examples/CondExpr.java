@@ -94,5 +94,8 @@ class CondExpr {
 	    else
 			  Meggy.setPixel( (byte)3, (byte)4, Meggy.Color.RED );
 	    
+	   // Meggy.checkButton(Meggy.Button.A);
 	    }
+
+
 }

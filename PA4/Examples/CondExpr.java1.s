@@ -77,14 +77,17 @@ main:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L4
+    breq MJ_L4
+
     # result is false
 MJ_L3:
     ldi     r24, 0
     jmp      MJ_L5
+
     # result is true
 MJ_L4:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L5:
     # push one byte expression onto stack
@@ -516,14 +519,17 @@ MJ_L22:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L24
+    breq MJ_L24
+
     # result is false
 MJ_L23:
     ldi     r24, 0
     jmp      MJ_L25
+
     # result is true
 MJ_L24:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L25:
     # push one byte expression onto stack
@@ -720,7 +726,7 @@ MJ_L20:
     # load a one byte expression off stack
     pop    r24
     cp    r24, r18
-    breq      MJ_L30
+    breq MJ_L30
     # result is false
 MJ_L29:
     ldi     r24, 0
@@ -887,14 +893,17 @@ MJ_L28:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L36
+    breq MJ_L36
+
     # result is false
 MJ_L35:
     ldi     r24, 0
     jmp      MJ_L37
+
     # result is true
 MJ_L36:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L37:
     # push one byte expression onto stack
@@ -1068,14 +1077,17 @@ MJ_L42:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L44
+    breq MJ_L44
+
     # result is false
 MJ_L43:
     ldi     r24, 0
     jmp      MJ_L45
+
     # result is true
 MJ_L44:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L45:
     # push one byte expression onto stack
@@ -1249,14 +1261,17 @@ MJ_L50:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L52
+    breq MJ_L52
+
     # result is false
 MJ_L51:
     ldi     r24, 0
     jmp      MJ_L53
+
     # result is true
 MJ_L52:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L53:
     # push one byte expression onto stack
@@ -1427,7 +1442,7 @@ MJ_L48:
     # load a one byte expression off stack
     pop    r24
     cp    r24, r18
-    breq      MJ_L58
+    breq MJ_L58
     # result is false
 MJ_L57:
     ldi     r24, 0
@@ -1618,14 +1633,17 @@ MJ_L56:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L64
+    breq MJ_L64
+
     # result is false
 MJ_L63:
     ldi     r24, 0
     jmp      MJ_L65
+
     # result is true
 MJ_L64:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L65:
     # push one byte expression onto stack
@@ -1822,14 +1840,17 @@ MJ_L70:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L72
+    breq MJ_L72
+
     # result is false
 MJ_L71:
     ldi     r24, 0
     jmp      MJ_L73
+
     # result is true
 MJ_L72:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L73:
     # push one byte expression onto stack
@@ -2027,14 +2048,17 @@ MJ_L78:
     pop    r25
     cp    r24, r18
     cpc   r25, r19
-    breq      MJ_L80
+    breq MJ_L80
+
     # result is false
 MJ_L79:
     ldi     r24, 0
     jmp      MJ_L81
+
     # result is true
 MJ_L80:
     ldi     r24, 1
+
     # store result of equal expression
 MJ_L81:
     # push one byte expression onto stack
@@ -2257,7 +2281,7 @@ MJ_L88:
     # load a one byte expression off stack
     pop    r24
     cp    r24, r18
-    breq      MJ_L90
+    breq MJ_L90
     # result is false
 MJ_L89:
     ldi     r24, 0
@@ -2769,6 +2793,25 @@ MJ_L102:
     # push one byte expression onto stack
     push   r22
 
+    # equality check expression
+    # load a one byte expression off stack
+    pop    r18
+    # load a one byte expression off stack
+    pop    r24
+    cp    r24, r18
+    breq MJ_L112
+    # result is false
+MJ_L111:
+    ldi     r24, 0
+    jmp      MJ_L113
+    # result is true
+MJ_L112:
+    ldi     r24, 1
+    # store result of equal expression
+MJ_L113:
+    # push one byte expression onto stack
+    push   r24
+
     # load condition and branch if false
     # load a one byte expression off stack
     pop    r24
@@ -2880,14 +2923,17 @@ MJ_L110:
 
     #### if statement
 
-# Button expression Meggy.Button.A
-ldi    r222
-# push onto stack as single byte
-push   r22
-
     ### MeggyCheckButton
     call    _Z16CheckButtonsDownv
     lds    r24, Button_A
+    # if button value is zero, push 0 else push 1
+    tst    r24
+    breq   MJ_L117
+MJ_L118:
+    ldi    r24, 1
+    jmp    MJ_L119
+MJ_L117:
+MJ_L119:
     # push one byte expression onto stack
     push   r24
 
@@ -2899,12 +2945,12 @@ push   r22
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L111
-    brne   MJ_L112
-    jmp    MJ_L111
+    #WANT breq MJ_L114
+    brne   MJ_L115
+    jmp    MJ_L114
 
     # then label for if
-MJ_L112:
+MJ_L115:
 
     # Load constant int 3
     ldi    r24,lo8(3)
@@ -2949,10 +2995,10 @@ MJ_L112:
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
 
-    jmp    MJ_L113
+    jmp    MJ_L116
 
     # else label for if
-MJ_L111:
+MJ_L114:
 
     # Load constant int 3
     ldi    r24,lo8(3)
@@ -2998,7 +3044,7 @@ MJ_L111:
     call   _Z12DisplaySlatev
 
     # done label for if
-MJ_L113:
+MJ_L116:
 
 
 
