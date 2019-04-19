@@ -19,7 +19,7 @@ class PA3buttondot {
             while (true) {
                 if (false) {
                     Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.VIOLET );
-                    Meggy.setPixel( (byte)(0+5), 0, Meggy.Color.VIOLET );
+                    Meggy.setPixel( (byte)(0+5), (byte)0, Meggy.Color.VIOLET );
                     
                 } else {
                     if (false) {

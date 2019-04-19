@@ -634,64 +634,72 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   	}
 
     public void outTrueExp(TrueLiteral node){
-  		out.println("# True/1 expression");
-  		out.println("ldi    r22, 1");
-  		out.println("# push one byte expression onto stack");
-  		out.println("push   r22");
+  		out.println("    # True/1 expression");
+  		out.println("    ldi    r22, 1");
+  		out.println("    # push one byte expression onto stack");
+  		out.println("    push   r22");
   		out.println("");
   	}
 
   	public void outFalseExp(FalseLiteral node){
-  		out.println("# False/0 expression");
-  		out.println("ldi    r22,0");
-  		out.println("# push one byte expression onto stack");
-  		out.println("push   r22");
+  		out.println("    # False/0 expression");
+  		out.println("    ldi    r24,0");
+  		out.println("    # push one byte expression onto stack");
+  		out.println("    push   r24");
   		out.println("");
   	}
 
     public void inAndExp(AndExp node){
-  		out.println("#### short-circuited && operation");
-  		out.println("# &&: left operand");
+  		out.println("    #### short-circuited && operation");
+  		out.println("    # &&: left operand");
   		out.println("");
   	}
 
 
   	public void visitAndExp(AndExp node){
   		inAndExp(node);
-  		String right_branch = new Label().toString();
-  		String done_branch = new Label().toString();
+
           if(node.getLExp() != null)
           {
               node.getLExp().accept(this);
           }
-          out.println("# &&: if left operand is false do not eval right");
-          out.println("# load a one byte expression off stack");
-          out.println("pop    r24");
-          out.println("# push one byte expression onto stack");
-          out.println("push   r24");
-          out.println("# compare left exp with zero");
-          out.println("ldi r25, 0");
-          out.println("cp    r24, r25");
-          out.println("# Want this, breq done_branch");
-          out.println("brne  " + right_branch); // right_branch
-          out.println("jmp   " + done_branch); // done_branch
+
+          String done_branch = new Label().toString();
+          String right_branch = new Label().toString();
+
+
+          out.println("    # &&: if left operand is false do not eval right");
+          out.println("    # load a one byte expression off stack");
+          out.println("    pop    r24");
+          out.println("    # push one byte expression onto stack");
+          out.println("    push   r24");
+          out.println("    # compare left exp with zero");
+          out.println("    ldi r25, 0");
+          out.println("    cp    r24, r25");
+          out.println("    # Want this, breq " + done_branch);
+          out.println("    brne  " + right_branch); // right_branch
+          out.println("    jmp   " + done_branch); // done_branch
           out.println("");
+          out.println(right_branch + ":"); // right_branch
+          out.println("    # right operand");
+          out.println("    # load a one byte expression off stack");
+          out.println("    pop    r24");
+          out.println("");
+
           if(node.getRExp() != null)
           {
               node.getRExp().accept(this);
           }
-          out.println(right_branch + ":"); // right_branch
-          out.println("# right operand");
-          out.println("# load a one byte expression off stack");
-          out.println("pop    r24");
-          out.println("# True/1 expression");
-          out.println("ldi    r22, 1");
-          out.println("# push one byte expression onto stack");
-          out.println("push   r22");
-          out.println("# load a one byte expression off stack");
-          out.println("pop    r24");
-          out.println("# push one byte expression onto stack");
-          out.println("push   r24");
+
+
+          // out.println("# True/1 expression");
+          // out.println("ldi    r22, 1");
+          // out.println("# push one byte expression onto stack");
+          // out.println("push   r22");
+          out.println("    # load a one byte expression off stack");
+          out.println("    pop    r24");
+          out.println("    # push one byte expression onto stack");
+          out.println("    push   r24");
           out.println(done_branch + ":"); //done_branch
           out.println("");
 
@@ -768,43 +776,45 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
     	}
 
       public void inWhileStatement(WhileStatement node){
-            out.println("#### while statement\n");
+
       }
+
       public void visitWhileStatement(WhileStatement node){
 
         String start = new Label().toString();
         String body = new Label().toString();
         String end = new Label().toString();
 
-        inWhileStatement(node);
+        //inWhileStatement(node);
+        out.println("    #### while statement\n");
         out.println(start + ":");
             if(node.getExp() != null)
             {
                 node.getExp().accept(this);
             }
             // loop body
-            out.println("# if not(condition)");
-            out.println("# load a one byte expression off stack");
-            out.println("pop    r24");
-            out.println("ldi    r25,0");
-            out.println("cp     r24, r25");
-            out.println("# WANT breq " + end);
-            out.println("brne   " + body);
-            out.println("jmp    " + end);
-            out.println("# while loop body");
+            out.println("    # if not(condition)");
+            out.println("    # load a one byte expression off stack");
+            out.println("    pop    r24");
+            out.println("    ldi    r25,0");
+            out.println("    cp     r24, r25");
+            out.println("    # WANT breq " + end);
+            out.println("    brne   " + body);
+            out.println("    jmp    " + end);
+            out.println("    # while loop body");
             out.println(body + ":");
             out.println("");
             if(node.getStatement() != null)
             {
                 node.getStatement().accept(this);
             }
-            out.println("# jump to while test");
-            out.println("jmp    " + start);
-            out.println("# end of while");
+            out.println("    # jump to while test");
+            out.println("    jmp    " + start);
+            out.println("    # end of while");
             out.println(end + ":");
             out.println("");
 
-            outWhileStatement(node);
+            //outWhileStatement(node);
       }
 
       public void outMeggyToneStart(MeggyToneStart node){
@@ -820,13 +830,13 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   	}
 
     public void outNotExp(NotExp node){
-  		out.println("# not operation");
-  		out.println("# load a one byte expression off stack");
-  		out.println("pop    r24");
-  		out.println("ldi     r22, 1");
-  		out.println("eor     r24,r22");
-  		out.println("# push one byte expression onto stack");
-  		out.println("push   r24");
+  		out.println("    # not operation");
+  		out.println("    # load a one byte expression off stack");
+  		out.println("    pop    r24");
+  		out.println("    ldi     r22, 1");
+  		out.println("    eor     r24,r22");
+  		out.println("    # push one byte expression onto stack");
+  		out.println("    push   r24");
   		out.println("");
   	}
 
@@ -852,7 +862,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("");
   			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
-  			out.println("    ldi     r24, 0");
+  			out.println("    ldi	   r24, 0");
   			out.println("    jmp      " + result_branch); // result
         out.println("");
   			out.println("    # result is true");
