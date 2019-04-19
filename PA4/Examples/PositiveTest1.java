@@ -5,7 +5,7 @@ import meggy.Meggy;
 
 class PositiveTest1 {		//Main class
 	public static void main(String[] whatever){
-		int i;
+
 		Meggy.setPixel((byte)3, (byte)10, Meggy.Color.GREEN);	//Meggy.setPixel(exp, exp, exp) statement
 		Meggy.setAuxLEDs(123);									//Meggy.setAuxLEDs(exp) statement
 		Meggy.toneStart(Meggy.Tone.As3, 400);					//Meggy.toneStart(exp,exp) statement
@@ -16,9 +16,9 @@ class PositiveTest1 {		//Main class
 					if(((34 == 54))){		//nested if statement and '==' operator
 					}
 				}
-			} else if(10 < 11){				//'<' operator
+			} else if((byte)10 < 11){				//'<' operator
 				while(true){				//while statement
-					i = 1;
+					// i = 1;
 				}
 			} else{
 			}

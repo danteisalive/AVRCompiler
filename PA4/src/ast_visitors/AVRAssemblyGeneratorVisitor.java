@@ -134,12 +134,12 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
      }
 
      public void outToneExp(ToneLiteral node){
-   		out.println("# Push " + node.getLexeme() + " onto the stack.");
-   		out.println("ldi    r25, hi8(" + node.getIntValue() + ")");
-   		out.println("ldi    r24, lo8(" + node.getIntValue() + ")");
-   		out.println("# push two byte expression onto stack");
-   		out.println("push   r25");
-   		out.println("push   r24");
+   		out.println("    # Push " + node.getLexeme() + " onto the stack.");
+   		out.println("    ldi    r25, hi8(" + node.getIntValue() + ")");
+   		out.println("    ldi    r24, lo8(" + node.getIntValue() + ")");
+   		out.println("    # push two byte expression onto stack");
+   		out.println("    push   r25");
+   		out.println("    push   r24");
    		out.println("");
 
    	}
@@ -471,6 +471,18 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
 
+
+
+    public void outMeggySetAuxLEDs(MeggySetAuxLEDs node){
+        out.println("    ### Meggy.setAuxLEDs(num) call");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r24");
+        out.println("    pop    r25");
+        out.println("    call   _Z10SetAuxLEDsh");
+        out.println("");
+    }
+
+
     public void outMeggyCheckButton(MeggyCheckButton node)
     {
       String branch_1 = new Label().toString();
@@ -500,31 +512,31 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		Type rexpType = this.mCurrentST.getExpType(node.getRExp());
   		// int int
   		if(lexpType == Type.INT && rexpType == Type.INT){
+        String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
-  			String false_branch = new Label().toString();
   			String result_branch = new Label().toString();
 
-  			out.println("# less than expression");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("pop    r19");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("pop    r25");
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("brlt " + true_branch + "\n"); // true_branch
-  			out.println("# load false");
+  			out.println("    # less than expression");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    pop    r19");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    pop    r25");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    brlt " + true_branch + "\n"); // true_branch
+  			out.println("    # load false");
   			out.println(false_branch + ":"); // false_branch
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + result_branch + "\n"); // result_branch
-  			out.println("# load true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + result_branch + "\n"); // result_branch
+  			out.println("    # load true");
   			out.println(true_branch + ":"); // true_branch
-  			out.println("ldi    r24, 1\n");
-  			out.println("# push result of less than");
+  			out.println("    ldi    r24, 1\n");
+  			out.println("    # push result of less than");
   			out.println(result_branch + ":"); // result_branch
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
 
@@ -535,34 +547,34 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			String MJ_L5 = new Label().toString();
   			String MJ_L6 = new Label().toString();
   			String MJ_L7 = new Label().toString();
-  			out.println("# less than expression");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("pop    r25");
-  			out.println("# promoting a byte to an int");
-  			out.println("tst     r18");
-  			out.println("brlt     " + MJ_L6); // MJ_L6
-  			out.println("ldi    r19, 0");
-  			out.println("jmp    " + MJ_L7); // MJ_L7
+  			out.println("    # less than expression");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    pop    r25");
+  			out.println("    # promoting a byte to an int");
+  			out.println("    tst     r18");
+  			out.println("    brlt     " + MJ_L6); // MJ_L6
+  			out.println("    ldi    r19, 0");
+  			out.println("    jmp    " + MJ_L7); // MJ_L7
   			out.println(MJ_L6 + ":"); // MJ_L6
-  			out.println("ldi    r19, hi8(-1)");
+  			out.println("    ldi    r19, hi8(-1)");
   			out.println(MJ_L7 + ":"); // MJ_L7
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("brlt " + MJ_L4 + "\n"); // MJ_L4
-  			out.println("# load false");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    brlt " + MJ_L4 + "\n"); // MJ_L4
+  			out.println("    # load false");
   			out.println(MJ_L3 + ":"); // MJ_L3
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + MJ_L5 + "\n"); // MJ_L5
-  			out.println("# load true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + MJ_L5 + "\n"); // MJ_L5
+  			out.println("    # load true");
   			out.println(MJ_L4 + ":"); // MJ_L4
-  			out.println("ldi    r24, 1\n");
-  			out.println("# push result of less than");
+  			out.println("    ldi    r24, 1\n");
+  			out.println("    # push result of less than");
   			out.println(MJ_L5 + ":"); // MJ_L5
-  			out.println("# push one byte expression onto stack");
-  			out.println(" push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
 
@@ -573,34 +585,34 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			String MJ_L5 = new Label().toString();
   			String MJ_L6 = new Label().toString();
   			String MJ_L7 = new Label().toString();
-  			out.println("# less than expression");
-  			out.println("# load a two byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("pop    r19");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("# promoting a byte to an int");
-  			out.println("tst     r24");
-  			out.println("brlt     " + MJ_L6);
-  			out.println("ldi    r25, 0");
-  			out.println("jmp    " + MJ_L7);
+  			out.println("    # less than expression");
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    pop    r19");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    # promoting a byte to an int");
+  			out.println("    tst     r24");
+  			out.println("    brlt     " + MJ_L6);
+  			out.println("    ldi    r25, 0");
+  			out.println("    jmp    " + MJ_L7);
   			out.println(MJ_L6 + ":");
-  			out.println("ldi    r25, hi8(-1)");
+  			out.println("    ldi    r25, hi8(-1)");
   			out.println(MJ_L7 + ":");
-  			out.println("cp    r24, r18");
-  			out.println("cpc   r25, r19");
-  			out.println("brlt " + MJ_L4);
-  			out.println("# load false");
+  			out.println("    cp    r24, r18");
+  			out.println("    cpc   r25, r19");
+  			out.println("    brlt " + MJ_L4);
+  			out.println("    # load false");
   			out.println(MJ_L3 + ":");
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + MJ_L5);
-  			out.println("# load true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + MJ_L5);
+  			out.println("    # load true");
   			out.println(MJ_L4 + ":");
-  			out.println("ldi    r24, 1");
-  			out.println("# push result of less than");
+  			out.println("    ldi    r24, 1");
+  			out.println("    # push result of less than");
   			out.println(MJ_L5 + ":");
-  			out.println("# push one byte expression onto stack");
-  			out.println(" push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
 
   		}
@@ -609,24 +621,24 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			String MJ_L3 = new Label().toString();
   			String MJ_L4 = new Label().toString();
   			String MJ_L5 = new Label().toString();
-  			out.println("# less than expression");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r18");
-  			out.println("# load a one byte expression off stack");
-  			out.println("pop    r24");
-  			out.println("cp    r24, r18");
-  			out.println("brlt " + MJ_L4 +"\n"); // MJ_L4
-  			out.println("# load false");
+  			out.println("    # less than expression");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r18");
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    cp    r24, r18");
+  			out.println("    brlt " + MJ_L4 +"\n"); // MJ_L4
+  			out.println("    # load false");
   			out.println(MJ_L3 + ":"); // MJ_L3
-  			out.println("ldi     r24, 0");
-  			out.println("jmp      " + MJ_L5 + "\n"); // MJ_L5
-  			out.println("# load true");
+  			out.println("    ldi     r24, 0");
+  			out.println("    jmp      " + MJ_L5 + "\n"); // MJ_L5
+  			out.println("    # load true");
   			out.println(MJ_L4 + ":"); // MJ_L4
-  			out.println("ldi    r24, 1\n");
-  			out.println("# push result of less than");
+  			out.println("    ldi    r24, 1\n");
+  			out.println("    # push result of less than");
   			out.println(MJ_L5 + ":"); // MJ_L5
-  			out.println("# push one byte expression onto stack");
-  			out.println("push   r24");
+  			out.println("    # push one byte expression onto stack");
+  			out.println("    push   r24");
   			out.println("");
   		}
 
@@ -818,14 +830,14 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       }
 
       public void outMeggyToneStart(MeggyToneStart node){
-          out.println("### Meggy.toneStart(tone, time_ms) call");
-          out.println("# load a two byte expression off stack");
-          out.println("pop	r22");
-          out.println("pop	r23");
-          out.println("# load a two byte expression off stack");
-          out.println("pop	r24");
-          out.println("pop	r25");
-          out.println("call	_Z10Tone_Startjj");
+          out.println("    ### Meggy.toneStart(tone, time_ms) call");
+          out.println("    # load a two byte expression off stack");
+          out.println("    pop    r22");
+          out.println("    pop    r23");
+          out.println("    # load a two byte expression off stack");
+          out.println("    pop    r24");
+          out.println("    pop    r25");
+          out.println("    call   _Z10Tone_Startjj");
           out.println("");
   	}
 
@@ -849,7 +861,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
   			String result_branch = new Label().toString();
-  			out.println("  	 # equality check expression");
+  			out.println("    # equality check expression");
   			out.println("    # load a two byte expression off stack");
   			out.println("    pop    r18");
   			out.println("    pop    r19");
@@ -862,7 +874,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("");
   			out.println("    # result is false");
   			out.println(false_branch + ":"); // false
-  			out.println("    ldi	   r24, 0");
+  			out.println("    ldi     r24, 0");
   			out.println("    jmp      " + result_branch); // result
         out.println("");
   			out.println("    # result is true");
@@ -903,7 +915,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("    breq " + branch_4);
   			out.println("    # result is false");
   			out.println(branch_3 + ":");
-  			out.println("    ldi	   r24, 0");
+  			out.println("    ldi     r24, 0");
   			out.println("    jmp      " + branch_5);
   			out.println("    # result is true");
   			out.println(branch_4 + ":");
