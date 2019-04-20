@@ -1,0 +1,381 @@
+
+package mjparser;
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import ast_visitors.DotVisitor;
+import ast.node.*;
+import ast.visitor.*;
+
+parser code {:
+
+    public String programName;
+
+
+    public void unrecovered_syntax_error(Symbol cur_SymbolValue) {
+        report_fatal_error("Fatal syntax error", cur_SymbolValue);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        done_parsing();
+        Symbol SymbolValue = (Symbol)info;
+        mjparser.SymbolValue tok = (mjparser.SymbolValue)SymbolValue.value;
+        throw new mjparser.ParseException("Fatal parsing error",
+                                          tok.line, tok.pos);
+    }
+
+    public void report_error(String message, Object info) {
+        Symbol SymbolValue = (Symbol)info;
+        mjparser.SymbolValue tok = (mjparser.SymbolValue)SymbolValue.value;
+        System.err.println("[" + tok.line + "," + tok.pos + "] "
+                               + message + " at " + tok.toString() );
+    }
+
+:}
+
+
+/* Notice: all terminals declared here */
+terminal SymbolValue PLUS, MINUS, TIMES, LPAREN, RPAREN;
+terminal SymbolValue LBRACE, RBRACE;
+terminal SymbolValue BOOLEAN, INT;
+terminal SymbolValue BYTE;
+terminal SymbolValue MAIN, IMPORT;
+terminal SymbolValue IF, ELSE;
+terminal SymbolValue LT;
+terminal SymbolValue EQUAL;
+terminal SymbolValue AND, NOT;
+terminal SymbolValue WHILE;
+terminal SymbolValue COMMA, DOT;
+terminal SymbolValue NEW, PUBLIC, RETURN, STATIC;
+terminal SymbolValue STRING, VOID;
+terminal SymbolValue CLASS, EXTENDS;
+terminal SymbolValue LBRACKET, RBRACKET;
+terminal SymbolValue LENGTH;
+terminal SymbolValue SEMI;
+terminal SymbolValue ASSIGN;
+
+terminal SymbolValue MEGGY;
+terminal SymbolValue MEGGYCOLOR;
+terminal SymbolValue MEGGYBUTTON;
+terminal SymbolValue MEGGYTONE;
+terminal SymbolValue MEGGYSETPIXEL;
+terminal SymbolValue MEGGYSETAUXLEDS;
+terminal SymbolValue MEGGYTONESTART;
+terminal SymbolValue MEGGYDELAY;
+terminal SymbolValue MEGGYGETPIXEL;
+terminal SymbolValue MEGGYCHECKBUTTON;
+
+terminal SymbolValue INT_LITERAL, ID;
+terminal SymbolValue TRUE, FALSE;
+terminal SymbolValue COLOR_LITERAL, BUTTON_LITERAL, TONE_LITERAL;
+terminal SymbolValue THIS;
+
+/* bogus terminal for unary precedence declaration */
+terminal UMINUS;
+
+non terminal        Program                   Program;
+non terminal        IExp                      Expression;
+non terminal        IType                     Type;
+non terminal        IStatement                Statement;
+non terminal        Formal                    FormalVar;
+non terminal        VarDecl                   VariableDecl;
+non terminal        TopClassDecl              ClassDeclaration;
+non terminal        MethodDecl                MethodDeclration;
+non terminal        MainClass                 MainClass;
+non terminal        List<IStatement>          StatementList;
+non terminal        List<IClassDecl>          ClassDeclarationList;
+non terminal        LinkedList<IExp>          ExpressionList;
+non terminal        List<MethodDecl>          MethodDeclrationList;
+non terminal        List<Formal>              FormalList;
+non terminal        List<VarDecl>             VarDeclList;
+
+
+/* Declare precedence and associativity  here */
+
+precedence right RETURN;
+
+precedence right THIS;
+precedence left AND;
+precedence left EQUAL;
+precedence left LT;
+precedence left PLUS, MINUS;
+precedence left LBRACKET, RBRACKET;
+precedence left TIMES;
+precedence right NOT;
+precedence right UMINUS, LPAREN, RPAREN, NOT;
+precedence left ELSE;
+precedence left DOT;
+precedence left BYTE;
+precedence right ASSIGN;
+
+
+/* Meggy Java Grammar */
+start with Program;
+
+Program ::=
+    IMPORT:imp MEGGY SEMI
+    MainClass:mainclass
+    ClassDeclarationList:classlist
+    {:
+        //System.out.println("PROGRAM");
+        RESULT =  new Program(imp.line, imp.pos, mainclass, classlist);
+
+    :}
+    ;
+
+MainClass ::=
+        CLASS:op ID:name
+            {:
+                //System.out.println(name.toString());
+                String t_name = name.toString() + ".java";
+
+                if (!parser.programName.contains(t_name)){
+                    System.err.println("Filename and Program name are different!");
+                    System.exit(0);
+                }
+
+            :}
+        LBRACE PUBLIC STATIC VOID MAIN:main
+        LPAREN STRING LBRACKET RBRACKET ID:param RPAREN
+        LBRACE
+          {:
+              //System.out.println(param.toString());
+          :}
+        StatementList:stmtlist
+        RBRACE
+        RBRACE
+          {:
+              //System.out.println("END OF FILE");
+              RESULT  = new MainClass(op.line, op.pos, name.toString(), param.toString(),  new BlockStatement(op.line, op.pos, stmtlist));
+          :}
+    ;
+
+
+
+
+StatementList    ::=  Statement:stmt StatementList:stmtlist
+                    {:
+                        List list = new LinkedList<IStatement>();
+                        if (stmt     != null) {list.add(stmt);}
+                        if (stmtlist != null) {list.addAll(stmtlist);}
+                        RESULT = list;
+                    :}
+
+                    |   /* empty */ {: RESULT = new LinkedList<IStatement>(); :}
+                    ;
+
+ClassDeclarationList    ::= ClassDeclarationList:classlist  ClassDeclaration:c  {: if(c!=null) {classlist.add(c);} RESULT = classlist; :}
+                        | /* empty */                                               {: RESULT = new LinkedList<IClassDecl>(); :}
+                        ;
+
+MethodDeclrationList   ::= MethodDeclrationList:methodlist  MethodDeclration:method {: if(method!=null) {methodlist.add(method);} RESULT = methodlist; :}
+                        | /* empty */                                               {: RESULT = new LinkedList<MethodDecl>(); :}
+                        ;
+
+
+ExpressionList ::= ExpressionList:explist COMMA  Expression:exp    {:  if(exp!=null) {explist.add(exp);} RESULT=explist;  :}
+                    |  ExpressionList:explist Expression:exp {:  if(exp!=null) {explist.add(exp);} RESULT = explist;  :}
+                    | /* empty */ {: RESULT = new LinkedList<IExp>(); :}
+                     ;
+
+FormalList  ::= FormalList:formallist COMMA FormalVar:formal  {: if(formal!=null) {formallist.add(formal);} RESULT=formallist; :}
+            |   FormalList:formallist FormalVar:formal        {: if(formal!=null) {formallist.add(formal);} RESULT=formallist; :}
+            |   /*  empty  */                                 {: RESULT = new LinkedList<Formal>(); :}
+            ;
+
+VarDeclList  ::= VarDeclList:varlist Type:t ID:name SEMI:op
+              {:
+                  varlist.add(new VarDecl(name.line, name.pos, t, name.toString()));
+                  RESULT=varlist;
+              :}
+
+              | VarDeclList:varlist INT:op LBRACKET RBRACKET ID:name SEMI
+              {:
+                  //IntArrayType t = new IntArrayType(op.line, op.pos);
+                  varlist.add(new VarDecl(name.line, name.pos, new IntArrayType(op.line, op.pos) , name.toString()));
+                  RESULT=varlist;
+              :}
+
+              | VarDeclList:varlist MEGGYCOLOR:op LBRACKET RBRACKET ID:name SEMI
+              {:
+                  //ColorArrayType t = new ColorArrayType(op.line, op.pos);
+                  varlist.add(new VarDecl(name.line, name.pos, new ColorArrayType(op.line, op.pos), name.toString()));
+                  RESULT=varlist;
+              :}
+
+              | /*  empty  */   {: RESULT = new LinkedList<VarDecl>(); :}
+              ;
+
+
+ClassDeclaration ::= CLASS:op ID:name LBRACE VarDeclList:varlist MethodDeclrationList:methodlist RBRACE
+                  {: RESULT = new TopClassDecl(op.line, op.pos, name.toString(), varlist, methodlist); :}
+                  ;
+
+MethodDeclration ::= PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, type, name.toString(), formallist, varlist, stmtlist, exp); :}
+
+                  | PUBLIC:op Type:type ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, type, name.toString(), formallist, varlist, stmtlist, (IExp)null); :}
+                  | PUBLIC INT:op LBRACKET RBRACKET ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, new IntArrayType(op.line, op.pos), name.toString(), formallist, varlist, stmtlist, exp); :}
+
+                  | PUBLIC MEGGYCOLOR:op LBRACKET RBRACKET ID:name LPAREN FormalList:formallist RPAREN LBRACE VarDeclList:varlist StatementList:stmtlist RETURN Expression:exp SEMI RBRACE
+                  {: RESULT = new MethodDecl(op.line, op.pos, new ColorArrayType(op.line, op.pos), name.toString(), formallist, varlist, stmtlist, exp); :}
+                  ;
+
+Statement   ::=  MEGGYSETPIXEL:op    LPAREN Expression:exp1 COMMA   Expression:exp2 COMMA Expression:exp3 RPAREN SEMI
+                {: RESULT = new MeggySetPixel(op.line, op.pos, exp1, exp2, exp3); :}
+
+            |    MEGGYDELAY:op       LPAREN Expression:exp1 RPAREN  SEMI
+                {: RESULT = new MeggyDelay(op.line, op.pos, exp1); :}
+
+            |    MEGGYTONESTART:op LPAREN Expression:exp1 COMMA Expression:exp2 RPAREN SEMI
+                {: RESULT = new MeggyToneStart(op.line, op.pos, exp1, exp2); :}
+
+            |   IF:op LPAREN Expression:exp1 RPAREN Statement:stmt1 ELSE Statement:stmt2
+          			{: RESULT = new IfStatement(op.line, op.pos, exp1, stmt1, stmt2); :}
+
+            |   IF LPAREN:op Expression:exp RPAREN Statement:stmt
+          			{: RESULT = new IfStatement(op.line, op.pos, exp, stmt, (IStatement)null); :}
+
+            |   WHILE:op LPAREN Expression:exp1 RPAREN Statement:stmt1
+          			{: RESULT = new WhileStatement(op.line, op.pos, exp1, stmt1); :}
+
+            |   Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN SEMI
+                {: RESULT = new CallStatement(dot.line, dot.pos, exp1, id.toString(), explist); :}
+
+            |    LBRACE:op StatementList:stmtlist RBRACE
+                {: RESULT = new BlockStatement(op.line, op.pos, stmtlist);  :}
+
+            |   Expression:exp1 ASSIGN:op Expression:exp2 SEMI
+                {: RESULT = new AssignStatement(op.line, op.pos, exp1.toString(), exp2); :}
+
+            |   Expression:exp1 LBRACKET Expression:exp2 RBRACKET ASSIGN:op Expression:exp3 SEMI
+                {: RESULT = new ArrayAssignStatement(op.line, op.pos, (IdLiteral)exp1, exp2, exp3); :}
+
+            |   MEGGYSETAUXLEDS LPAREN:op Expression:exp RPAREN SEMI
+                {: RESULT = new MeggySetAuxLEDs(op.line, op.pos, exp);:}
+            ;
+
+
+
+Expression ::=  Expression:lhs TIMES:op Expression:rhs
+                {: RESULT = new MulExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs PLUS:op  Expression:rhs
+                {: RESULT = new PlusExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs MINUS:op  Expression:rhs
+                {: RESULT = new MinusExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs EQUAL:op  Expression:rhs
+                {: RESULT = new EqualExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs AND:op  Expression:rhs
+                {: RESULT = new AndExp(op.line, op.pos, lhs, rhs); :}
+
+                | Expression:lhs LT:op  Expression:rhs
+                {: RESULT = new LtExp(op.line, op.pos, lhs, rhs); :}
+
+                | MINUS:op Expression:exp
+         			  {: RESULT = new NegExp(op.line, op.pos, exp); :}
+
+                | MEGGYGETPIXEL:op LPAREN Expression:exp1 COMMA Expression:exp2 RPAREN
+          			{: RESULT = new MeggyGetPixel(op.line, op.pos, exp1, exp2); :}
+
+          			 | MEGGYCHECKBUTTON:op LPAREN Expression:exp RPAREN
+          			{: RESULT = new MeggyCheckButton(op.line, op.pos, exp); :}
+
+          			 | LPAREN:op BYTE RPAREN Expression:a
+          			{: RESULT = new ByteCast(op.line, op.pos, a); :}
+
+          			 | INT_LITERAL:intval
+          			{: RESULT = new IntLiteral(intval.line, intval.pos, intval.toString(), intval.value); :}
+
+          			 | COLOR_LITERAL:colorval
+          			{: RESULT = new ColorLiteral(colorval.line, colorval.pos, colorval.toString(), colorval.value); :}
+
+                | TONE_LITERAL:toneval
+                {: RESULT = new ToneLiteral(toneval.line, toneval.pos, toneval.toString(), toneval.value); :}
+
+          			 | BUTTON_LITERAL:buttval
+          			{: RESULT = new ButtonLiteral(buttval.line, buttval.pos, buttval.toString(), buttval.value); :}
+
+          			 | TRUE:val
+          			{: RESULT = new TrueLiteral(val.line, val.pos, val.toString(), val.value); :}
+
+          			 | FALSE:val
+          			{: RESULT = new FalseLiteral(val.line, val.pos, val.toString(), val.value); :}
+
+          			 | LPAREN:op Expression:exp RPAREN
+          			{: RESULT = exp; :}
+
+                | NOT:op Expression:exp
+         			  {: RESULT = new NotExp(op.line, op.pos, exp); :}
+
+          			| ID:id
+                {: RESULT = new IdLiteral(id.line, id.pos, id.toString()); :}
+
+                | THIS:op
+                {: RESULT = new ThisLiteral(op.line, op.pos, op.lexeme, op.value); :}
+
+                | Expression:exp DOT LENGTH:op
+                {: RESULT = new LengthExp(op.line, op.pos, exp); :}
+
+                | NEW:op ID:id LPAREN RPAREN
+                {: RESULT = new NewExp(op.line, op.pos, id.lexeme); :}
+
+                | NEW:op Type:t LBRACKET Expression:exp1 RBRACKET
+                {: RESULT = new NewArrayExp(op.line, op.pos, t, exp1); :}
+
+                | Expression:exp1 DOT:dot ID:id LPAREN ExpressionList:explist RPAREN
+                {: RESULT = new CallExp(dot.line, dot.pos, exp1, id.toString(), explist); :}
+
+                | Expression:exp1 LBRACKET:op Expression:exp2 RBRACKET
+                {: RESULT = new ArrayExp(op.line, op.pos, exp1, exp2); :}
+                ;
+
+
+FormalVar      ::= Type:t  ID:name
+                {: RESULT = new Formal(name.line, name.pos, t, name.toString()); :}
+
+                | MEGGYCOLOR:op LBRACKET RBRACKET ID:name
+                {: RESULT = new Formal(name.line, name.pos, new ColorArrayType(op.line, op.pos), name.toString()); :}
+
+                | INT:op LBRACKET RBRACKET ID:name
+                {: RESULT = new Formal(name.line, name.pos, new IntArrayType(op.line, op.pos), name.toString()); :}
+                ;
+
+Type   ::=  BOOLEAN:op
+        {: RESULT = new BoolType(op.line, op.pos); :}
+
+        | BYTE:op
+        {: RESULT = new ByteType(op.line, op.pos); :}
+
+        | INT:op
+        {: RESULT = new IntType(op.line, op.pos); :}
+
+	      | VOID:op
+        {: RESULT = new VoidType(op.line, op.pos); :}
+
+	      | MEGGYCOLOR:op
+        {: RESULT = new ColorType(op.line, op.pos); :}
+
+	      | MEGGYBUTTON:op
+        {: RESULT = new ButtonType(op.line, op.pos); :}
+
+	      | MEGGYTONE:op
+        {: RESULT = new ToneType(op.line, op.pos); :}
+
+        | ID:op
+        {: RESULT = new ClassType(op.line, op.pos, op.toString()); :}
+
+        ;
