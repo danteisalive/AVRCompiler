@@ -26,7 +26,7 @@ import symtable.Type;
 import exceptions.InternalException;
 import exceptions.SemanticException;
 import label.Label;
-
+import symtable.Scope;
 import symtable.VarSTE;
 import symtable.ClassSTE;
 import symtable.MethodSTE;
@@ -46,6 +46,44 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       this.mCurrentST = st;
       this.errors = "";
    }
+
+   public Type convertType(IType iType){
+       if(iType instanceof BoolType){
+         return Type.BOOL;
+       }
+       if(iType instanceof IntType){
+         return Type.INT;
+       }
+       if(iType instanceof ByteType){
+         return Type.BYTE;
+       }
+       if(iType instanceof ColorType){
+         return Type.COLOR;
+       }
+       if(iType instanceof ButtonType){
+         return Type.BUTTON;
+       }
+       if(iType instanceof VoidType){
+         return Type.VOID;
+       }
+       if(iType instanceof ToneType){
+         return Type.TONE;
+       }
+       if (iType instanceof IntArrayType){
+         return Type.INTARRAY;
+       }
+       if (iType instanceof ColorArrayType){
+         return Type.COLORARRAY;
+       }
+       if (iType instanceof ClassType) {
+             //System.out.println("ClassType: " + (String)((ClassType)iType).getName());
+             return new Type((String)((ClassType)iType).getName());
+       }
+       else {
+         errors += "type " + " is not defined\n";
+         return null;
+       }
+     }
 
    //========================= Overriding the visitor interface
 
@@ -998,19 +1036,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
 // PA5 staters from here
-    public void inTopClassDecl(TopClassDecl node){
-  		System.out.println("\nin AVRGenVisitor.inTopClassDecl(" + node.getName() + ") ... ");
-  		System.out.println("make class " + node.getName() + " the top of scope stack");
-  		this.mCurrentST.pushScope(node.getName());
-  		System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
-  	}
 
-    public void outTopClassDecl(TopClassDecl node){
-  		System.out.println("\nin AVRGenVisitor.outTopClassDecl(" + node.getName() + ") ... ");
-  		System.out.println("pop top of the scope stack");
-  		this.mCurrentST.popScope();
-  		System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
-  	}
 
 
   	public void outNewExp(NewExp node){
@@ -1063,52 +1089,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("");
     }
 
-    public void outCallExp(CallExp node){
 
-          System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
-          out.println("#### function call");
-          out.println("# put parameter values into appropriate registers");
-          // determine class/type
-          String class_name = this.mCurrentST.getExpType(node.getExp()).toString();
-          //String class_name = Type.
-          LinkedList<IExp> argList = node.getArgs();
-          ListIterator<IExp> iter = argList.listIterator(argList.size());
-          IExp arg;
-          int reg = 24 - 2*argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
-          while(iter.hasPrevious()){
-            arg = iter.previous();
-            System.out.println(arg);
-            int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
-            this.mCurrentST.getExpType(arg);
-            if(argSize == 1){
-              out.println("# load a one byte expression off stack");
-              out.println("pop	r"+reg);
-              reg += 2;
-            } else if(argSize == 2){
-              out.println("pop	r"+reg);
-              reg += 1;
-              out.println("pop	r"+reg);
-              reg += 1;
-            }
-          }
-
-          out.println("# receiver will be passed as first param");
-          out.println("# load a two byte expression off stack");
-          out.println("pop	r24");
-          out.println("pop	r25\n");
-          //out.println("call	" + funcName);
-          out.println("call	" + class_name + "_" + node.getId() + "\n");
-
-          // handle returns
-          Type retType = this.mCurrentST.getExpType(node);
-          if (retType != Type.VOID && retType != null){
-            out.println("# handle return value\n");
-            if(retType.getAVRTypeSize() == 2){
-              out.println("push	r25\n");
-            }
-            out.println("push	r24");
-          }
-      }
 
       public void outCallStatement(CallStatement node){
 
@@ -1158,4 +1139,232 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
           }
     }
 
+    public void inTopClassDecl(TopClassDecl node){
+  		  System.out.println("\nin AVRGenVisitor.inTopClassDecl(" + node.getName() + ") ... ");
+  		// System.out.println("make class " + node.getName() + " the top of scope stack");
+  		  this.mCurrentST.pushScope(node.getName());
+  		 //System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
+  	}
+
+    public void outTopClassDecl(TopClassDecl node){
+  		  System.out.println("\nin AVRGenVisitor.outTopClassDecl(" + node.getName() + ") ... ");
+  		 //System.out.println("pop top of the scope stack");
+  		  this.mCurrentST.popScope();
+  		 //System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
+  	}
+
+    public void inMethodDecl(MethodDecl node){
+  		System.out.println("\nin AVRGenVisitor.inMethodDecl(" + node.getName() + ") ... ");
+
+  		// make current func on top of stack for processing.
+  		this.mCurrentST.pushScope(node.getName());
+
+  		// get class name by looking at the "this"
+  		Scope methodScope = this.mCurrentST.peekScopeStack();
+  		String className = ((VarSTE)methodScope.mDict.get("THIS")).getSTEType().toString();
+  		String funcName = className + "_" + node.getName();
+  		// get class name by get to its mScope
+  		System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
+
+  		out.println("/*prologue start for function " + funcName + "*/\n" +
+  		             ".text\n" + ".global " + funcName + "\n" +
+  		             ".type " + funcName + ", @function\n" + funcName +
+  		             ":\n");
+  		out.println("push r29");
+  		out.println("push r28");
+  		out.println("# make space for locals and params");
+  		out.println("ldi	r30, 0");
+  		out.println("push	r30");
+  		out.println("push	r30");
+
+  		// loop through method locals and reserve space
+  		LinkedList<VarDecl> var_list = node.getVarDecls();
+  		Iterator node_itr_3 = var_list.iterator();
+
+  		while(node_itr_3.hasNext()){
+  			IType it = ((VarDecl)node_itr_3.next()).getType();
+  			int var_size = convertType(it).getAVRTypeSize();
+  			if(var_size == 1){
+  				out.println("push	r30");
+  			} else if (var_size == 2){
+  				out.println("push	r30");
+  				out.println("push	r30");
+  			}
+  		}
+
+  		// loop through formals and reserve space
+  		LinkedList<Formal> formal_list = node.getFormals();
+  		Iterator node_itr_1 = formal_list.iterator();
+  		while(node_itr_1.hasNext()){
+  			IType it = ((Formal)node_itr_1.next()).getType();
+  			int formal_size = convertType(it).getAVRTypeSize();
+  			if(formal_size == 1){
+  				out.println("push	r30");
+  			} else if (formal_size == 2){
+  				out.println("push	r30");
+  				out.println("push	r30");
+  			}
+  		}
+  		out.println("\n# Copy stack pointer to frame pointer");
+  		out.println("in	r28,__SP_L__");
+  		out.println("in	r29,__SP_H__\n");
+
+  		out.println("# save off parameters");
+  		out.println("std	Y + 2, r25");
+  		out.println("std	Y + 1, r24");
+  		// prepare register in reverse order starting from r23
+  		Iterator node_itr_2 = formal_list.iterator();
+  		int r = 24, y = 3, max_y = y;
+  		String register = "";
+  		while(node_itr_2.hasNext()){
+  			IType it = ((Formal)node_itr_2.next()).getType();
+  			int formal_size = convertType(it).getAVRTypeSize();
+  			if(formal_size == 1){
+  				max_y += 1;
+  				y = max_y;
+  				y -= 1;
+  				r -= 2;
+  				out.println("std	Y + " + y + ", r" + r);
+  			} else if (formal_size == 2){
+  				max_y += 1;
+  				y = max_y;
+  				r -= 1;
+  				out.println("std	Y + " + y + ", r" + r);
+  				y -= 1;
+  				r -= 1;
+  				out.println("std	Y + " + y + ", r" + r);
+  				max_y += 1;
+  			}
+  		}
+
+  		out.println("\n/* done with function "+funcName+" prologue */\n\n");
+  	}
+
+  	public void outMethodDecl(MethodDecl node){
+      		System.out.println("\nin AVRGenVisitor.outMethodDecl(" + node.getName() + ") ... ");
+      		System.out.println("pop top of the scope stack");
+
+      		// get class name by looking at the "this"
+      		Scope methodScope = this.mCurrentST.peekScopeStack();
+      		String className = ((VarSTE)methodScope.mDict.get("THIS")).getSTEType().toString();
+      		String funcName = className + "_" + node.getName();
+
+      		out.println("/* epilogue start for " + funcName + "*/");
+
+      		if(node.getExp() != null){ // requires return
+      			// have to determine the size of return type
+      			Type retType = convertType(node.getType());
+      			System.out.println(convertType(node.getType()));
+      			out.println("# handle return value");
+      			if(retType.getAVRTypeSize() == 2){
+      				out.println("# load a two byte expression off stack");
+      				out.println("pop    r24");
+      				out.println("pop    r25");
+      			} else if (retType.getAVRTypeSize() == 1){
+      				String MJ_L0 = new Label().toString();
+      				String MJ_L1 = new Label().toString();
+      				out.println("# load a one byte expression off stack");
+      				out.println("pop    r24");
+      				/*out.println("# promoting a byte to an int");
+      				out.println("tst     r24");
+      				out.println("brlt     " + MJ_L0); // MJ_L0
+      				out.println("ldi    r25, 0");
+      				out.println("jmp    " + MJ_L1); // MJ_L1
+      				out.println(MJ_L0 + ":"); // MJ_L0
+      				out.println("ldi    r25, hi8(-1)");
+      				out.println(MJ_L1 + ":"); // MJ_L1*/
+
+      			}
+      		} else { // void return
+      			out.println("# no return value");
+      			out.println("# pop space off stack for parameters and locals");
+      		}
+      		out.println("pop	r30");
+      		out.println("pop	r30");
+
+      		// loop through locals and pop
+      		LinkedList<VarDecl> var_list = node.getVarDecls();
+      		Iterator node_itr_2 = var_list.iterator();
+      		while(node_itr_2.hasNext()){
+      			IType it = ((VarDecl)node_itr_2.next()).getType();
+      			int var_size = convertType(it).getAVRTypeSize();
+      			if(var_size == 1){
+      				out.println("pop	r30");
+      			} else if (var_size == 2){
+      				out.println("pop	r30");
+      				out.println("pop	r30");
+      			}
+      		}
+      		// loop through formals and pop
+      		LinkedList<Formal> formal_list = node.getFormals();
+      		Iterator node_itr_1 = formal_list.iterator();
+      		while(node_itr_1.hasNext()){
+      			IType it = ((Formal)node_itr_1.next()).getType();
+      			int formal_size = convertType(it).getAVRTypeSize();
+      			if(formal_size == 1){
+      				out.println("pop	r30");
+      			} else if (formal_size == 2){
+      				out.println("pop	r30");
+      				out.println("pop	r30");
+      			}
+      		}
+
+      		out.println("\n"+
+                              "# restoring the frame pointer\n"+
+                              "pop	r28\n"+
+                              "pop	r29\n\n" +
+                              "ret\n"+
+                              ".size " + funcName + ", .-" + funcName + "\n\n");
+
+      		this.mCurrentST.popScope();
+      		System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
+  	}
+
+
+  public void outCallExp(CallExp node){
+
+          System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
+          out.println("#### function call");
+          out.println("# put parameter values into appropriate registers");
+          // determine class/type
+          String class_name = this.mCurrentST.getExpType(node.getExp()).toString();
+          //String class_name = Type.
+          LinkedList<IExp> argList = node.getArgs();
+          ListIterator<IExp> iter = argList.listIterator(argList.size());
+          IExp arg;
+          int reg = 24 - 2*argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
+          while(iter.hasPrevious()){
+            arg = iter.previous();
+            System.out.println(arg);
+            int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
+            this.mCurrentST.getExpType(arg);
+            if(argSize == 1){
+              out.println("# load a one byte expression off stack");
+              out.println("pop	r"+reg);
+              reg += 2;
+            } else if(argSize == 2){
+              out.println("pop	r"+reg);
+              reg += 1;
+              out.println("pop	r"+reg);
+              reg += 1;
+            }
+          }
+
+          out.println("# receiver will be passed as first param");
+          out.println("# load a two byte expression off stack");
+          out.println("pop	r24");
+          out.println("pop	r25\n");
+          //out.println("call	" + funcName);
+          out.println("call	" + class_name + "_" + node.getId() + "\n");
+
+          // handle returns
+          Type retType = this.mCurrentST.getExpType(node);
+          if (retType != Type.VOID && retType != null){
+            out.println("# handle return value\n");
+            if(retType.getAVRTypeSize() == 2){
+              out.println("push	r25\n");
+            }
+            out.println("push	r24");
+          }
+    }
 }

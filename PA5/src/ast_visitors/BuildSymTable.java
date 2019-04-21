@@ -120,11 +120,9 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		// insert the MethodSTE into the symbol table with SymbolTable.insert
    		SymbolTable.insert(methodSTE);
-   		//System.out.println("inserted " + methodSTE.toString());
 
    		// push it to the top on the scope stack
    		SymbolTable.pushScope(node.getName());
-   		//System.out.println("after push, scope is like this: " + SymbolTable.getStackScope());
 
       offset = 1;
 
