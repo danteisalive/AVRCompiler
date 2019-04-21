@@ -685,7 +685,7 @@ public class BuildSymTable extends DepthFirstVisitor
       }
 
       // set the return type
-      
+
 
   }
 

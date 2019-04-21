@@ -24,8 +24,6 @@ public class Scope {
 
 	public STE lookupInnermost (String steName){
 
-		//System.out.println("in Scope(" + scopeType + ")" + ".lookup(" + steName + ") ...");
-
 		if(mDict.containsKey(steName)){
 			return mDict.get(steName);
 		}

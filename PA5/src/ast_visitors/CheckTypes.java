@@ -22,6 +22,10 @@ import symtable.SymTable;
 import symtable.Type;
 import exceptions.InternalException;
 import exceptions.SemanticException;
+import symtable.ClassSTE;
+import symtable.MethodSTE;
+import symtable.VarSTE;
+import symtable.STE;
 
 public class CheckTypes extends DepthFirstVisitor
 {
@@ -294,14 +298,6 @@ public class CheckTypes extends DepthFirstVisitor
 
    }
 
-   public void outCallStatement(CallStatement node){
-
-     Type expType = this.mCurrentST.getExpType(node.getExp());
-     if (expType.isClassType()){
-       //System.out.println(expType.getClassName());
-     }
-
-   }
 
    public void outProgram(Program node){
        if (!errors.equals("")){
@@ -310,6 +306,28 @@ public class CheckTypes extends DepthFirstVisitor
    }
 
    public void outCallExp(CallExp node){
-     
+
+   }
+
+   public void outCallStatement(CallStatement node){
+     // first lets see which class this function belongs to
+     String id = node.getId();
+     ClassSTE classSte = this.mCurrentST.lookupClass(((NewExp)node.getExp()).getId());
+     // now serach in class scope to see whether there is a function named as nodet.getId() or not
+     STE methodSte = classSte.getScope().lookupInnermost(node.getId());
+     if (methodSte != null){
+       if (methodSte instanceof MethodSTE){
+         // now we have the method STE, therefore we can find the return value and set this call statement return type
+         this.mCurrentST.setExpType(node, ((MethodSTE)methodSte).getSignature().getReturnType());
+       }
+       else {
+         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                  " STE is not a method name!\n";
+       }
+     }
+     else{
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                " Method is not found in class scope!\n";
+     }
    }
 }
