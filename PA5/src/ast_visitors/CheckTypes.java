@@ -140,7 +140,7 @@ public class CheckTypes extends DepthFirstVisitor
        errors += "[" + node.getLine() + "," + node.getPos() + "]" +
                  " Meggy Check Button expects Button Type argument!\n";
      }
-     
+
 
    }
 
@@ -307,5 +307,9 @@ public class CheckTypes extends DepthFirstVisitor
        if (!errors.equals("")){
          System.out.print(errors);
        }
+   }
+
+   public void outCallExp(CallExp node){
+     
    }
 }

@@ -5,6 +5,7 @@ public class ClassSTE extends STE{
 	private boolean mMain;
 	private String mSuperClass;
 	private Scope mScope;
+	private Integer mSize;
 
 	public ClassSTE(String mName, boolean mMain, String mSuperClass, Scope mScope){
 		super(mName);
@@ -25,6 +26,9 @@ public class ClassSTE extends STE{
 		return getSTEName();
 	}
 
+	public Integer getClassSize(){
+		return mSize;
+	}
 	public String toString(){
 
 			return " <f0> ClassSTE | <f1> mName = " + getSTEName() +

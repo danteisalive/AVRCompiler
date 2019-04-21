@@ -101,6 +101,24 @@ public class SymTable {
         return mGlobalScope;
     }
 
+    public ClassSTE lookupClass(String classId){
+        HashMap<String,STE> tempHashMap = new HashMap(mGlobalScope.getHashMap());
+        List<String> keyList = new ArrayList(tempHashMap.keySet());
+        for (String name : keyList ) {
+          if (name.equals(classId)){
+             STE s = tempHashMap.get(name);
+             if (s instanceof ClassSTE){
+                return (ClassSTE)s;
+             }
+             else {
+                throw new InternalException("found the class " + classId + " but it's not a ClassSTE!");
+             }
+          }
+        }
+
+        throw new InternalException("cant find class " + classId);
+    }
+
     public void printSymTable(PrintWriter out, Scope sc){
 
        boolean flag = false;

@@ -625,6 +625,13 @@ public class BuildSymTable extends DepthFirstVisitor
                     " index variable is not defined\n";
           }
         }
+        else{
+          if (convertType(node.getType()) == Type.INT)
+            this.SymbolTable.setExpType(node, Type.INTARRAY);
+          else if (convertType(node.getType()) == Type.COLOR)
+            this.SymbolTable.setExpType(node, Type.COLORARRAY);
+        }
+
 
       }
       else{
@@ -673,9 +680,13 @@ public class BuildSymTable extends DepthFirstVisitor
           }
       }
 
-    if (node.getExp() instanceof ThisLiteral){
-        this.SymbolTable.setExpType(node.getExp(), new Type(currClass.getSTEName()));
-    }
+      if (node.getExp() instanceof ThisLiteral){
+          this.SymbolTable.setExpType(node.getExp(), new Type(currClass.getSTEName()));
+      }
+
+      // set the return type
+      
+
   }
 
   public void outNewExp(NewExp node){
@@ -697,4 +708,14 @@ public class BuildSymTable extends DepthFirstVisitor
       }
   }
 
+  public void inCallExp(CallExp node){
+  }
+
+  // public void outColorArrayType(ColorArrayType node){
+  //     this.SymbolTable.setExpType(node, Type.COLORARRAY);
+  // }
+  //
+  // public void outIntArrayType(IntArrayType node){
+  //     this.SymbolTable.setExpType(node, Type.INTARRAY);
+  // }
 }

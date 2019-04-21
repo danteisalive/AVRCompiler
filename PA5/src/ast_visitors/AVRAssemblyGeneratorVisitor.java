@@ -28,6 +28,8 @@ import exceptions.SemanticException;
 import label.Label;
 
 import symtable.VarSTE;
+import symtable.ClassSTE;
+import symtable.MethodSTE;
 
 public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 {
@@ -993,5 +995,167 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("");
   		}
   	}
+
+
+// PA5 staters from here
+    public void inTopClassDecl(TopClassDecl node){
+  		System.out.println("\nin AVRGenVisitor.inTopClassDecl(" + node.getName() + ") ... ");
+  		System.out.println("make class " + node.getName() + " the top of scope stack");
+  		this.mCurrentST.pushScope(node.getName());
+  		System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
+  	}
+
+    public void outTopClassDecl(TopClassDecl node){
+  		System.out.println("\nin AVRGenVisitor.outTopClassDecl(" + node.getName() + ") ... ");
+  		System.out.println("pop top of the scope stack");
+  		this.mCurrentST.popScope();
+  		System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
+  	}
+
+
+  	public void outNewExp(NewExp node){
+  		System.out.println("\nin AVRgenVisitor.outNewExp(" + node.getId() + ") ...");
+  		ClassSTE classSte = this.mCurrentST.lookupClass(node.getId());
+  		System.out.println("classSte: " + classSte + " size: " + classSte.getClassSize());
+
+  		out.println("# NewExp");
+  		out.println("ldi    r24, lo8(" + classSte.getClassSize() + ")");
+  		out.println("ldi    r25, hi8(" + classSte.getClassSize() + ")");
+  		out.println("# allocating object of size " + classSte.getClassSize() + " on heap");
+  		out.println("call    malloc");
+  		out.println("# push object address");
+  		out.println("# push two byte expression onto stack");
+  		out.println("push   r25");
+  		out.println("push   r24\n");
+  	}
+
+
+    public void outNewArrayExp(NewArrayExp node){
+
+        out.println("### NewArrayExp, allocating a new array");
+        out.println("# loading array size in elements");
+        out.println("# load a two byte expression off stack");
+        out.println("pop    r26");
+        out.println("pop    r27");
+        out.println("# since num elems might be in caller-saved registers");
+        out.println("# need to push num elems onto the stack around call to malloc");
+        out.println("# if had three-address code reg alloc could work around this");
+        out.println("push   r27");
+        out.println("push   r26");
+        out.println("# need bytes for elems + 2 in bytes");
+        out.println("ldi    r24, 2");
+        out.println("ldi    r25, 0");
+        out.println("add    r24,r26");
+        out.println("adc    r25,r27");
+        out.println("# call malloc, it expects r25:r24 as input");
+        out.println("call   malloc");
+        out.println("# set .length field to number of elements");
+        out.println("mov    r31, r25");
+        out.println("mov    r30, r24");
+        out.println("pop    r26");
+        out.println("pop    r27");
+        out.println("std    Z+0,r26");
+        out.println("std    Z+1,r27");
+        out.println("# store object address");
+        out.println("# push two byte expression onto stack");
+        out.println("push   r31");
+        out.println("push   r30");
+        out.println("");
+    }
+
+    public void outCallExp(CallExp node){
+
+          System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
+          out.println("#### function call");
+          out.println("# put parameter values into appropriate registers");
+          // determine class/type
+          String class_name = this.mCurrentST.getExpType(node.getExp()).toString();
+          //String class_name = Type.
+          LinkedList<IExp> argList = node.getArgs();
+          ListIterator<IExp> iter = argList.listIterator(argList.size());
+          IExp arg;
+          int reg = 24 - 2*argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
+          while(iter.hasPrevious()){
+            arg = iter.previous();
+            System.out.println(arg);
+            int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
+            this.mCurrentST.getExpType(arg);
+            if(argSize == 1){
+              out.println("# load a one byte expression off stack");
+              out.println("pop	r"+reg);
+              reg += 2;
+            } else if(argSize == 2){
+              out.println("pop	r"+reg);
+              reg += 1;
+              out.println("pop	r"+reg);
+              reg += 1;
+            }
+          }
+
+          out.println("# receiver will be passed as first param");
+          out.println("# load a two byte expression off stack");
+          out.println("pop	r24");
+          out.println("pop	r25\n");
+          //out.println("call	" + funcName);
+          out.println("call	" + class_name + "_" + node.getId() + "\n");
+
+          // handle returns
+          Type retType = this.mCurrentST.getExpType(node);
+          if (retType != Type.VOID && retType != null){
+            out.println("# handle return value\n");
+            if(retType.getAVRTypeSize() == 2){
+              out.println("push	r25\n");
+            }
+            out.println("push	r24");
+          }
+      }
+
+      public void outCallStatement(CallStatement node){
+
+          System.out.println("\nin AVRGenVisitor.outCallStatement(" + node.getId() + ") ... ");
+          out.println("#### function call");
+          out.println("# put parameter values into appropriate registers");
+          // determine class/type
+          String class_name = this.mCurrentST.getExpType(node.getExp()).toString();
+          //String class_name = Type.
+          LinkedList<IExp> argList = node.getArgs();
+          ListIterator<IExp> iter = argList.listIterator(argList.size());
+          IExp arg;
+          int reg = 24 - 2 * argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
+          while(iter.hasPrevious()){
+              arg = iter.previous();
+              System.out.println("ARG TYPE: " + arg.toString());
+              int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
+              this.mCurrentST.getExpType(arg);
+              if(argSize == 1){
+                out.println("# load a one byte expression off stack");
+                out.println("pop	r"+reg);
+                reg += 2;
+              } else if(argSize == 2){
+                out.println("# load a two byte expression off stack");
+                out.println("pop	r"+reg);
+                reg += 1;
+                out.println("pop	r"+reg);
+                reg += 1;
+              }
+          }
+
+          out.println("# receiver will be passed as first param");
+          out.println("# load a two byte expression off stack");
+          out.println("pop	r24");
+          out.println("pop	r25\n");
+          out.println("\ncall	" + class_name + "_" + node.getId() + "\n");
+
+          // handle returns
+          Type retType = this.mCurrentST.getExpType(node);
+          if (retType != Type.VOID && retType != null){
+              out.println("# handle return value\n");
+              System.out.println("RETURN TYPE: " + retType.toString());
+              if(retType.getAVRTypeSize() == 2){
+                out.println("push	r25\n");
+              }
+              out.println("push	r24");
+          }
+    }
 
 }
