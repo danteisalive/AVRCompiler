@@ -313,20 +313,26 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
      public void outIdLiteral(IdLiteral node){
-     		System.out.println("\nin AVRGenVisitor.outIdLiteral(" + node.toString() + ") ...");
-     		out.println("# IdExp");
+       		System.out.println("\nin AVRGenVisitor.outIdLiteral(" + node.toString() + ") ...");
+       		out.println("# IdExp");
 
-     		out.println("# load value for variable" + node.toString()); //
-     		out.println("# variable is a local or param variable");
+       		out.println("# load value for variable " + node.toString()); //
+       		out.println("# variable is a local or param variable");
 
-     		VarSTE varSte = (VarSTE)this.mCurrentST.lookup(node.toString());
 
-     		if(varSte.getSTEType().getAVRTypeSize() == 2){
-     			out.println("ldd	r24, " + varSte.getSTEBase() + "+" + (varSte.getSTEOffset()+1));
-     			out.println("push	r24\n");
-     		}
-     		out.println("ldd	r24, " + varSte.getSTEBase() + "+" + varSte.getSTEOffset());
-     		out.println("push	r24\n");
+       		VarSTE varSte = (VarSTE)this.mCurrentST.lookupVar(node.toString());
+       		if(varSte.getBase() == "Z"){
+       				out.println("# loading the implicit \"this\"");
+       				out.println("# load a two byte variable from base+offset");
+       				out.println("ldd    r31, Y + 2");
+       				out.println("ldd    r30, Y + 1");
+       		}
+       		if(varSte.getType().getAVRTypeSize() == 2){
+       			out.println("ldd	r24, "+varSte.getBase()+"+"+(varSte.getOffset()+1));
+       			out.println("push	r24\n");
+       		}
+       		out.println("ldd	r24, "+varSte.getBase()+"+"+varSte.getOffset());
+       		out.println("push	r24\n");
 
    	}
 
@@ -1154,6 +1160,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   	}
 
     public void inMethodDecl(MethodDecl node){
+
   		System.out.println("\nin AVRGenVisitor.inMethodDecl(" + node.getName() + ") ... ");
 
   		// make current func on top of stack for processing.
