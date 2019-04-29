@@ -306,6 +306,28 @@ public class CheckTypes extends DepthFirstVisitor
    }
 
    public void outCallExp(CallExp node){
+      // first find the class name
+      String className = ((NewExp)node.getExp()).getId();
+      String methodName = node.getId();
+
+      ClassSTE classSte = this.mCurrentST.lookupClass(className);
+      // now serach in class scope to see whether there is a function named as nodet.getId() or not
+      STE methodSte = classSte.getScope().lookupInnermost(node.getId());
+
+      if (methodSte != null){
+        if (methodSte instanceof MethodSTE){
+          // now we have the method STE, therefore we can find the return value and set this call statement return type
+          this.mCurrentST.setExpType(node, ((MethodSTE)methodSte).getSignature().getReturnType());
+        }
+        else {
+          errors += "outCallExp [" + node.getLine() + "," + node.getPos() + "]" +
+                   " STE is not a method name!\n";
+        }
+      }
+      else{
+        errors += "outCallExp [" + node.getLine() + "," + node.getPos() + "]" +
+                 " Method is not found in class scope!\n";
+      }
 
    }
 

@@ -590,6 +590,20 @@ A_mth1:
 
     call    A_mth1
 
+    # handle return value
+    # push two byte expression onto stack
+    push   r25
+    push   r24
+
+    ### AssignStatement
+    # load rhs exp
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
+    # store rhs into var d
+    std    Y + 1, r25
+    std    Y + 0, r24
+
     # IdExp
     # load value for variable t
     # variable is a local or param variable
@@ -626,6 +640,11 @@ A_mth1:
     pop    r25
 
     call    B_mth2
+
+    # handle return value
+    # push two byte expression onto stack
+    push   r25
+    push   r24
 
     # Load constant int 100
     ldi    r24,lo8(100)

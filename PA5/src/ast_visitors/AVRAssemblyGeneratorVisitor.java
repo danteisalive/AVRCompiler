@@ -1354,8 +1354,6 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
   public void outCallExp(CallExp node){
 
-
-
           System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
           out.println("    #### function call");
           out.println("    # put parameter values into appropriate registers");
@@ -1394,11 +1392,56 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
           // handle returns
           Type retType = this.mCurrentST.getExpType(node);
           if (retType != Type.VOID && retType != null){
-            out.println("# handle return value\n");
+            out.println("    # handle return value");
             if(retType.getAVRTypeSize() == 2){
-              out.println("push	r25\n");
+              out.println("    # push two byte expression onto stack");
+              out.println("    push   r25");
+              out.println("    push   r24\n");
             }
-            out.println("push	r24");
+            if(retType.getAVRTypeSize() == 1){
+              out.println("    # push one byte expression onto stack");
+              out.println("    push   r24\n");
+            }
           }
     }
+
+    public void outAssignStatement(AssignStatement node){
+  		System.out.println("\nin AVRGenVisitor.outAssignStatement(" + node.getExp() + ") ...");
+
+  		out.println("    ### AssignStatement");
+  		out.println("    # load rhs exp");
+  		// get the size of rhs
+  		VarSTE varSte = this.mCurrentST.lookupVar(node.getId());
+  		Type right = varSte.getSTEType();
+  		int size = right.getAVRTypeSize();
+  		System.out.println("varSte.getType(): " + varSte.getSTEType());
+  		System.out.println("varSte.getOffset(): " + varSte.getSTEOffset());
+  		System.out.println("varSte.getBase(): " + varSte.getSTEBase());
+  		if(size == 1){
+  			out.println("    # load a one byte expression off stack");
+  			out.println("    pop    r24");
+  			if(varSte.getSTEBase() == "Z"){
+  				out.println("    # loading the implicit \"this\"");
+  				out.println("    # load a two byte variable from base+offset");
+  				out.println("    ldd    r31, Y + 2");
+  				out.println("    ldd    r30, Y + 1");
+  			}
+  			out.println("    # store rhs into var " + node.getId());
+  			out.println("    std	" + varSte.getSTEBase() + " + " + varSte.getSTEOffset() + ", r24\n");
+  		} else if(size == 2){
+  			out.println("    # load a two byte expression off stack");
+  			out.println("    pop    r24");
+  			out.println("    pop    r25");
+  			if(varSte.getSTEBase() == "Z"){
+  				out.println("    # loading the implicit \"this\"");
+  				out.println("    # load a two byte variable from base+offset");
+  				out.println("    ldd    r31, Y + 2");
+  				out.println("    ldd    r30, Y + 1");
+  			}
+  			out.println("    # store rhs into var " + node.getId());
+  			out.println("    std    " + varSte.getSTEBase() + " + " + (varSte.getSTEOffset()+1) +", r25");
+  			out.println("    std    " + varSte.getSTEBase() + " + " + varSte.getSTEOffset() + ", r24\n");
+  		}
+
+  	}
 }
