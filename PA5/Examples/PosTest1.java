@@ -15,21 +15,22 @@ class PosTest1 {		//Main class
 							true,						//byte literal
 							(byte)6,					//byte cast
 							12,							//int
-							Meggy.Color.BLUE			//Color literal
-//							Meggy.Button.Right,			//Button literal
-//							Meggy.Tone.C3,				//Tone literal
-//							new B()
+							Meggy.Color.BLUE,			//Color literal
+							Meggy.Button.Right,			//Button literal
+							Meggy.Tone.C3,				//Tone literal
+							new B()
 							);					//new class
 			if(true && false){				//'&&' operator
 				{							//nested block statement
 					if(((34 == 54))){		//nested if statement and '==' operator
 					}
 				}
-			} else {				//'<' operator
+			} else if(10 < 11){				//'<' operator
 				while(true){				//while statement
 					new B().mth2();
 				}
-			} 
+			} else{
+			}
 		}
 		Meggy.delay(1000);
 	}
@@ -42,7 +43,7 @@ class A {
 	byte			d;
 	int				e;
 	Meggy.Color		f;
-//	Meggy.Button	g;
+	Meggy.Button	g;
 	Meggy.Tone		h;
 	B				i;
 
@@ -51,10 +52,10 @@ class A {
 								boolean 		f,			//redefines class variable on different type
 								byte 			j,
 								int 			k,
-								Meggy.Color 	l
-//								Meggy.Button 	m,
-//								Meggy.Tone 		n,
-//								B 				o
+								Meggy.Color 	l,
+								Meggy.Button 	m,
+								Meggy.Tone 		n,
+								B 				o
 								){
 
 		Meggy.Color[] 	s;
@@ -63,11 +64,11 @@ class A {
 		byte 			p;
 		int 			q;
 		Meggy.Color 	r;
-//		Meggy.Button 	a;									//redefined class variable on different type
+		Meggy.Button 	a;									//redefined class variable on different type
 		Meggy.Tone 		b;									//redefined class variable on different type
 		B 				c;									//redefined class variable on different type
 
-		d = new A().mth1(s, e, u, p, k, r/*, g, h, c*/);		//recursive call using class variable,
+		d = new A().mth1(s, e, u, p, k, r, g, h, c);		//recursive call using class variable,
 															//argument and method variables
 
 		t[6] = new B().mth2();								//calls new on different class

@@ -730,11 +730,4 @@ public class BuildSymTable extends DepthFirstVisitor
   public void inCallExp(CallExp node){
   }
 
-  // public void outColorArrayType(ColorArrayType node){
-  //     this.SymbolTable.setExpType(node, Type.COLORARRAY);
-  // }
-  //
-  // public void outIntArrayType(IntArrayType node){
-  //     this.SymbolTable.setExpType(node, Type.INTARRAY);
-  // }
 }

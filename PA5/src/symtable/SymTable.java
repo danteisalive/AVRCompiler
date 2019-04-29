@@ -106,10 +106,26 @@ public class SymTable {
         Scope currentScope = mScopeStack.peek();
         HashMap<String,STE> tempHashMap = new HashMap(currentScope.getHashMap());
         List<String> keyList = new ArrayList(tempHashMap.keySet());
-        
+
         for (String name : keyList ) {
           if (name.equals(varId)){
              STE s = tempHashMap.get(name);
+             if (s instanceof VarSTE){
+                return (VarSTE)s;
+             }
+             else {
+                throw new InternalException("found the variable " + varId + " but it's not a VarSTE!");
+             }
+          }
+        }
+
+        // search in class variables
+        Scope currentClassScope = currentScope.mEnclosing; // parent class scope
+        HashMap<String,STE> classTempHashMap = new HashMap(currentClassScope.getHashMap());
+        List<String> classKeyList = new ArrayList(classTempHashMap.keySet());
+        for (String classVarName : classKeyList ) {
+          if (classVarName.equals(varId)){
+             STE s = classTempHashMap.get(classVarName);
              if (s instanceof VarSTE){
                 return (VarSTE)s;
              }

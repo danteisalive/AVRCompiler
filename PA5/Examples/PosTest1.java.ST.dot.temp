@@ -1,11 +1,11 @@
 Classes in global scope: A B
 
 In class A scope
-Vars in current scope: a:COLORARRAY b:INTARRAY c:BOOL d:BYTE e:INT f:COLOR h:TONE i:class_B
+Vars in current scope: a:COLORARRAY b:INTARRAY c:BOOL d:BYTE e:INT f:COLOR g:BUTTON h:TONE i:class_B
 Methods in current scope: mth1 mth3
 In method mth1 scope
-Method Signature: (COLORARRAY,INTARRAY,BOOL,BYTE,INT,COLOR) returns COLORARRAY
-Vars in current scope: THIS:class_A b:TONE c:class_B d:COLORARRAY e:INTARRAY f:BOOL j:BYTE k:INT l:COLOR p:BYTE q:INT r:COLOR s:COLORARRAY t:INTARRAY u:BOOL
+Method Signature: (COLORARRAY,INTARRAY,BOOL,BYTE,INT,COLOR,BUTTON,TONE,class_B) returns COLORARRAY
+Vars in current scope: THIS:class_A a:BUTTON b:TONE c:class_B d:COLORARRAY e:INTARRAY f:BOOL j:BYTE k:INT l:COLOR m:BUTTON n:TONE o:class_B p:BYTE q:INT r:COLOR s:COLORARRAY t:INTARRAY u:BOOL
 In method mth3 scope
 Method Signature: (INT,BYTE) returns COLOR
 Vars in current scope: THIS:class_A a:INT b:BYTE

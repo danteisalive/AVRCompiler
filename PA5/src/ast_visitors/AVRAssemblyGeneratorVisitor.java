@@ -315,22 +315,41 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
      public void outIdLiteral(IdLiteral node){
        		System.out.println("\nin AVRGenVisitor.outIdLiteral(" + node.toString() + ") ...");
        		out.println("    # IdExp");
-
        		out.println("    # load value for variable " + node.toString()); //
-       		out.println("    # variable is a local or param variable");
-          out.println("");
+          //out.println("");
 
        		VarSTE varSte = (VarSTE)this.mCurrentST.lookupVar(node.toString());
           this.mCurrentST.setExpType(node, varSte.getSTEType());
 
        		if(varSte.getSTEBase() == "Z"){
-       				out.println("# loading the implicit \"this\"");
-       				out.println("# load a two byte variable from base+offset");
-       				out.println("ldd    r31, Y + 2");
-       				out.println("ldd    r30, Y + 1");
+              out.println("");
+       				out.println("    # loading the implicit \"this\"\n");
+       				out.println("    # load a two byte variable from base+offset");
+       				out.println("    ldd    r31, Y + 2");
+       				out.println("    ldd    r30, Y + 1");
+              out.println("    # variable is a member variable\n");
+
+              if(varSte.getSTEType().getAVRTypeSize() == 2){
+                out.println("    # load a two byte variable from base+offset");
+                out.println("    ldd    r25, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()+1));
+                out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
+                out.println("    # push two byte expression onto stack");
+                out.println("    push   r25");
+                out.println("    push   r24\n");
+              }
+
+              if(varSte.getSTEType().getAVRTypeSize() == 1){
+                out.println("    # load a one byte variable from base+offset");
+                out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
+                out.println("    # push one byte expression onto stack");
+                out.println("    push   r24\n");
+              }
+
+              return;
        		}
 
        		if(varSte.getSTEType().getAVRTypeSize() == 2){
+            out.println("    # variable is a local or param variable\n");
             out.println("    # load a two byte variable from base+offset");
        			out.println("    ldd    r25, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()+1));
             out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
@@ -340,13 +359,13 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
        		}
 
           if(varSte.getSTEType().getAVRTypeSize() == 1){
+       		  out.println("    # variable is a local or param variable\n");
             out.println("    # load a one byte variable from base+offset");
             out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
             out.println("    # push one byte expression onto stack");
        			out.println("    push   r24\n");
        		}
-       		// out.println("    ldd	r24, "+varSte.getSTEBase()+"+"+varSte.getSTEOffset());
-       		// out.println("    push	r24\n");
+
 
    	}
 

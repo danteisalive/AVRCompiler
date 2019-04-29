@@ -58,192 +58,234 @@ digraph ASTGraph {
 17 -> 28
 29 [ label="ColorLiteral\nMeggy.Color.BLUE" ];
 17 -> 29
-30 [ label="IfStatement" ];
-14 -> 30
-31 [ label="AndExp" ];
-30 -> 31
-32 [ label="TrueLiteral\ntrue" ];
-31 -> 32
-33 [ label="FalseLiteral\nfalse" ];
-31 -> 33
-34 [ label="BlockStatement" ];
-30 -> 34
-35 [ label="BlockStatement" ];
+30 [ label="ButtonLiteral\nMeggy.Button.Right" ];
+17 -> 30
+31 [ label="ToneLiteral\nMeggy.Tone.C3" ];
+17 -> 31
+32 [ label="NewExp" ];
+17 -> 32
+33 [ label="IfStatement" ];
+14 -> 33
+34 [ label="AndExp" ];
+33 -> 34
+35 [ label="TrueLiteral\ntrue" ];
 34 -> 35
-36 [ label="IfStatement" ];
-35 -> 36
-37 [ label="EqualExp" ];
-36 -> 37
-38 [ label="IntLiteral\n34" ];
+36 [ label="FalseLiteral\nfalse" ];
+34 -> 36
+37 [ label="BlockStatement" ];
+33 -> 37
+38 [ label="BlockStatement" ];
 37 -> 38
-39 [ label="IntLiteral\n54" ];
-37 -> 39
-40 [ label="BlockStatement" ];
-36 -> 40
-41 [ label="BlockStatement" ];
-30 -> 41
-42 [ label="WhileStatement" ];
-41 -> 42
-43 [ label="TrueLiteral\ntrue" ];
-42 -> 43
-44 [ label="BlockStatement" ];
-42 -> 44
-45 [ label="CallStatement" ];
+39 [ label="IfStatement" ];
+38 -> 39
+40 [ label="EqualExp" ];
+39 -> 40
+41 [ label="IntLiteral\n34" ];
+40 -> 41
+42 [ label="IntLiteral\n54" ];
+40 -> 42
+43 [ label="BlockStatement" ];
+39 -> 43
+44 [ label="IfStatement" ];
+33 -> 44
+45 [ label="LtExp" ];
 44 -> 45
-46 [ label="NewExp" ];
+46 [ label="IntLiteral\n10" ];
 45 -> 46
-47 [ label="MeggyDelay" ];
-2 -> 47
-48 [ label="IntLiteral\n1000" ];
-47 -> 48
-49 [ label="TopClassDecl" ];
-0 -> 49
-50 [ label="VarDecl" ];
+47 [ label="IntLiteral\n11" ];
+45 -> 47
+48 [ label="BlockStatement" ];
+44 -> 48
+49 [ label="WhileStatement" ];
+48 -> 49
+50 [ label="TrueLiteral\ntrue" ];
 49 -> 50
-51 [ label="ColorArrayType" ];
-50 -> 51
-52 [ label="VarDecl" ];
-49 -> 52
-53 [ label="IntArrayType" ];
+51 [ label="BlockStatement" ];
+49 -> 51
+52 [ label="CallStatement" ];
+51 -> 52
+53 [ label="NewExp" ];
 52 -> 53
-54 [ label="VarDecl" ];
-49 -> 54
-55 [ label="BoolType" ];
-54 -> 55
-56 [ label="VarDecl" ];
-49 -> 56
-57 [ label="ByteType" ];
-56 -> 57
+54 [ label="BlockStatement" ];
+44 -> 54
+55 [ label="MeggyDelay" ];
+2 -> 55
+56 [ label="IntLiteral\n1000" ];
+55 -> 56
+57 [ label="TopClassDecl" ];
+0 -> 57
 58 [ label="VarDecl" ];
-49 -> 58
-59 [ label="IntType" ];
+57 -> 58
+59 [ label="ColorArrayType" ];
 58 -> 59
 60 [ label="VarDecl" ];
-49 -> 60
-61 [ label="ColorType" ];
+57 -> 60
+61 [ label="IntArrayType" ];
 60 -> 61
 62 [ label="VarDecl" ];
-49 -> 62
-63 [ label="ToneType" ];
+57 -> 62
+63 [ label="BoolType" ];
 62 -> 63
 64 [ label="VarDecl" ];
-49 -> 64
-65 [ label="ClassType" ];
+57 -> 64
+65 [ label="ByteType" ];
 64 -> 65
-66 [ label="MethodDecl" ];
-49 -> 66
-67 [ label="ColorArrayType" ];
+66 [ label="VarDecl" ];
+57 -> 66
+67 [ label="IntType" ];
 66 -> 67
-68 [ label="Formal" ];
-66 -> 68
-69 [ label="ColorArrayType" ];
+68 [ label="VarDecl" ];
+57 -> 68
+69 [ label="ColorType" ];
 68 -> 69
-70 [ label="Formal" ];
-66 -> 70
-71 [ label="IntArrayType" ];
+70 [ label="VarDecl" ];
+57 -> 70
+71 [ label="ButtonType" ];
 70 -> 71
-72 [ label="Formal" ];
-66 -> 72
-73 [ label="BoolType" ];
+72 [ label="VarDecl" ];
+57 -> 72
+73 [ label="ToneType" ];
 72 -> 73
-74 [ label="Formal" ];
-66 -> 74
-75 [ label="ByteType" ];
+74 [ label="VarDecl" ];
+57 -> 74
+75 [ label="ClassType" ];
 74 -> 75
-76 [ label="Formal" ];
-66 -> 76
-77 [ label="IntType" ];
+76 [ label="MethodDecl" ];
+57 -> 76
+77 [ label="ColorArrayType" ];
 76 -> 77
 78 [ label="Formal" ];
-66 -> 78
-79 [ label="ColorType" ];
+76 -> 78
+79 [ label="ColorArrayType" ];
 78 -> 79
-80 [ label="VarDecl" ];
-66 -> 80
-81 [ label="ColorArrayType" ];
+80 [ label="Formal" ];
+76 -> 80
+81 [ label="IntArrayType" ];
 80 -> 81
-82 [ label="VarDecl" ];
-66 -> 82
-83 [ label="IntArrayType" ];
+82 [ label="Formal" ];
+76 -> 82
+83 [ label="BoolType" ];
 82 -> 83
-84 [ label="VarDecl" ];
-66 -> 84
-85 [ label="BoolType" ];
+84 [ label="Formal" ];
+76 -> 84
+85 [ label="ByteType" ];
 84 -> 85
-86 [ label="VarDecl" ];
-66 -> 86
-87 [ label="ByteType" ];
+86 [ label="Formal" ];
+76 -> 86
+87 [ label="IntType" ];
 86 -> 87
-88 [ label="VarDecl" ];
-66 -> 88
-89 [ label="IntType" ];
+88 [ label="Formal" ];
+76 -> 88
+89 [ label="ColorType" ];
 88 -> 89
-90 [ label="VarDecl" ];
-66 -> 90
-91 [ label="ColorType" ];
+90 [ label="Formal" ];
+76 -> 90
+91 [ label="ButtonType" ];
 90 -> 91
-92 [ label="VarDecl" ];
-66 -> 92
+92 [ label="Formal" ];
+76 -> 92
 93 [ label="ToneType" ];
 92 -> 93
-94 [ label="VarDecl" ];
-66 -> 94
+94 [ label="Formal" ];
+76 -> 94
 95 [ label="ClassType" ];
 94 -> 95
-96 [ label="AssignStatement" ];
-66 -> 96
-97 [ label="CallExp" ];
+96 [ label="VarDecl" ];
+76 -> 96
+97 [ label="ColorArrayType" ];
 96 -> 97
-98 [ label="NewExp" ];
-97 -> 98
-99 [ label="IdLiteral\ns" ];
-97 -> 99
-100 [ label="IdLiteral\ne" ];
-97 -> 100
-101 [ label="IdLiteral\nu" ];
-97 -> 101
-102 [ label="IdLiteral\np" ];
-97 -> 102
-103 [ label="IdLiteral\nk" ];
-97 -> 103
-104 [ label="IdLiteral\nr" ];
-97 -> 104
-105 [ label="ArrayAssignStatement" ];
-66 -> 105
-106 [ label="IdLiteral\nt" ];
-105 -> 106
-107 [ label="IntLiteral\n6" ];
-105 -> 107
-108 [ label="CallExp" ];
-105 -> 108
-109 [ label="NewExp" ];
+98 [ label="VarDecl" ];
+76 -> 98
+99 [ label="IntArrayType" ];
+98 -> 99
+100 [ label="VarDecl" ];
+76 -> 100
+101 [ label="BoolType" ];
+100 -> 101
+102 [ label="VarDecl" ];
+76 -> 102
+103 [ label="ByteType" ];
+102 -> 103
+104 [ label="VarDecl" ];
+76 -> 104
+105 [ label="IntType" ];
+104 -> 105
+106 [ label="VarDecl" ];
+76 -> 106
+107 [ label="ColorType" ];
+106 -> 107
+108 [ label="VarDecl" ];
+76 -> 108
+109 [ label="ButtonType" ];
 108 -> 109
-110 [ label="NewArrayExp" ];
-66 -> 110
-111 [ label="ColorType" ];
+110 [ label="VarDecl" ];
+76 -> 110
+111 [ label="ToneType" ];
 110 -> 111
-112 [ label="IntLiteral\n100" ];
-110 -> 112
-113 [ label="MethodDecl" ];
-49 -> 113
-114 [ label="ColorType" ];
-113 -> 114
-115 [ label="Formal" ];
-113 -> 115
-116 [ label="IntType" ];
+112 [ label="VarDecl" ];
+76 -> 112
+113 [ label="ClassType" ];
+112 -> 113
+114 [ label="AssignStatement" ];
+76 -> 114
+115 [ label="CallExp" ];
+114 -> 115
+116 [ label="NewExp" ];
 115 -> 116
-117 [ label="Formal" ];
-113 -> 117
-118 [ label="ByteType" ];
-117 -> 118
-119 [ label="ColorLiteral\nMeggy.Color.RED" ];
-113 -> 119
-120 [ label="TopClassDecl" ];
-0 -> 120
-121 [ label="MethodDecl" ];
-120 -> 121
-122 [ label="IntType" ];
-121 -> 122
-123 [ label="IntLiteral\n6" ];
-121 -> 123
+117 [ label="IdLiteral\ns" ];
+115 -> 117
+118 [ label="IdLiteral\ne" ];
+115 -> 118
+119 [ label="IdLiteral\nu" ];
+115 -> 119
+120 [ label="IdLiteral\np" ];
+115 -> 120
+121 [ label="IdLiteral\nk" ];
+115 -> 121
+122 [ label="IdLiteral\nr" ];
+115 -> 122
+123 [ label="IdLiteral\ng" ];
+115 -> 123
+124 [ label="IdLiteral\nh" ];
+115 -> 124
+125 [ label="IdLiteral\nc" ];
+115 -> 125
+126 [ label="ArrayAssignStatement" ];
+76 -> 126
+127 [ label="IdLiteral\nt" ];
+126 -> 127
+128 [ label="IntLiteral\n6" ];
+126 -> 128
+129 [ label="CallExp" ];
+126 -> 129
+130 [ label="NewExp" ];
+129 -> 130
+131 [ label="NewArrayExp" ];
+76 -> 131
+132 [ label="ColorType" ];
+131 -> 132
+133 [ label="IntLiteral\n100" ];
+131 -> 133
+134 [ label="MethodDecl" ];
+57 -> 134
+135 [ label="ColorType" ];
+134 -> 135
+136 [ label="Formal" ];
+134 -> 136
+137 [ label="IntType" ];
+136 -> 137
+138 [ label="Formal" ];
+134 -> 138
+139 [ label="ByteType" ];
+138 -> 139
+140 [ label="ColorLiteral\nMeggy.Color.RED" ];
+134 -> 140
+141 [ label="TopClassDecl" ];
+0 -> 141
+142 [ label="MethodDecl" ];
+141 -> 142
+143 [ label="IntType" ];
+142 -> 143
+144 [ label="IntLiteral\n6" ];
+142 -> 144
 }
