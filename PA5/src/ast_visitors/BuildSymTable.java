@@ -37,7 +37,7 @@ public class BuildSymTable extends DepthFirstVisitor
    private PrintWriter STout;
    private SymTable SymbolTable;
    private ClassSTE currClass;
-   private int  offset;
+   private int  formalOffset;
    private String errors;
 
    public BuildSymTable(PrintWriter out, SymTable st) {
@@ -73,7 +73,7 @@ public class BuildSymTable extends DepthFirstVisitor
       LinkedList<VarDecl> vars_list = node.getVarDecls();
       Iterator vars_itr = vars_list.iterator();
       Integer _mSize = 0;
-
+      Integer offset = 0 ;
       while(vars_itr.hasNext())
       {
         VarDecl var_node = (VarDecl)vars_itr.next();
@@ -84,8 +84,9 @@ public class BuildSymTable extends DepthFirstVisitor
         }
         else
         {
-            SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Z", 0));
+            SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Z", offset));
             _mSize += convertType(var_node.getType()).getAVRTypeSize();
+            offset += convertType(var_node.getType()).getAVRTypeSize();
         }
       }
 
@@ -102,8 +103,8 @@ public class BuildSymTable extends DepthFirstVisitor
    	public void inMethodDecl(MethodDecl node){
    		// Look up method name in current symbol table to see if there are any duplicates.
    		// only look into the innermost scope
-
-
+      formalOffset = 1;
+      Integer formal_offset = 0;
    		if(SymbolTable.lookupInnermost(node.getName()) != null){
         errors += "[" + node.getLine() + "," + node.getPos() + "] Redefined Method " + node.getName() + "\n";
    			//throw new SemanticException("Method " + node.getName() + " already defined!");
@@ -115,6 +116,11 @@ public class BuildSymTable extends DepthFirstVisitor
    		while(itr.hasNext()){
    			formalType_list.add(convertType(((Formal)itr.next()).getType()));
    		}
+
+      itr = formalType_list.iterator();
+      while(itr.hasNext()){
+        formal_offset += ((Type)itr.next()).getAVRTypeSize();
+      }
 
 
    		Signature signature = new Signature(convertType(node.getType()), formalType_list);
@@ -129,12 +135,15 @@ public class BuildSymTable extends DepthFirstVisitor
    		// push it to the top on the scope stack
    		SymbolTable.pushScope(node.getName());
 
-      offset = 1;
+      Integer offset = 1;
 
-   		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", 0);
+   		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", offset);
    		SymbolTable.insert(varSte);
-      //offset += varSte.getSTEType().getAVRTypeSize();
-
+      System.out.println("FORMAL_OFFSET: " + formal_offset);
+      offset += formal_offset;
+      offset += varSte.getSTEType().getAVRTypeSize(); //2
+      formalOffset += varSte.getSTEType().getAVRTypeSize(); //2
+      System.out.println("VAR OFFSET: " + offset);
       LinkedList<VarDecl> vars_list = node.getVarDecls();
       Iterator vars_itr = vars_list.iterator();
       while(vars_itr.hasNext())
@@ -147,7 +156,12 @@ public class BuildSymTable extends DepthFirstVisitor
         }
         else
         {
-            SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Y", 0));
+            VarSTE _varSte = new VarSTE(var_node.getName(), convertType(var_node.getType()), "Y", offset);
+            SymbolTable.insert(_varSte);
+            System.out.println("VAR: " + var_node.getName() + " Y + "+ offset);
+            offset += _varSte.getSTEType().getAVRTypeSize();
+
+
         }
       }
 
@@ -157,21 +171,23 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		SymbolTable.popScope();
 
-      offset = 0;
+    //  offset = 0;
 
    	}
 
 
     public void outFormal(Formal node){
   		// check if var name has already been inserted in SymTable using st.lookup(name).  Error if 		   there is a duplicate.
+
   		STE ste = SymbolTable.lookupInnermost(node.getName());
   		if(ste != null){
         errors += "[" + node.getLine() + "," + node.getPos() + "] Redefined Formal " + node.getName() + "\n";
   			//throw new SemanticException("Redefined Formal",node.getLine(), node.getPos());
   		} else {
 
-  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , 0);
-        //offset += varSte.getSTEType().getAVRTypeSize();
+  			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , formalOffset);
+        System.out.println("VAR FORMAL: " + node.getName() + " Y + "+ formalOffset);
+        formalOffset += varSte.getSTEType().getAVRTypeSize();
         SymbolTable.insert(varSte);
         //System.out.println("Added VarSTE: " + varSte.toString());
   		}

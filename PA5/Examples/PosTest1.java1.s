@@ -511,8 +511,8 @@ A_mth1:
     # variable is a local or param variable
 
     # load a two byte variable from base+offset
-    ldd    r25, Y+1
-    ldd    r24, Y+0
+    ldd    r25, Y + 13
+    ldd    r24, Y + 12
     # push two byte expression onto stack
     push   r25
     push   r24
@@ -522,8 +522,8 @@ A_mth1:
     # variable is a local or param variable
 
     # load a two byte variable from base+offset
-    ldd    r25, Y+1
-    ldd    r24, Y+0
+    ldd    r25, Y + 6
+    ldd    r24, Y + 5
     # push two byte expression onto stack
     push   r25
     push   r24
@@ -533,7 +533,7 @@ A_mth1:
     # variable is a local or param variable
 
     # load a one byte variable from base+offset
-    ldd    r24, Y+0
+    ldd    r24, Y + 16
     # push one byte expression onto stack
     push   r24
 
@@ -542,7 +542,7 @@ A_mth1:
     # variable is a local or param variable
 
     # load a one byte variable from base+offset
-    ldd    r24, Y+0
+    ldd    r24, Y + 17
     # push one byte expression onto stack
     push   r24
 
@@ -551,8 +551,8 @@ A_mth1:
     # variable is a local or param variable
 
     # load a two byte variable from base+offset
-    ldd    r25, Y+1
-    ldd    r24, Y+0
+    ldd    r25, Y + 10
+    ldd    r24, Y + 9
     # push two byte expression onto stack
     push   r25
     push   r24
@@ -562,7 +562,7 @@ A_mth1:
     # variable is a local or param variable
 
     # load a one byte variable from base+offset
-    ldd    r24, Y+0
+    ldd    r24, Y + 20
     # push one byte expression onto stack
     push   r24
 
@@ -601,16 +601,16 @@ A_mth1:
     pop    r24
     pop    r25
     # store rhs into var d
-    std    Y + 1, r25
-    std    Y + 0, r24
+    std    Y + 4, r25
+    std    Y + 3, r24
 
     # IdExp
     # load value for variable t
     # variable is a local or param variable
 
     # load a two byte variable from base+offset
-    ldd    r25, Y+1
-    ldd    r24, Y+0
+    ldd    r25, Y + 15
+    ldd    r24, Y + 14
     # push two byte expression onto stack
     push   r25
     push   r24

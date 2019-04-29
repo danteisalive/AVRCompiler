@@ -332,8 +332,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
        		if(varSte.getSTEType().getAVRTypeSize() == 2){
             out.println("    # load a two byte variable from base+offset");
-       			out.println("    ldd    r25, "+ varSte.getSTEBase()+"+"+(varSte.getSTEOffset()+1));
-            out.println("    ldd    r24, "+ varSte.getSTEBase()+"+"+(varSte.getSTEOffset()));
+       			out.println("    ldd    r25, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()+1));
+            out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
             out.println("    # push two byte expression onto stack");
             out.println("    push   r25");
        			out.println("    push   r24\n");
@@ -341,7 +341,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
           if(varSte.getSTEType().getAVRTypeSize() == 1){
             out.println("    # load a one byte variable from base+offset");
-            out.println("    ldd    r24, "+ varSte.getSTEBase()+"+"+(varSte.getSTEOffset()));
+            out.println("    ldd    r24, "+ varSte.getSTEBase()+" + "+(varSte.getSTEOffset()));
             out.println("    # push one byte expression onto stack");
        			out.println("    push   r24\n");
        		}
