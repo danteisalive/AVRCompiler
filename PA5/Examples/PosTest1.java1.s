@@ -791,6 +791,14 @@ A_mth3:
     # handle return value
     # load a one byte expression off stack
     pop    r24
+    # promoting a byte to an int
+    tst     r24
+    brlt     MJ_L14
+    ldi    r25, 0
+    jmp    MJ_L15
+MJ_L14:
+    ldi    r25, hi8(-1)
+MJ_L15:
     # pop space off stack for parameters and locals
     pop    r30
     pop    r30

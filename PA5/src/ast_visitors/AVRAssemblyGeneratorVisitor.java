@@ -1297,6 +1297,14 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       				String MJ_L1 = new Label().toString();
       				out.println("    # load a one byte expression off stack");
       				out.println("    pop    r24");
+              out.println("    # promoting a byte to an int");
+              out.println("    tst     r24");
+              out.println("    brlt     " + MJ_L0);
+              out.println("    ldi    r25, 0");
+              out.println("    jmp    " + MJ_L1);
+              out.println(MJ_L0 + ":");
+              out.println("    ldi    r25, hi8(-1)");
+              out.println(MJ_L1 + ":");
       			}
       		} else { // void return
       			out.println("    # no return value");
