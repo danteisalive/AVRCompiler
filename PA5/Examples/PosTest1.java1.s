@@ -506,80 +506,100 @@ A_mth1:
     push   r25
     push   r24
 
-# IdExp
-# load value for variable s
-# variable is a local or param variable
-ldd	r24, Y+1
-push	r24
+    # IdExp
+    # load value for variable s
+    # variable is a local or param variable
 
-ldd	r24, Y+0
-push	r24
+    # load a two byte variable from base+offset
+    ldd    r25, Y+1
+    ldd    r24, Y+0
+    # push two byte expression onto stack
+    push   r25
+    push   r24
 
-# IdExp
-# load value for variable e
-# variable is a local or param variable
-ldd	r24, Y+1
-push	r24
+    # IdExp
+    # load value for variable e
+    # variable is a local or param variable
 
-ldd	r24, Y+0
-push	r24
+    # load a two byte variable from base+offset
+    ldd    r25, Y+1
+    ldd    r24, Y+0
+    # push two byte expression onto stack
+    push   r25
+    push   r24
 
-# IdExp
-# load value for variable u
-# variable is a local or param variable
-ldd	r24, Y+0
-push	r24
+    # IdExp
+    # load value for variable u
+    # variable is a local or param variable
 
-# IdExp
-# load value for variable p
-# variable is a local or param variable
-ldd	r24, Y+0
-push	r24
+    # load a one byte variable from base+offset
+    ldd    r24, Y+0
+    # push one byte expression onto stack
+    push   r24
 
-# IdExp
-# load value for variable k
-# variable is a local or param variable
-ldd	r24, Y+1
-push	r24
+    # IdExp
+    # load value for variable p
+    # variable is a local or param variable
 
-ldd	r24, Y+0
-push	r24
+    # load a one byte variable from base+offset
+    ldd    r24, Y+0
+    # push one byte expression onto stack
+    push   r24
 
-# IdExp
-# load value for variable r
-# variable is a local or param variable
-ldd	r24, Y+0
-push	r24
+    # IdExp
+    # load value for variable k
+    # variable is a local or param variable
 
-#### function call
-# put parameter values into appropriate registers
-# load a one byte expression off stack
-pop	r12
-pop	r14
-pop	r15
-# load a one byte expression off stack
-pop	r16
-# load a one byte expression off stack
-pop	r18
-pop	r20
-pop	r21
-pop	r22
-pop	r23
-# receiver will be passed as first param
-# load a two byte expression off stack
-pop	r24
-pop	r25
+    # load a two byte variable from base+offset
+    ldd    r25, Y+1
+    ldd    r24, Y+0
+    # push two byte expression onto stack
+    push   r25
+    push   r24
 
-call	A_mth1
+    # IdExp
+    # load value for variable r
+    # variable is a local or param variable
 
-# IdExp
-# load value for variable t
-# variable is a local or param variable
-ldd	r24, Y+1
-push	r24
+    # load a one byte variable from base+offset
+    ldd    r24, Y+0
+    # push one byte expression onto stack
+    push   r24
 
-ldd	r24, Y+0
-push	r24
+    #### function call
+    # put parameter values into appropriate registers
+    # load a one byte expression off stack
+    pop    r12
+    # load a two byte expression off stack
+    pop    r14
+    pop    r15
+    # load a one byte expression off stack
+    pop    r16
+    # load a one byte expression off stack
+    pop    r18
+    # load a two byte expression off stack
+    pop    r20
+    pop    r21
+    # load a two byte expression off stack
+    pop    r22
+    pop    r23
+    # receiver will be passed as first param
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
+
+    call    A_mth1
+
+    # IdExp
+    # load value for variable t
+    # variable is a local or param variable
+
+    # load a two byte variable from base+offset
+    ldd    r25, Y+1
+    ldd    r24, Y+0
+    # push two byte expression onto stack
+    push   r25
+    push   r24
 
     # Load constant int 6
     ldi    r24,lo8(6)
@@ -598,14 +618,14 @@ push	r24
     push   r25
     push   r24
 
-#### function call
-# put parameter values into appropriate registers
-# receiver will be passed as first param
-# load a two byte expression off stack
-pop	r24
-pop	r25
+    #### function call
+    # put parameter values into appropriate registers
+    # receiver will be passed as first param
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
 
-call	B_mth2
+    call    B_mth2
 
     # Load constant int 100
     ldi    r24,lo8(100)
