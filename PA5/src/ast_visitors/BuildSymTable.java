@@ -72,6 +72,8 @@ public class BuildSymTable extends DepthFirstVisitor
 
       LinkedList<VarDecl> vars_list = node.getVarDecls();
       Iterator vars_itr = vars_list.iterator();
+      Integer _mSize = 0;
+
       while(vars_itr.hasNext())
       {
         VarDecl var_node = (VarDecl)vars_itr.next();
@@ -83,8 +85,11 @@ public class BuildSymTable extends DepthFirstVisitor
         else
         {
             SymbolTable.insert(new VarSTE(var_node.getName(), convertType(var_node.getType()), "Z", 0));
+            _mSize += convertType(var_node.getType()).getAVRTypeSize();
         }
       }
+
+      classSte.setClassSize(_mSize);
 
     }
 

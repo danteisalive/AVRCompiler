@@ -29,6 +29,11 @@ public class ClassSTE extends STE{
 	public Integer getClassSize(){
 		return mSize;
 	}
+
+	public void setClassSize(Integer _mSize){
+			mSize = _mSize;
+	}
+
 	public String toString(){
 
 			return " <f0> ClassSTE | <f1> mName = " + getSTEName() +

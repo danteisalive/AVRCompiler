@@ -112,9 +112,9 @@ main:
     call   _Z8delay_msj
 
     # NewExp
-    ldi    r24, lo8(null)
-    ldi    r25, hi8(null)
-    # allocating object of size null on heap
+    ldi    r24, lo8(13)
+    ldi    r25, hi8(13)
+    # allocating object of size 13 on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
@@ -394,9 +394,9 @@ MJ_L11:
 MJ_L12:
 
     # NewExp
-    ldi    r24, lo8(null)
-    ldi    r25, hi8(null)
-    # allocating object of size null on heap
+    ldi    r24, lo8(0)
+    ldi    r25, hi8(0)
+    # allocating object of size 0 on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
@@ -497,9 +497,9 @@ A_mth1:
 
 
     # NewExp
-    ldi    r24, lo8(null)
-    ldi    r25, hi8(null)
-    # allocating object of size null on heap
+    ldi    r24, lo8(13)
+    ldi    r25, hi8(13)
+    # allocating object of size 13 on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
@@ -623,9 +623,9 @@ A_mth1:
     push   r24
 
     # NewExp
-    ldi    r24, lo8(null)
-    ldi    r25, hi8(null)
-    # allocating object of size null on heap
+    ldi    r24, lo8(0)
+    ldi    r25, hi8(0)
+    # allocating object of size 0 on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
