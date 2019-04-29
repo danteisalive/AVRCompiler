@@ -25,12 +25,11 @@ class PosTest1 {		//Main class
 					if(((34 == 54))){		//nested if statement and '==' operator
 					}
 				}
-			} else if(10 < 11){				//'<' operator
+			} else{				//'<' operator
 				while(true){				//while statement
 					new B().mth2();
 				}
-			} else{
-			}
+			} 
 		}
 		Meggy.delay(1000);
 	}

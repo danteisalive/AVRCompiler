@@ -18,7 +18,6 @@ main:
     call _Z18MeggyJrSimpleSetupv 
     /* Need to call this so that the meggy library gets set up */
 
-
     # Load constant int 3
     ldi    r24,lo8(3)
     ldi    r25,hi8(3)
@@ -113,9 +112,9 @@ main:
     call   _Z8delay_msj
 
     # NewExp
-    ldi    r24, lo8(13)
-    ldi    r25, hi8(13)
-    # allocating object of size 13 on heap
+    ldi    r24, lo8(null)
+    ldi    r25, hi8(null)
+    # allocating object of size null on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
@@ -284,11 +283,11 @@ MJ_L4:
     ldi    r24,0
     # push one byte expression onto stack
     push   r24
+
     # load a one byte expression off stack
     pop    r24
     # push one byte expression onto stack
     push   r24
-
 MJ_L3:
 
     # load condition and branch if false
@@ -361,6 +360,7 @@ MJ_L10:
 
     # then label for if
 MJ_L6:
+
     jmp    MJ_L7
 
     # else label for if
@@ -368,14 +368,15 @@ MJ_L5:
 
     # done label for if
 MJ_L7:
+
     jmp    MJ_L2
 
     # else label for if
 MJ_L0:
 
     #### while statement
-MJ_L11:
 
+MJ_L11:
     # True/1 expression
     ldi    r22, 1
     # push one byte expression onto stack
@@ -389,14 +390,13 @@ MJ_L11:
     # WANT breq MJ_L13
     brne   MJ_L12
     jmp    MJ_L13
-
     # while loop body
 MJ_L12:
 
     # NewExp
-    ldi    r24, lo8(0)
-    ldi    r25, hi8(0)
-    # allocating object of size 0 on heap
+    ldi    r24, lo8(null)
+    ldi    r25, hi8(null)
+    # allocating object of size null on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
@@ -414,7 +414,6 @@ MJ_L12:
 
     # jump to while test
     jmp    MJ_L11
-
     # end of while
 MJ_L13:
 
@@ -436,12 +435,12 @@ MJ_L2:
     call   _Z8delay_msj
 
 
+
 /* epilogue start */
     endLabel:
     jmp endLabel
     ret
     .size   main, .-main
-
 
 
     .text
@@ -493,127 +492,94 @@ A_mth1:
     std    Y + 10, r15
     std    Y + 9, r14
     std    Y + 11, r12
+
 /* done with function A_mth1 prologue */
 
 
     # NewExp
-    ldi    r24, lo8(13)
-    ldi    r25, hi8(13)
-    # allocating object of size 13 on heap
+    ldi    r24, lo8(null)
+    ldi    r25, hi8(null)
+    # allocating object of size null on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
     push   r25
     push   r24
 
-    # IdExp
-    # load value for variable s
-    # variable is a local or param variable
+# IdExp
+# load value for variable s
+# variable is a local or param variable
+ldd	r24, Y+1
+push	r24
 
-    # load a two byte variable from base+offset
-    ldd    r25, Y + 13
-    ldd    r24, Y + 12
-    # push two byte expression onto stack
-    push   r25
-    push   r24
+ldd	r24, Y+0
+push	r24
 
-    # IdExp
-    # load value for variable e
-    # variable is a local or param variable
+# IdExp
+# load value for variable e
+# variable is a local or param variable
+ldd	r24, Y+1
+push	r24
 
-    # load a two byte variable from base+offset
-    ldd    r25, Y + 6
-    ldd    r24, Y + 5
-    # push two byte expression onto stack
-    push   r25
-    push   r24
+ldd	r24, Y+0
+push	r24
 
-    # IdExp
-    # load value for variable u
-    # variable is a local or param variable
+# IdExp
+# load value for variable u
+# variable is a local or param variable
+ldd	r24, Y+0
+push	r24
 
-    # load a one byte variable from base+offset
-    ldd    r24, Y + 16
-    # push one byte expression onto stack
-    push   r24
+# IdExp
+# load value for variable p
+# variable is a local or param variable
+ldd	r24, Y+0
+push	r24
 
-    # IdExp
-    # load value for variable p
-    # variable is a local or param variable
+# IdExp
+# load value for variable k
+# variable is a local or param variable
+ldd	r24, Y+1
+push	r24
 
-    # load a one byte variable from base+offset
-    ldd    r24, Y + 17
-    # push one byte expression onto stack
-    push   r24
+ldd	r24, Y+0
+push	r24
 
-    # IdExp
-    # load value for variable k
-    # variable is a local or param variable
+# IdExp
+# load value for variable r
+# variable is a local or param variable
+ldd	r24, Y+0
+push	r24
 
-    # load a two byte variable from base+offset
-    ldd    r25, Y + 10
-    ldd    r24, Y + 9
-    # push two byte expression onto stack
-    push   r25
-    push   r24
+#### function call
+# put parameter values into appropriate registers
+# load a one byte expression off stack
+pop	r12
+pop	r14
+pop	r15
+# load a one byte expression off stack
+pop	r16
+# load a one byte expression off stack
+pop	r18
+pop	r20
+pop	r21
+pop	r22
+pop	r23
+# receiver will be passed as first param
+# load a two byte expression off stack
+pop	r24
+pop	r25
 
-    # IdExp
-    # load value for variable r
-    # variable is a local or param variable
+call	A_mth1
 
-    # load a one byte variable from base+offset
-    ldd    r24, Y + 20
-    # push one byte expression onto stack
-    push   r24
+# IdExp
+# load value for variable t
+# variable is a local or param variable
+ldd	r24, Y+1
+push	r24
 
-    #### function call
-    # put parameter values into appropriate registers
-    # load a one byte expression off stack
-    pop    r12
-    # load a two byte expression off stack
-    pop    r14
-    pop    r15
-    # load a one byte expression off stack
-    pop    r16
-    # load a one byte expression off stack
-    pop    r18
-    # load a two byte expression off stack
-    pop    r20
-    pop    r21
-    # load a two byte expression off stack
-    pop    r22
-    pop    r23
-    # receiver will be passed as first param
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
-
-    call    A_mth1
-
-    # handle return value
-    # push two byte expression onto stack
-    push   r25
-    push   r24
-
-    ### AssignStatement
-    # load rhs exp
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
-    # store rhs into var d
-    std    Y + 4, r25
-    std    Y + 3, r24
-
-    # IdExp
-    # load value for variable t
-    # variable is a local or param variable
-
-    # load a two byte variable from base+offset
-    ldd    r25, Y + 15
-    ldd    r24, Y + 14
-    # push two byte expression onto stack
-    push   r25
-    push   r24
+ldd	r24, Y+0
+push	r24
 
     # Load constant int 6
     ldi    r24,lo8(6)
@@ -623,63 +589,23 @@ A_mth1:
     push   r24
 
     # NewExp
-    ldi    r24, lo8(0)
-    ldi    r25, hi8(0)
-    # allocating object of size 0 on heap
+    ldi    r24, lo8(null)
+    ldi    r25, hi8(null)
+    # allocating object of size null on heap
     call    malloc
     # push object address
     # push two byte expression onto stack
     push   r25
     push   r24
 
-    #### function call
-    # put parameter values into appropriate registers
-    # receiver will be passed as first param
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
+#### function call
+# put parameter values into appropriate registers
+# receiver will be passed as first param
+# load a two byte expression off stack
+pop	r24
+pop	r25
 
-    call    B_mth2
-
-    # handle return value
-    # push two byte expression onto stack
-    push   r25
-    push   r24
-
-    ### ArrayAssignStatement
-    # load rhs
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
-    # calculate the array element address by first
-    # loading index
-    # load a two byte expression off stack
-    pop    r18
-    pop    r19
-    # add size in elems to self to multiply by 2
-    # complements of Jason Mealler
-    add    r18,r18
-    adc    r19,r19
-    # put index*(elem size in bytes) into r31:r30
-    mov    r31, r19
-    mov    r30, r18
-    # want result of addressing arithmetic 
-    # to be in r31:r30 for access through Z
-    # index over length
-    ldi    r20, 2
-    ldi    r21, 0
-    add    r30, r20
-    adc    r31, r21
-    # loading array reference
-    # load a two byte expression off stack
-    pop    r22
-    pop    r23
-    # add array reference to result of indexing arithmetic
-    add    r30, r22
-    adc    r31, r23
-    # store rhs into memory location for array element
-    std    Z+0, r24
-    std    Z+1, r25
+call	B_mth2
 
     # Load constant int 100
     ldi    r24,lo8(100)
@@ -717,41 +643,42 @@ A_mth1:
     push   r31
     push   r30
 
-/* epilogue start for A_mth1 */
-    # handle return value
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
-    # pop space off stack for parameters and locals
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    # restoring the frame pointer
-    pop    r28
-    pop    r29
-    ret
-    .size A_mth1, .-A_mth1
+/* epilogue start for class_A_mth1*/
+# handle return value
+# load a two byte expression off stack
+pop    r24
+pop    r25
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+
+# restoring the frame pointer
+pop	r28
+pop	r29
+
+ret
+.size class_A_mth1, .-class_A_mth1
 
 
     .text
@@ -778,6 +705,7 @@ A_mth3:
     std    Y + 4, r23
     std    Y + 3, r22
     std    Y + 5, r20
+
 /* done with function A_mth3 prologue */
 
 
@@ -786,29 +714,22 @@ A_mth3:
     # push one byte expression onto stack
     push   r22
 
-/* epilogue start for A_mth3 */
-    # handle return value
-    # load a one byte expression off stack
-    pop    r24
-    # promoting a byte to an int
-    tst     r24
-    brlt     MJ_L14
-    ldi    r25, 0
-    jmp    MJ_L15
-MJ_L14:
-    ldi    r25, hi8(-1)
-MJ_L15:
-    # pop space off stack for parameters and locals
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    pop    r30
-    # restoring the frame pointer
-    pop    r28
-    pop    r29
-    ret
-    .size A_mth3, .-A_mth3
+/* epilogue start for class_A_mth3*/
+# handle return value
+# load a one byte expression off stack
+pop    r24
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+pop	r30
+
+# restoring the frame pointer
+pop	r28
+pop	r29
+
+ret
+.size class_A_mth3, .-class_A_mth3
 
 
     .text
@@ -829,6 +750,7 @@ B_mth2:
     # save off parameters
     std    Y + 2, r25
     std    Y + 1, r24
+
 /* done with function B_mth2 prologue */
 
 
@@ -839,17 +761,19 @@ B_mth2:
     push   r25
     push   r24
 
-/* epilogue start for B_mth2 */
-    # handle return value
-    # load a two byte expression off stack
-    pop    r24
-    pop    r25
-    # pop space off stack for parameters and locals
-    pop    r30
-    pop    r30
-    # restoring the frame pointer
-    pop    r28
-    pop    r29
-    ret
-    .size B_mth2, .-B_mth2
+/* epilogue start for class_B_mth2*/
+# handle return value
+# load a two byte expression off stack
+pop    r24
+pop    r25
+pop	r30
+pop	r30
+
+# restoring the frame pointer
+pop	r28
+pop	r29
+
+ret
+.size class_B_mth2, .-class_B_mth2
+
 

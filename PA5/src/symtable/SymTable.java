@@ -101,6 +101,28 @@ public class SymTable {
         return mGlobalScope;
     }
 
+
+    public VarSTE lookupVar(String varId){
+        Scope currentScope = mScopeStack.peek();
+        HashMap<String,STE> tempHashMap = new HashMap(currentScope.getHashMap());
+        List<String> keyList = new ArrayList(tempHashMap.keySet());
+        
+        for (String name : keyList ) {
+          if (name.equals(varId)){
+             STE s = tempHashMap.get(name);
+             if (s instanceof VarSTE){
+                return (VarSTE)s;
+             }
+             else {
+                throw new InternalException("found the variable " + varId + " but it's not a VarSTE!");
+             }
+          }
+        }
+
+        throw new InternalException("cant find variable " + varId);
+
+    }
+
     public ClassSTE lookupClass(String classId){
         HashMap<String,STE> tempHashMap = new HashMap(mGlobalScope.getHashMap());
         List<String> keyList = new ArrayList(tempHashMap.keySet());
