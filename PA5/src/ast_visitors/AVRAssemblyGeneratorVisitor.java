@@ -1278,40 +1278,32 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       		// get class name by looking at the "this"
       		Scope methodScope = this.mCurrentST.peekScopeStack();
       		String className = ((VarSTE)methodScope.mDict.get("THIS")).getSTEType().toString();
-      		String funcName = className + "_" + node.getName();
+          String [] classNameSplited = className.split("_");
+      		String funcName = classNameSplited[1] + "_" + node.getName();
 
-      		out.println("/* epilogue start for " + funcName + "*/");
+      		out.println("/* epilogue start for " + funcName + " */");
 
       		if(node.getExp() != null){ // requires return
       			// have to determine the size of return type
       			Type retType = convertType(node.getType());
       			System.out.println(convertType(node.getType()));
-      			out.println("# handle return value");
+      			out.println("    # handle return value");
       			if(retType.getAVRTypeSize() == 2){
-      				out.println("# load a two byte expression off stack");
-      				out.println("pop    r24");
-      				out.println("pop    r25");
+      				out.println("    # load a two byte expression off stack");
+      				out.println("    pop    r24");
+      				out.println("    pop    r25");
       			} else if (retType.getAVRTypeSize() == 1){
       				String MJ_L0 = new Label().toString();
       				String MJ_L1 = new Label().toString();
-      				out.println("# load a one byte expression off stack");
-      				out.println("pop    r24");
-      				/*out.println("# promoting a byte to an int");
-      				out.println("tst     r24");
-      				out.println("brlt     " + MJ_L0); // MJ_L0
-      				out.println("ldi    r25, 0");
-      				out.println("jmp    " + MJ_L1); // MJ_L1
-      				out.println(MJ_L0 + ":"); // MJ_L0
-      				out.println("ldi    r25, hi8(-1)");
-      				out.println(MJ_L1 + ":"); // MJ_L1*/
-
+      				out.println("    # load a one byte expression off stack");
+      				out.println("    pop    r24");
       			}
       		} else { // void return
-      			out.println("# no return value");
-      			out.println("# pop space off stack for parameters and locals");
+      			out.println("    # no return value");
       		}
-      		out.println("pop	r30");
-      		out.println("pop	r30");
+          out.println("    # pop space off stack for parameters and locals");
+      		out.println("    pop    r30");
+      		out.println("    pop    r30");
 
       		// loop through locals and pop
       		LinkedList<VarDecl> var_list = node.getVarDecls();
@@ -1320,10 +1312,10 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       			IType it = ((VarDecl)node_itr_2.next()).getType();
       			int var_size = convertType(it).getAVRTypeSize();
       			if(var_size == 1){
-      				out.println("pop	r30");
+      				out.println("    pop    r30");
       			} else if (var_size == 2){
-      				out.println("pop	r30");
-      				out.println("pop	r30");
+      				out.println("    pop    r30");
+      				out.println("    pop    r30");
       			}
       		}
       		// loop through formals and pop
@@ -1333,19 +1325,18 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       			IType it = ((Formal)node_itr_1.next()).getType();
       			int formal_size = convertType(it).getAVRTypeSize();
       			if(formal_size == 1){
-      				out.println("pop	r30");
+      				out.println("    pop    r30");
       			} else if (formal_size == 2){
-      				out.println("pop	r30");
-      				out.println("pop	r30");
+      				out.println("    pop    r30");
+      				out.println("    pop    r30");
       			}
       		}
 
-      		out.println("\n"+
-                              "# restoring the frame pointer\n"+
-                              "pop	r28\n"+
-                              "pop	r29\n\n" +
-                              "ret\n"+
-                              ".size " + funcName + ", .-" + funcName + "\n\n");
+      		out.println("    # restoring the frame pointer\n"+
+                              "    pop    r28\n"+
+                              "    pop    r29\n" +
+                              "    ret\n"+
+                              "    .size " + funcName + ", .-" + funcName + "\n\n");
 
       		this.mCurrentST.popScope();
       		System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
@@ -1444,4 +1435,45 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		}
 
   	}
+
+
+    public void outArrayAssignStatement(ArrayAssignStatement node){
+        out.println("    ### ArrayAssignStatement");
+        out.println("    # load rhs");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r24");
+        out.println("    pop    r25");
+        out.println("    # calculate the array element address by first");
+        out.println("    # loading index");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r18");
+        out.println("    pop    r19");
+        out.println("    # add size in elems to self to multiply by 2");
+        out.println("    # complements of Jason Mealler");
+        out.println("    add    r18,r18");
+        out.println("    adc    r19,r19");
+        out.println("    # put index*(elem size in bytes) into r31:r30");
+        out.println("    mov    r31, r19");
+        out.println("    mov    r30, r18");
+        out.println("    # want result of addressing arithmetic ");
+        out.println("    # to be in r31:r30 for access through Z");
+        out.println("    # index over length");
+        out.println("    ldi    r20, 2");
+        out.println("    ldi    r21, 0");
+        out.println("    add    r30, r20");
+        out.println("    adc    r31, r21");
+        out.println("    # loading array reference");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r22");
+        out.println("    pop    r23");
+        out.println("    # add array reference to result of indexing arithmetic");
+        out.println("    add    r30, r22");
+        out.println("    adc    r31, r23");
+        out.println("    # store rhs into memory location for array element");
+        out.println("    std    Z+0, r24");
+        out.println("    std    Z+1, r25");
+        out.println("");
+
+
+    }
 }

@@ -646,6 +646,41 @@ A_mth1:
     push   r25
     push   r24
 
+    ### ArrayAssignStatement
+    # load rhs
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
+    # calculate the array element address by first
+    # loading index
+    # load a two byte expression off stack
+    pop    r18
+    pop    r19
+    # add size in elems to self to multiply by 2
+    # complements of Jason Mealler
+    add    r18,r18
+    adc    r19,r19
+    # put index*(elem size in bytes) into r31:r30
+    mov    r31, r19
+    mov    r30, r18
+    # want result of addressing arithmetic 
+    # to be in r31:r30 for access through Z
+    # index over length
+    ldi    r20, 2
+    ldi    r21, 0
+    add    r30, r20
+    adc    r31, r21
+    # loading array reference
+    # load a two byte expression off stack
+    pop    r22
+    pop    r23
+    # add array reference to result of indexing arithmetic
+    add    r30, r22
+    adc    r31, r23
+    # store rhs into memory location for array element
+    std    Z+0, r24
+    std    Z+1, r25
+
     # Load constant int 100
     ldi    r24,lo8(100)
     ldi    r25,hi8(100)
@@ -682,42 +717,41 @@ A_mth1:
     push   r31
     push   r30
 
-/* epilogue start for class_A_mth1*/
-# handle return value
-# load a two byte expression off stack
-pop    r24
-pop    r25
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-
-# restoring the frame pointer
-pop	r28
-pop	r29
-
-ret
-.size class_A_mth1, .-class_A_mth1
+/* epilogue start for A_mth1 */
+    # handle return value
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
+    # pop space off stack for parameters and locals
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    # restoring the frame pointer
+    pop    r28
+    pop    r29
+    ret
+    .size A_mth1, .-A_mth1
 
 
     .text
@@ -753,22 +787,21 @@ A_mth3:
     # push one byte expression onto stack
     push   r22
 
-/* epilogue start for class_A_mth3*/
-# handle return value
-# load a one byte expression off stack
-pop    r24
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-pop	r30
-
-# restoring the frame pointer
-pop	r28
-pop	r29
-
-ret
-.size class_A_mth3, .-class_A_mth3
+/* epilogue start for A_mth3 */
+    # handle return value
+    # load a one byte expression off stack
+    pop    r24
+    # pop space off stack for parameters and locals
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    pop    r30
+    # restoring the frame pointer
+    pop    r28
+    pop    r29
+    ret
+    .size A_mth3, .-A_mth3
 
 
     .text
@@ -800,19 +833,18 @@ B_mth2:
     push   r25
     push   r24
 
-/* epilogue start for class_B_mth2*/
-# handle return value
-# load a two byte expression off stack
-pop    r24
-pop    r25
-pop	r30
-pop	r30
-
-# restoring the frame pointer
-pop	r28
-pop	r29
-
-ret
-.size class_B_mth2, .-class_B_mth2
+/* epilogue start for B_mth2 */
+    # handle return value
+    # load a two byte expression off stack
+    pop    r24
+    pop    r25
+    # pop space off stack for parameters and locals
+    pop    r30
+    pop    r30
+    # restoring the frame pointer
+    pop    r28
+    pop    r29
+    ret
+    .size B_mth2, .-B_mth2
 
 
