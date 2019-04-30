@@ -945,6 +945,40 @@ MJ_L43:
     push   r25
     push   r24
 
+    ### ArrayExp
+    # calculate the array element address by first
+    # loading index
+    # load a two byte expression off stack
+    pop    r18
+    pop    r19
+    # add size in elems to self to multiply by 2
+    # complements of Jason Mealler
+    add    r18,r18
+    adc    r19,r19
+    # put index*(elem size in bytes) into r31:r30
+    mov    r31, r19
+    mov    r30, r18
+    # want result of addressing arithmetic 
+    # to be in r31:r30 for access through Z
+    # index over length
+    ldi    r20, 2
+    ldi    r21, 0
+    add    r30, r20
+    adc    r31, r21
+    # loading array reference
+    # load a two byte expression off stack
+    pop    r22
+    pop    r23
+    # add array reference to result of indexing arithmetic
+    add    r30, r22
+    adc    r31, r23
+    # load array element and push onto stack
+    ldd    r24, Z+0
+    ldd    r25, Z+1
+    # push two byte expression onto stack
+    push   r25
+    push   r24
+
     ### AssignStatement
     # load rhs exp
     # load a two byte expression off stack
@@ -1026,6 +1060,34 @@ MJ_L47:
     # push hi order byte first
     # push two byte expression onto stack
     push   r25
+    push   r24
+
+    ### ArrayExp
+    # calculate the array element address by first
+    # loading index
+    # load a two byte expression off stack
+    pop    r18
+    pop    r19
+    # put index*(elem size in bytes) into r31:r30
+    mov    r31, r19
+    mov    r30, r18
+    # want result of addressing arithmetic 
+    # to be in r31:r30 for access through Z
+    # index over length
+    ldi    r20, 2
+    ldi    r21, 0
+    add    r30, r20
+    adc    r31, r21
+    # loading array reference
+    # load a two byte expression off stack
+    pop    r22
+    pop    r23
+    # add array reference to result of indexing arithmetic
+    add    r30, r22
+    adc    r31, r23
+    # load array element and push onto stack
+    ldd    r24, Z+0
+    # push one byte expression onto stack
     push   r24
 
     ### AssignStatement

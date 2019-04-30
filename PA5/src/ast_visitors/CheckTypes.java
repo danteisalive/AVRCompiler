@@ -382,4 +382,20 @@ public class CheckTypes extends DepthFirstVisitor
      this.mCurrentST.pushScope(node.getName());
    }
 
+   public void outArrayExp(ArrayExp node){
+      // check that index is byte or int
+      Type expType = this.mCurrentST.getExpType(node.getIndex());
+      if (expType == Type.INT || expType == Type.BYTE){
+        // then find the array type and set it
+        String arrayName = ((IdLiteral)node.getExp()).getLexeme();
+        VarSTE varSte = this.mCurrentST.lookupVar(arrayName);
+        this.mCurrentST.setExpType(node, varSte.getSTEType());
+
+      }
+      else {
+        errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                 " Array index is not int or byte type!\n";
+      }
+   }
+
 }

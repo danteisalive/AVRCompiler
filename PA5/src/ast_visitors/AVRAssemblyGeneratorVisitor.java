@@ -1503,4 +1503,54 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
     }
+
+
+    public void outArrayExp(ArrayExp node){
+        out.println("    ### ArrayExp");
+        out.println("    # calculate the array element address by first");
+        out.println("    # loading index");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r18");
+        out.println("    pop    r19");
+
+        if (this.mCurrentST.getExpType(node) == Type.INTARRAY){
+          out.println("    # add size in elems to self to multiply by 2");
+          out.println("    # complements of Jason Mealler");
+          out.println("    add    r18,r18");
+          out.println("    adc    r19,r19");
+        }
+
+        out.println("    # put index*(elem size in bytes) into r31:r30");
+        out.println("    mov    r31, r19");
+        out.println("    mov    r30, r18");
+        out.println("    # want result of addressing arithmetic ");
+        out.println("    # to be in r31:r30 for access through Z");
+        out.println("    # index over length");
+        out.println("    ldi    r20, 2");
+        out.println("    ldi    r21, 0");
+        out.println("    add    r30, r20");
+        out.println("    adc    r31, r21");
+        out.println("    # loading array reference");
+        out.println("    # load a two byte expression off stack");
+        out.println("    pop    r22");
+        out.println("    pop    r23");
+        out.println("    # add array reference to result of indexing arithmetic");
+        out.println("    add    r30, r22");
+        out.println("    adc    r31, r23");
+        out.println("    # load array element and push onto stack");
+        if (this.mCurrentST.getExpType(node) == Type.INTARRAY){
+          out.println("    ldd    r24, Z+0");
+          out.println("    ldd    r25, Z+1");
+          out.println("    # push two byte expression onto stack");
+          out.println("    push   r25");
+          out.println("    push   r24");
+        }
+        else {
+          out.println("    ldd    r24, Z+0");
+          out.println("    # push one byte expression onto stack");
+          out.println("    push   r24");
+        }
+        out.println("");
+
+    }
 }
