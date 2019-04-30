@@ -313,7 +313,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
      public void outIdLiteral(IdLiteral node){
-       		System.out.println("\nin AVRGenVisitor.outIdLiteral(" + node.toString() + ") ...");
+       		//System.out.println("\nin AVRGenVisitor.outIdLiteral(" + node.toString() + ") ...");
        		out.println("    # IdExp");
        		out.println("    # load value for variable " + node.toString()); //
           //out.println("");
@@ -1141,7 +1141,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
       public void outCallStatement(CallStatement node){
 
-          System.out.println("\nin AVRGenVisitor.outCallStatement(" + node.getId() + ") ... ");
+          //System.out.println("\nin AVRGenVisitor.outCallStatement(" + node.getId() + ") ... ");
           out.println("    #### function call");
           out.println("    # put parameter values into appropriate registers");
           // determine class/type
@@ -1154,7 +1154,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
           int reg = 24 - 2 * argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
           while(iter.hasPrevious()){
               arg = iter.previous();
-              System.out.println("ARG TYPE: " + arg.toString());
+              //System.out.println("ARG TYPE: " + arg.toString());
               int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
               this.mCurrentST.getExpType(arg);
               if(argSize == 1){
@@ -1189,14 +1189,14 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
     }
 
     public void inTopClassDecl(TopClassDecl node){
-  		  System.out.println("\nin AVRGenVisitor.inTopClassDecl(" + node.getName() + ") ... ");
+  		  //System.out.println("\nin AVRGenVisitor.inTopClassDecl(" + node.getName() + ") ... ");
   		// System.out.println("make class " + node.getName() + " the top of scope stack");
   		  this.mCurrentST.pushScope(node.getName());
   		 //System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
   	}
 
     public void outTopClassDecl(TopClassDecl node){
-  		  System.out.println("\nin AVRGenVisitor.outTopClassDecl(" + node.getName() + ") ... ");
+  		  //System.out.println("\nin AVRGenVisitor.outTopClassDecl(" + node.getName() + ") ... ");
   		 //System.out.println("pop top of the scope stack");
   		  this.mCurrentST.popScope();
   		 //System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
@@ -1204,7 +1204,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
     public void inMethodDecl(MethodDecl node){
 
-  		System.out.println("\nin AVRGenVisitor.inMethodDecl(" + node.getName() + ") ... ");
+  		//System.out.println("\nin AVRGenVisitor.inMethodDecl(" + node.getName() + ") ... ");
 
   		// make current func on top of stack for processing.
   		this.mCurrentST.pushScope(node.getName());
@@ -1215,7 +1215,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       String [] classNameSplited = className.split("_");
   		String funcName = classNameSplited[1] + "_" + node.getName();
   		// get class name by get to its mScope
-  		System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
+  	//	System.out.println("after push, scope is like this: " + this.mCurrentST.getStackScope());
 
   		out.println( "    .text\n" + ".global " + funcName + "\n" +
   		             "    .type  " + funcName + ", @function\n" + funcName +
@@ -1291,8 +1291,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   	}
 
   	public void outMethodDecl(MethodDecl node){
-      		System.out.println("\nin AVRGenVisitor.outMethodDecl(" + node.getName() + ") ... ");
-      		System.out.println("pop top of the scope stack");
+      		//System.out.println("\nin AVRGenVisitor.outMethodDecl(" + node.getName() + ") ... ");
+      		//System.out.println("pop top of the scope stack");
 
       		// get class name by looking at the "this"
       		Scope methodScope = this.mCurrentST.peekScopeStack();
@@ -1305,7 +1305,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
       		if(node.getExp() != null){ // requires return
       			// have to determine the size of return type
       			Type retType = convertType(node.getType());
-      			System.out.println(convertType(node.getType()));
+      			//System.out.println(convertType(node.getType()));
       			out.println("    # handle return value");
       			if(retType.getAVRTypeSize() == 2){
       				out.println("    # load a two byte expression off stack");
@@ -1366,13 +1366,13 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
                               "    .size " + funcName + ", .-" + funcName + "\n\n");
 
       		this.mCurrentST.popScope();
-      		System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
+      		//System.out.println("after pop, scope is like this: " + this.mCurrentST.getStackScope());
   	}
 
 
   public void outCallExp(CallExp node){
 
-          System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
+          //System.out.println("\nin AVRGenVisitor.outCallExp(" + node.getId() + ") ... ");
           out.println("    #### function call");
           out.println("    # put parameter values into appropriate registers");
           // determine class/type
@@ -1384,7 +1384,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
           int reg = 24 - 2*argList.size(); // initial reg num. if #arg = 3, then start with r18 (24-2*3)
           while(iter.hasPrevious()){
             arg = iter.previous();
-            System.out.println(arg);
+            //System.out.println(arg);
             int argSize = this.mCurrentST.getExpType(arg).getAVRTypeSize();
             //this.mCurrentST.getExpType(arg);
             if(argSize == 1){
@@ -1424,7 +1424,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
     }
 
     public void outAssignStatement(AssignStatement node){
-  		System.out.println("\nin AVRGenVisitor.outAssignStatement(" + node.getExp() + ") ...");
+  		//System.out.println("\nin AVRGenVisitor.outAssignStatement(" + node.getExp() + ") ...");
 
   		out.println("    ### AssignStatement");
   		out.println("    # load rhs exp");
@@ -1432,9 +1432,9 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		VarSTE varSte = this.mCurrentST.lookupVar(node.getId());
   		Type right = varSte.getSTEType();
   		int size = right.getAVRTypeSize();
-  		System.out.println("varSte.getType(): " + varSte.getSTEType());
-  		System.out.println("varSte.getOffset(): " + varSte.getSTEOffset());
-  		System.out.println("varSte.getBase(): " + varSte.getSTEBase());
+  		//System.out.println("varSte.getType(): " + varSte.getSTEType());
+  		//System.out.println("varSte.getOffset(): " + varSte.getSTEOffset());
+  		//System.out.println("varSte.getBase(): " + varSte.getSTEBase());
   		if(size == 1){
   			out.println("    # load a one byte expression off stack");
   			out.println("    pop    r24");
@@ -1475,10 +1475,14 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("    # load a two byte expression off stack");
         out.println("    pop    r18");
         out.println("    pop    r19");
-        out.println("    # add size in elems to self to multiply by 2");
-        out.println("    # complements of Jason Mealler");
-        out.println("    add    r18,r18");
-        out.println("    adc    r19,r19");
+
+        if (this.mCurrentST.getExpType(node) == Type.INTARRAY){
+            out.println("    # add size in elems to self to multiply by 2");
+            out.println("    # complements of Jason Mealler");
+            out.println("    add    r18,r18");
+            out.println("    adc    r19,r19");
+        }
+
         out.println("    # put index*(elem size in bytes) into r31:r30");
         out.println("    mov    r31, r19");
         out.println("    mov    r30, r18");
@@ -1538,6 +1542,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
         out.println("    add    r30, r22");
         out.println("    adc    r31, r23");
         out.println("    # load array element and push onto stack");
+
         if (this.mCurrentST.getExpType(node) == Type.INTARRAY){
           out.println("    ldd    r24, Z+0");
           out.println("    ldd    r25, Z+1");
@@ -1550,6 +1555,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
           out.println("    # push one byte expression onto stack");
           out.println("    push   r24");
         }
+
         out.println("");
 
     }

@@ -389,13 +389,46 @@ public class CheckTypes extends DepthFirstVisitor
         // then find the array type and set it
         String arrayName = ((IdLiteral)node.getExp()).getLexeme();
         VarSTE varSte = this.mCurrentST.lookupVar(arrayName);
-        this.mCurrentST.setExpType(node, varSte.getSTEType());
+        if (varSte != null && (varSte.getSTEType() == Type.INTARRAY || varSte.getSTEType() == Type.COLORARRAY)){
+          this.mCurrentST.setExpType(node, varSte.getSTEType());
+        }
+        else{
+          errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                   " variable is not an array!\n";
+        }
 
       }
       else {
         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
                  " Array index is not int or byte type!\n";
       }
+   }
+
+   public void outArrayAssignStatement(ArrayAssignStatement node){
+     // check that index is byte or int
+     Type expType = this.mCurrentST.getExpType(node.getIndex());
+     if (expType == Type.INT || expType == Type.BYTE){
+       // then find the array type and set it
+       String arrayName = node.getIdLit().getLexeme();
+       VarSTE varSte = this.mCurrentST.lookupVar(arrayName);
+
+       if (varSte != null && (varSte.getSTEType() == Type.INTARRAY || varSte.getSTEType() == Type.COLORARRAY)){
+         this.mCurrentST.setExpType(node, varSte.getSTEType());
+       }
+       else{
+         errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                  " variable is not an array!\n";
+       }
+
+     }
+     else {
+       errors += "[" + node.getLine() + "," + node.getPos() + "]" +
+                " Array index is not int or byte type!\n";
+     }
+
+
+
+
    }
 
 }

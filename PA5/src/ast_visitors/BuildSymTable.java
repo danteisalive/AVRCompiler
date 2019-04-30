@@ -139,11 +139,11 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		VarSTE varSte = new VarSTE("THIS", new Type(currClass.getSTEName()), "Y", offset);
    		SymbolTable.insert(varSte);
-      System.out.println("FORMAL_OFFSET: " + formal_offset);
+      //System.out.println("FORMAL_OFFSET: " + formal_offset);
       offset += formal_offset;
       offset += varSte.getSTEType().getAVRTypeSize(); //2
       formalOffset += varSte.getSTEType().getAVRTypeSize(); //2
-      System.out.println("VAR OFFSET: " + offset);
+      //System.out.println("VAR OFFSET: " + offset);
       LinkedList<VarDecl> vars_list = node.getVarDecls();
       Iterator vars_itr = vars_list.iterator();
       while(vars_itr.hasNext())
@@ -158,7 +158,7 @@ public class BuildSymTable extends DepthFirstVisitor
         {
             VarSTE _varSte = new VarSTE(var_node.getName(), convertType(var_node.getType()), "Y", offset);
             SymbolTable.insert(_varSte);
-            System.out.println("VAR: " + var_node.getName() + " Y + "+ offset);
+            //System.out.println("VAR: " + var_node.getName() + " Y + "+ offset);
             offset += _varSte.getSTEType().getAVRTypeSize();
 
 
@@ -184,7 +184,7 @@ public class BuildSymTable extends DepthFirstVisitor
   		} else {
 
   			VarSTE varSte = new VarSTE(node.getName(), convertType(node.getType()), "Y" , formalOffset);
-        System.out.println("VAR FORMAL: " + node.getName() + " Y + "+ formalOffset);
+        //System.out.println("VAR FORMAL: " + node.getName() + " Y + "+ formalOffset);
         formalOffset += varSte.getSTEType().getAVRTypeSize();
         SymbolTable.insert(varSte);
         //System.out.println("Added VarSTE: " + varSte.toString());
