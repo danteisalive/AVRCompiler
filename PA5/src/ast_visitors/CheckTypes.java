@@ -307,7 +307,20 @@ public class CheckTypes extends DepthFirstVisitor
 
    public void outCallExp(CallExp node){
       // first find the class name
-      String className = ((NewExp)node.getExp()).getId();
+      String className;
+
+      if (node.getExp() instanceof NewExp) {
+         className = ((NewExp)node.getExp()).getId();
+      }
+      else if (node.getExp() instanceof IdLiteral){
+         String classVarName = ((IdLiteral)node.getExp()).getLexeme();
+         VarSTE varSte = this.mCurrentST.lookupVar(classVarName);
+         className = varSte.getSTEType().getClassName();
+      }
+      else {
+          throw new InternalException("new kind of call?");
+      }
+
       String methodName = node.getId();
 
       ClassSTE classSte = this.mCurrentST.lookupClass(className);
@@ -352,4 +365,21 @@ public class CheckTypes extends DepthFirstVisitor
                 " Method is not found in class scope!\n";
      }
    }
+
+   public void outTopClassDecl(TopClassDecl node){
+      this.mCurrentST.popScope();
+   }
+
+   public void outMethodDecl(MethodDecl node){
+     this.mCurrentST.popScope();
+   }
+
+   public void inMethodDecl(MethodDecl node){
+     this.mCurrentST.pushScope(node.getName());
+   }
+
+   public void inTopClassDecl(TopClassDecl node){
+     this.mCurrentST.pushScope(node.getName());
+   }
+
 }

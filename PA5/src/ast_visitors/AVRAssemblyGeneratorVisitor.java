@@ -968,7 +968,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   		}
 
   		// first byte second int.
-  		if(lexpType == Type.BYTE && rexpType == Type.INT){
+  		if((lexpType == Type.BYTE || lexpType == Type.COLOR  || lexpType == Type.BOOL) && rexpType == Type.INT){
         String branch_3 = new Label().toString();
         String branch_4 = new Label().toString();
         String branch_5 = new Label().toString();
@@ -1006,8 +1006,8 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("");
   		}
   		// both byte
-  		if((lexpType == Type.BYTE || lexpType == Type.COLOR) &&
-          (rexpType == Type.BYTE || rexpType == Type.COLOR))
+  		if((lexpType == Type.BYTE || lexpType == Type.COLOR  || lexpType == Type.BOOL) &&
+          (rexpType == Type.BYTE || rexpType == Type.COLOR || rexpType == Type.BOOL))
       {
         String false_branch = new Label().toString();
   			String true_branch = new Label().toString();
@@ -1033,7 +1033,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   			out.println("");
   		}
   		// first int second byte
-  		if(lexpType == Type.INT && rexpType == Type.BYTE){
+  		if(lexpType == Type.INT && (rexpType == Type.BYTE || rexpType == Type.COLOR || rexpType == Type.BOOL)){
 
   			String branch_1 = new Label().toString();
         String branch_2 = new Label().toString();
@@ -1079,9 +1079,9 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
 
 
   	public void outNewExp(NewExp node){
-  		System.out.println("\nin AVRgenVisitor.outNewExp(" + node.getId() + ") ...");
+  		//System.out.println("\nin AVRgenVisitor.outNewExp(" + node.getId() + ") ...");
   		ClassSTE classSte = this.mCurrentST.lookupClass(node.getId());
-  		System.out.println("classSte: " + classSte + " size: " + classSte.getClassSize());
+  		//System.out.println("classSte: " + classSte + " size: " + classSte.getClassSize());
 
   		out.println("    # NewExp");
   		out.println("    ldi    r24, lo8(" + classSte.getClassSize() + ")");
@@ -1445,7 +1445,7 @@ public class AVRAssemblyGeneratorVisitor extends DepthFirstVisitor
   				out.println("    ldd    r30, Y + 1");
   			}
   			out.println("    # store rhs into var " + node.getId());
-  			out.println("    std	" + varSte.getSTEBase() + " + " + varSte.getSTEOffset() + ", r24\n");
+  			out.println("    std    " + varSte.getSTEBase() + " + " + varSte.getSTEOffset() + ", r24\n");
   		} else if(size == 2){
   			out.println("    # load a two byte expression off stack");
   			out.println("    pop    r24");

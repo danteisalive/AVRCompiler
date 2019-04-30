@@ -171,8 +171,6 @@ public class BuildSymTable extends DepthFirstVisitor
 
    		SymbolTable.popScope();
 
-    //  offset = 0;
-
    	}
 
 
